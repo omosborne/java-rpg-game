@@ -16,5 +16,7 @@ public class Main {
         window.setTitle("Last Mind - Dev");
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
+        gamePanel.startGameThread();
     }
 }
