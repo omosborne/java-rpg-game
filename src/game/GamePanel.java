@@ -2,7 +2,7 @@ package game;
 
 import javax.swing.JPanel;
 import java.awt.*;
-import entity.Player;
+import game.entity.Player;
 
 public class GamePanel extends JPanel implements Runnable {
     // Main screen settings
@@ -23,10 +23,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     Player player = new Player(this, keyH);
 
-    int playerX = 100;
-    int playerY = 100;
-    byte playerSpeed = 4;
-
     public GamePanel () {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
@@ -46,9 +42,6 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
 
-        // FPS Debug Variables
-        long timer = 0;
-        int FPS = 0;
 
         while (gameThread != null) {
             currentTime = System.nanoTime();
@@ -58,12 +51,6 @@ public class GamePanel extends JPanel implements Runnable {
                 update();
                 repaint();
                 delta--;
-                FPS++;
-            }
-            if (timer >= 1000000000) {
-                System.out.println("FPS - " + FPS);
-                timer = 0;
-                FPS = 0;
             }
         }
     }
