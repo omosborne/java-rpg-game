@@ -82,7 +82,7 @@ public class Player extends Entity {
             case 2 -> sprite = spriteNumber == 1 ? walk_down1 : walk_down2;
             case 3 -> sprite = spriteNumber == 1 ? walk_right1 : walk_right2;
         }
-        else if (!keyH.isWalking) switch (dir) {
+        else switch (dir) {
             case 0 -> sprite = idle_up;
             case 1 -> sprite = idle_left;
             case 2 -> sprite = idle_down;
