@@ -15,7 +15,7 @@ public class TileManager {
     public TileManager(GamePanel gp) {
         this.gp = gp;
 
-        tile = new Tile[10];
+        tile = new Tile[16];
         mapTileNum = new int[gp.screenMaxCol][gp.screenMaxRow];
 
         getTileImage();
@@ -24,14 +24,10 @@ public class TileManager {
 
     public void getTileImage() {
         try {
-            tile[0] = new Tile();
-            tile[0].image = ImageIO.read(getClass().getResourceAsStream("/game/images/tiles/grass_1.png"));
-
-            tile[1] = new Tile();
-            tile[1].image = ImageIO.read(getClass().getResourceAsStream("/game/images/tiles/dirt_1.png"));
-
-            tile[2] = new Tile();
-            tile[2].image = ImageIO.read(getClass().getResourceAsStream("/game/images/tiles/water_1.png"));
+            for (int i = 0; i < tile.length; i++) {
+                tile[i] = new Tile();
+                tile[i].image = ImageIO.read(getClass().getResourceAsStream("/game/images/tiles/tile_" + i + ".png"));
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
