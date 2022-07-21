@@ -16,7 +16,7 @@ public class TileManager {
         this.gp = gp;
 
         tile = new Tile[16];
-        mapTileNum = new int[gp.screenMaxCol][gp.screenMaxRow];
+        mapTileNum = new int[gp.worldMaxCol][gp.worldMaxRow];
 
         getTileImage();
         loadMap("/game/maps/map02.txt");
@@ -42,9 +42,9 @@ public class TileManager {
             int col = 0;
             int row = 0;
 
-            while (col < gp.screenMaxCol && row < gp.screenMaxRow) {
+            while (col < gp.worldMaxCol && row < gp.worldMaxRow) {
                 String line = br.readLine();
-                while (col < gp.screenMaxCol) {
+                while (col < gp.worldMaxCol) {
                     String numbers[] = line.split(" ");
 
                     int num = Integer.parseInt(numbers[col]);
@@ -52,7 +52,7 @@ public class TileManager {
                     mapTileNum[col][row] = num;
                     col++;
                 }
-                if (col == gp.screenMaxCol) {
+                if (col == gp.worldMaxCol) {
                     col = 0;
                     row++;
                 }
