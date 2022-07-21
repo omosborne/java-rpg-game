@@ -5,6 +5,7 @@ import game.KeyInputHandler;
 
 import javax.imageio.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
@@ -14,6 +15,7 @@ public class Player extends Entity {
         this.gp = gp;
         this.keyH = keyH;
         setDefaultVariables();
+        getPlayerImage();
     }
 
     public void setDefaultVariables () {
@@ -47,14 +49,37 @@ public class Player extends Entity {
     }
 
     public void update () {
-        if (keyH.upPressed) y -= speed;
-        else if (keyH.leftPressed) x -= speed;
-        else if (keyH.downPressed) y += speed;
-        else if (keyH.rightPressed) x += speed;
+        if (keyH.upPressed) {
+            dir = 0;
+            y -= speed;
+        }
+        else if (keyH.leftPressed) {
+            dir = 1;
+            x -= speed;
+        }
+        else if (keyH.downPressed) {
+            dir = 2;
+            y += speed;
+        }
+        else if (keyH.rightPressed) {
+            dir = 3;
+            x += speed;
+        }
+        spriteCounter++;
+        if (spriteCounter > 10) {
+            spriteNumber = (byte) (spriteNumber == 1 ? 2 : 1);
+            spriteCounter = 0;
+        }
     }
 
     public void draw (Graphics2D g2) {
-        g2.setColor(Color.white);
-        g2.fillRect(x, y, gp.tileSize, gp.tileSize);
+        BufferedImage sprite = null;
+        switch (dir) {
+            case 0 -> sprite = spriteNumber == 1 ? walk_up1 : walk_up2;
+            case 1 -> sprite = spriteNumber == 1 ? walk_left1 : walk_left2;
+            case 2 -> sprite = spriteNumber == 1 ? walk_down1 : walk_down2;
+            case 3 -> sprite = spriteNumber == 1 ? walk_right1 : walk_right2;
+        }
+        g2.drawImage(sprite, x, y, gp.tileSize, gp.tileSize, null);
     }
 }
