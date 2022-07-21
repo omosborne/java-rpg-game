@@ -49,26 +49,28 @@ public class Player extends Entity {
     }
 
     public void update () {
-        if (keyH.upPressed) {
-            dir = 0;
-            y -= speed;
-        }
-        else if (keyH.leftPressed) {
-            dir = 1;
-            x -= speed;
-        }
-        else if (keyH.downPressed) {
-            dir = 2;
-            y += speed;
-        }
-        else if (keyH.rightPressed) {
-            dir = 3;
-            x += speed;
-        }
-        spriteCounter++;
-        if (spriteCounter > 10) {
-            spriteNumber = (byte) (spriteNumber == 1 ? 2 : 1);
-            spriteCounter = 0;
+        if (keyH.isWalking) {
+            if (keyH.upPressed) {
+                dir = 0;
+                y -= speed;
+            }
+            else if (keyH.leftPressed) {
+                dir = 1;
+                x -= speed;
+            }
+            else if (keyH.downPressed) {
+                dir = 2;
+                y += speed;
+            }
+            else if (keyH.rightPressed) {
+                dir = 3;
+                x += speed;
+            }
+            spriteCounter++;
+            if (spriteCounter > 10) {
+                spriteNumber = (byte) (spriteNumber == 1 ? 2 : 1);
+                spriteCounter = 0;
+            }
         }
     }
 
@@ -79,7 +81,8 @@ public class Player extends Entity {
             case 1 -> sprite = spriteNumber == 1 ? walk_left1 : walk_left2;
             case 2 -> sprite = spriteNumber == 1 ? walk_down1 : walk_down2;
             case 3 -> sprite = spriteNumber == 1 ? walk_right1 : walk_right2;
-        } else if (!(keyH.isWalking)) switch (dir) {
+        }
+        else if (!keyH.isWalking) switch (dir) {
             case 0 -> sprite = idle_up;
             case 1 -> sprite = idle_left;
             case 2 -> sprite = idle_down;
