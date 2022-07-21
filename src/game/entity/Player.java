@@ -11,16 +11,24 @@ import java.io.IOException;
 public class Player extends Entity {
     GamePanel gp;
     KeyInputHandler keyH;
+
+    public final int screenX;
+    public final int screenY;
+
     public Player (GamePanel gp, KeyInputHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
+
+        screenX = gp.screenWidth/2 - (gp.tileSize/2);
+        screenY = gp.screenHeight/2 - (gp.tileSize/2);
+
         setDefaultVariables();
         getPlayerImage();
     }
 
     public void setDefaultVariables () {
-        x = 100;
-        y = 100;
+        worldX = 100;
+        worldY = 100;
         speed = 4;
     }
 
@@ -52,19 +60,19 @@ public class Player extends Entity {
         if (keyH.isWalking) {
             if (keyH.upPressed) {
                 dir = 0;
-                y -= speed;
+                worldY -= speed;
             }
             else if (keyH.leftPressed) {
                 dir = 1;
-                x -= speed;
+                worldX -= speed;
             }
             else if (keyH.downPressed) {
                 dir = 2;
-                y += speed;
+                worldY += speed;
             }
             else if (keyH.rightPressed) {
                 dir = 3;
-                x += speed;
+                worldX += speed;
             }
             spriteCounter++;
             if (spriteCounter > 10) {
@@ -88,6 +96,6 @@ public class Player extends Entity {
             case 2 -> sprite = idle_down;
             case 3 -> sprite = idle_right;
         }
-        g2.drawImage(sprite, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(sprite, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 }
