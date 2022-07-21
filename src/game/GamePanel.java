@@ -7,14 +7,15 @@ import game.entity.Player;
 public class GamePanel extends JPanel implements Runnable {
     // Main screen settings
     final byte originalTileSize = 16;
+    final int scale = 3;
 
-    public final int tileSize = originalTileSize * 3;
+    public final int tileSize = originalTileSize * scale;
 
-    final int screenMaxCol = 16;
-    final int screenMaxRow = 12;
+    public final int screenMaxCol = 16;
+    public final int screenMaxRow = 12;
 
-    final int screenWidth = screenMaxCol * tileSize;
-    final int screenHeight = screenMaxRow * tileSize;
+    public final int screenWidth = screenMaxCol * tileSize;
+    public final int screenHeight = screenMaxRow * tileSize;
 
     KeyInputHandler keyH = new KeyInputHandler();
     Thread gameThread;
