@@ -19,7 +19,7 @@ public class TileManager {
         mapTileNum = new int[gp.screenMaxCol][gp.screenMaxRow];
 
         getTileImage();
-        loadMap("/game/maps/map01.txt");
+        loadMap("/game/maps/map02.txt");
     }
 
     public void getTileImage() {
