@@ -4,8 +4,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
-    public double worldX, worldY;
-    public double speed;
+    public int worldX, worldY;
+    public byte speed;
 
     public BufferedImage idle_left, idle_right, idle_up, idle_down;
     public BufferedImage walk_left1, walk_right1, walk_up1, walk_down1;

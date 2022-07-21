@@ -9,11 +9,13 @@ public class GamePanel extends JPanel implements Runnable {
     final byte originalTileSize = 16;
     final int scale = 3;
 
-    public int tileSize = originalTileSize * scale;
-    public int screenMaxCol = 16;
-    public int screenMaxRow = 12;
-    public int screenWidth = screenMaxCol * tileSize;
-    public int screenHeight = screenMaxRow * tileSize;
+    public final int tileSize = originalTileSize * scale;
+
+    public final int screenMaxCol = 16;
+    public final int screenMaxRow = 12;
+
+    public final int screenWidth = screenMaxCol * tileSize;
+    public final int screenHeight = screenMaxRow * tileSize;
 
     // World Settings.
     public final int worldMaxCol = 50;
@@ -22,7 +24,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int worldHeight = tileSize * worldMaxRow;
 
 
-    KeyInputHandler keyH = new KeyInputHandler(this);
+    KeyInputHandler keyH = new KeyInputHandler();
     Thread gameThread;
     public CollisionCheck cChecker = new CollisionCheck(this);
 
@@ -37,23 +39,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.setBackground(Color.black);
         this.addKeyListener(keyH);
         this.setFocusable(true);
-    }
-
-    public void zoom(int i) {
-        int oldWorldWidth = tileSize * worldMaxCol;
-        tileSize += i;
-
-        int newWorldWidth = tileSize * worldMaxCol;
-
-        player.speed = (double) newWorldWidth/600;
-
-        double multiplier = (double) newWorldWidth/oldWorldWidth;
-
-        double newPlayerWorldX = player.worldX * multiplier;
-        double newPlayerWorldY = player.worldY * multiplier;
-
-        player.worldX = newPlayerWorldX;
-        player.worldY = newPlayerWorldY;
     }
 
     public void startGameThread () {
