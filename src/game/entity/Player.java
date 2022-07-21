@@ -22,6 +22,8 @@ public class Player extends Entity {
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
+        Hitbox = new Rectangle(8, 16, 32, 32);
+
         setDefaultVariables();
         getPlayerImage();
     }
@@ -58,22 +60,21 @@ public class Player extends Entity {
 
     public void update () {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
-            if (keyH.upPressed) {
-                dir = 0;
-                worldY -= speed;
+            if (keyH.upPressed) dir = 0;
+            else if (keyH.leftPressed) dir = 1;
+            else if (keyH.downPressed) dir = 2;
+            else if (keyH.rightPressed) dir = 3;
+
+            collisionOn = false;
+            gp.cChecker.checktile(this);
+
+            if (collisionOn == false) switch (dir) {
+                case 0 -> worldY -= speed;
+                case 1 -> worldX -= speed;
+                case 2 -> worldY += speed;
+                case 3 -> worldX += speed;
             }
-            else if (keyH.leftPressed) {
-                dir = 1;
-                worldX -= speed;
-            }
-            else if (keyH.downPressed) {
-                dir = 2;
-                worldY += speed;
-            }
-            else if (keyH.rightPressed) {
-                dir = 3;
-                worldX += speed;
-            }
+
             spriteCounter++;
             if (spriteCounter > 10) {
                 spriteNumber = (byte) (spriteNumber == 1 ? 2 : 1);
