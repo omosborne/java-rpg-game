@@ -9,8 +9,8 @@ import java.io.InputStreamReader;
 
 public class TileManager {
     GamePanel gp;
-    Tile[] tile;
-    int mapTileNum[][];
+    public Tile[] tile;
+    public int mapTileNum[][];
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
@@ -28,6 +28,9 @@ public class TileManager {
                 tile[i] = new Tile();
                 tile[i].image = ImageIO.read(getClass().getResourceAsStream("/game/images/tiles/tile_" + i + ".png"));
             }
+            tile[0].collision = true;
+            // From 9 to 15
+            for (int i = 9; i < 15; i++) tile[i].collision = true;
 
         } catch (IOException e) {
             e.printStackTrace();

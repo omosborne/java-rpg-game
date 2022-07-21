@@ -1,5 +1,6 @@
 package game.entity;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
@@ -13,4 +14,7 @@ public class Entity {
     public byte dir;
     public byte spriteCounter = 0;
     public byte spriteNumber = 1;
+
+    public Rectangle Hitbox;
+    public boolean collisionOn = false;
 }

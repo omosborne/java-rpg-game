@@ -24,6 +24,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     KeyInputHandler keyH = new KeyInputHandler(this);
     Thread gameThread;
+    public CollisionCheck cChecker = new CollisionCheck(this);
 
     final byte MaxFPS = 60;
 
