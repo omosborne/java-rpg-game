@@ -15,6 +15,9 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
 
+    private final int width = 32;
+    private final int height = 32;
+
     public Player (GamePanel gp, KeyInputHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
@@ -22,9 +25,9 @@ public class Player extends Entity {
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
-        int hitboxBuffer = gp.tileSize/8;
-        int hitboxOverlap = (gp.tileSize-hitboxBuffer)/3;
-        hitbox = new Rectangle(hitboxBuffer, hitboxBuffer + hitboxOverlap, gp.tileSize-hitboxBuffer, (gp.tileSize-hitboxBuffer)-hitboxOverlap);
+        int hitboxBuffer = width/8;
+        int hitboxOverlap = (height-hitboxBuffer)/3;
+        hitbox = new Rectangle(hitboxBuffer, hitboxBuffer + hitboxOverlap, width-hitboxBuffer, (height-hitboxBuffer)-hitboxOverlap);
 
         setDefaultVariables();
         getPlayerImage();
@@ -102,6 +105,6 @@ public class Player extends Entity {
             case 3 -> sprite = spriteNumber == 1 ? walk_right1 : walk_right2;
         }
 
-        g2.drawImage(sprite, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(sprite, screenX, screenY, width, height, null);
     }
 }
