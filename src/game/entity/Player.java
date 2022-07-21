@@ -57,7 +57,7 @@ public class Player extends Entity {
     }
 
     public void update () {
-        if (keyH.isWalking) {
+        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
             if (keyH.upPressed) {
                 dir = 0;
                 worldY -= speed;
@@ -84,18 +84,21 @@ public class Player extends Entity {
 
     public void draw (Graphics2D g2) {
         BufferedImage sprite = null;
-        if (keyH.isWalking) switch (dir) {
+        if (!(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed)) {
+            switch (dir) {
+                case 0 -> sprite = idle_up;
+                case 1 -> sprite = idle_left;
+                case 2 -> sprite = idle_down;
+                case 3 -> sprite = idle_right;
+            }
+        }
+        else switch (dir) {
             case 0 -> sprite = spriteNumber == 1 ? walk_up1 : walk_up2;
             case 1 -> sprite = spriteNumber == 1 ? walk_left1 : walk_left2;
             case 2 -> sprite = spriteNumber == 1 ? walk_down1 : walk_down2;
             case 3 -> sprite = spriteNumber == 1 ? walk_right1 : walk_right2;
         }
-        else switch (dir) {
-            case 0 -> sprite = idle_up;
-            case 1 -> sprite = idle_left;
-            case 2 -> sprite = idle_down;
-            case 3 -> sprite = idle_right;
-        }
+
         g2.drawImage(sprite, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 }
