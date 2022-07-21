@@ -2,7 +2,7 @@ package game;
 
 import javax.swing.JPanel;
 import java.awt.*;
-import entity.Player;
+import game.entity.Player;
 
 public class GamePanel extends JPanel implements Runnable {
     // Main screen settings
