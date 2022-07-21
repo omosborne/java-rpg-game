@@ -3,7 +3,9 @@ package game.entity;
 import game.GamePanel;
 import game.KeyInputHandler;
 
+import javax.imageio.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class Player extends Entity {
     GamePanel gp;
@@ -18,6 +20,14 @@ public class Player extends Entity {
         x = 100;
         y = 100;
         speed = 4;
+    }
+
+    public void getPlayerImage () {
+        try {
+            idle_up = ImageIO.read(getClass().getResourceAsStream("../images/idle_up.png"));
+        } catch (IOException error) {
+            error.printStackTrace();
+        }
     }
 
     public void update () {
