@@ -8,10 +8,10 @@ public class CollisionCheck {
         this.gp = gp;
     }
     public void checktile (Entity entity) {
-        int entityLeftWorldX = entity.worldX + entity.Hitbox.x;
-        int entityRightWorldX = entity.worldX + entity.Hitbox.x + entity.Hitbox.width;
-        int entityTopWorldY = entity.worldY + entity.Hitbox.y;
-        int entityBottomWorldY = entity.worldY + entity.Hitbox.y + entity.Hitbox.height;
+        int entityLeftWorldX = entity.worldX + entity.hitbox.x;
+        int entityRightWorldX = entity.worldX + entity.hitbox.x + entity.hitbox.width;
+        int entityTopWorldY = entity.worldY + entity.hitbox.y;
+        int entityBottomWorldY = entity.worldY + entity.hitbox.y + entity.hitbox.height;
 
         int entityLeftCol = entityLeftWorldX/gp.tileSize;
         int entityRightCol = entityRightWorldX/ gp.tileSize;

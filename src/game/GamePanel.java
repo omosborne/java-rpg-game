@@ -6,13 +6,11 @@ import game.entity.Player;
 
 public class GamePanel extends JPanel implements Runnable {
     // Main screen settings
-    final byte originalTileSize = 16;
-    final int scale = 3;
 
-    public final int tileSize = originalTileSize * scale;
+    public final int tileSize = 16;
 
-    public final int screenMaxCol = 16;
-    public final int screenMaxRow = 12;
+    public final int screenMaxCol = 64;
+    public final int screenMaxRow = 48;
 
     public final int screenWidth = screenMaxCol * tileSize;
     public final int screenHeight = screenMaxRow * tileSize;

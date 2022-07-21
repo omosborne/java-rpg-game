@@ -22,7 +22,9 @@ public class Player extends Entity {
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
-        Hitbox = new Rectangle(8, 16, 32, 32);
+        int hitboxBuffer = gp.tileSize/8;
+        int hitboxOverlap = (gp.tileSize-hitboxBuffer)/3;
+        hitbox = new Rectangle(hitboxBuffer, hitboxBuffer + hitboxOverlap, gp.tileSize-hitboxBuffer, (gp.tileSize-hitboxBuffer)-hitboxOverlap);
 
         setDefaultVariables();
         getPlayerImage();
@@ -31,7 +33,7 @@ public class Player extends Entity {
     public void setDefaultVariables () {
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
-        speed = 4;
+        speed = gp.worldWidth/600;
     }
 
     public void getPlayerImage () {

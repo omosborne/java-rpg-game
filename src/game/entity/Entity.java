@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 public class Entity {
     public int worldX, worldY;
-    public byte speed;
+    public int speed;
 
     public BufferedImage idle_left, idle_right, idle_up, idle_down;
     public BufferedImage walk_left1, walk_right1, walk_up1, walk_down1;
@@ -15,6 +15,6 @@ public class Entity {
     public byte spriteCounter = 0;
     public byte spriteNumber = 1;
 
-    public Rectangle Hitbox;
+    public Rectangle hitbox;
     public boolean collisionOn = false;
 }
