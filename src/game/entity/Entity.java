@@ -3,8 +3,8 @@ package game.entity;
 import java.awt.image.BufferedImage;
 
 public class Entity {
-    public int worldX, worldY;
-    public byte speed;
+    public double worldX, worldY;
+    public double speed;
 
     public BufferedImage idle_left, idle_right, idle_up, idle_down;
     public BufferedImage walk_left1, walk_right1, walk_up1, walk_down1;

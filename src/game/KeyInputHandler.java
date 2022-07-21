@@ -7,6 +7,11 @@ public class KeyInputHandler implements KeyListener {
     public void keyTyped (KeyEvent keyEvent) {}
 
     public boolean upPressed, downPressed, leftPressed, rightPressed;
+    GamePanel gp;
+
+    public KeyInputHandler(GamePanel gp) {
+        this.gp = gp;
+    }
 
     @Override
     public void keyPressed (KeyEvent keyEvent) {
@@ -17,6 +22,8 @@ public class KeyInputHandler implements KeyListener {
             case KeyEvent.VK_S -> downPressed = true;
             case KeyEvent.VK_A -> leftPressed = true;
             case KeyEvent.VK_D -> rightPressed = true;
+            case KeyEvent.VK_Z -> gp.zoom(1);
+            case KeyEvent.VK_X -> gp.zoom(-1);
         }
     }
 
