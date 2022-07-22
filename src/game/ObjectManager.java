@@ -16,7 +16,7 @@ public class ObjectManager {
         gp.obj[0].worldY = 7 * gp.tileSize;
 
         gp.obj[1] = new Box();
-        gp.obj[0].worldX = 23 * gp.tileSize;
-        gp.obj[0].worldY = 40 * gp.tileSize;
+        gp.obj[1].worldX = 23 * gp.tileSize;
+        gp.obj[1].worldY = 40 * gp.tileSize;
     }
 }

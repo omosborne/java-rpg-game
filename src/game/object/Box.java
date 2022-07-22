@@ -9,6 +9,8 @@ public class Box extends SuperObject{
         name = "Box";
         try {
             image = ImageIO.read(getClass().getResourceAsStream("/game/images/objects/box.png"));
+            width = image.getWidth();
+            height = image.getHeight();
         } catch (IOException e) {
             e.printStackTrace();
         }
