@@ -3,6 +3,7 @@ package game;
 import javax.swing.JPanel;
 import java.awt.*;
 import game.entity.Player;
+import game.object.SuperObject;
 
 public class GamePanel extends JPanel implements Runnable {
     // Main screen settings
@@ -32,11 +33,19 @@ public class GamePanel extends JPanel implements Runnable {
 
     public Player player = new Player(this, keyH);
 
+    // Number of objects that can be displayed at once.
+    public SuperObject obj[] = new SuperObject[10];
+    public ObjectManager objM = new ObjectManager(this);
+
     public GamePanel () {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+    }
+
+    public void loadGameObjects() {
+        objM.placeObject();
     }
 
     public void startGameThread () {
