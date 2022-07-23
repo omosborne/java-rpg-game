@@ -60,52 +60,31 @@ public class CollisionCheck {
         for (int i = 0; i < gp.obj.length; i++) {
             SuperObject object = gp.obj[i];
 
-            if (object != null) {
-               entity.hitbox.x = entity.worldX + entity.hitbox.x;
-               entity.hitbox.y = entity.worldY + entity.hitbox.y;
+            if (object == null) continue;
 
-                object.hitbox.x = object.worldX + object.hitbox.x;
-                object.hitbox.y = object.worldY + object.hitbox.y;
+            entity.hitbox.x = entity.worldX + entity.hitbox.x;
+            entity.hitbox.y = entity.worldY + entity.hitbox.y;
 
-               switch (entity.direction) {
-                   case 0 -> {
-                       entity.hitbox.y -= entity.speed;
-                       if (entity.hitbox.intersects(object.hitbox)) {
-                           if (object.isCollidable) {
-                               entity.hasCollided = true;
-                           }
-                       }
-                   }
-                   case 1 -> {
-                       entity.hitbox.x -= entity.speed;
-                       if (entity.hitbox.intersects(object.hitbox)) {
-                           if (object.isCollidable) {
-                               entity.hasCollided = true;
-                           }
-                       }
-                   }
-                   case 2 -> {
-                       entity.hitbox.y += entity.speed;
-                       if (entity.hitbox.intersects(object.hitbox)) {
-                           if (object.isCollidable) {
-                               entity.hasCollided = true;
-                           }
-                       }
-                   }
-                   case 3 -> {
-                       entity.hitbox.x += entity.speed;
-                       if (entity.hitbox.intersects(object.hitbox)) {
-                           if (object.isCollidable) {
-                               entity.hasCollided = true;
-                           }
-                       }
-                   }
-               }
-                entity.hitbox.x = entity.hitboxDefaultX;
-                entity.hitbox.y = entity.hitboxDefaultY;
-                object.hitbox.x = object.hitboxDefaultX;
-                object.hitbox.y = object.hitboxDefaultY;
+            object.hitbox.x = object.worldX + object.hitbox.x;
+            object.hitbox.y = object.worldY + object.hitbox.y;
+
+            switch (entity.direction) {
+                case 0 -> entity.hitbox.y -= entity.speed;
+                case 1 -> entity.hitbox.x -= entity.speed;
+                case 2 -> entity.hitbox.y += entity.speed;
+                case 3 -> entity.hitbox.x += entity.speed;
             }
+
+            if (entity.hitbox.intersects(object.hitbox) && object.isCollidable) {
+                entity.hasCollided = true;
+            }
+
+            // Reset hitboxes.
+            entity.hitbox.x = entity.hitboxDefaultX;
+            entity.hitbox.y = entity.hitboxDefaultY;
+            object.hitbox.x = object.hitboxDefaultX;
+            object.hitbox.y = object.hitboxDefaultY;
+
         }
     }
 }
