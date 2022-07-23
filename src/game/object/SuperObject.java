@@ -9,9 +9,14 @@ public class SuperObject {
 
     public BufferedImage image;
     public String name;
-    public boolean collision = false;
-    public int worldX, worldY;
-    public int width, height;
+    public boolean isCollidable = false;
+    public int worldX = 0;
+    public int worldY = 0;
+    public int width = 0;
+    public int height = 0;
+    public Rectangle hitbox = new Rectangle(0,0,32,32);
+    public int hitboxDefaultX = 0;
+    public int hitboxDefaultY = 0;
 
     public void draw(Graphics2D g2, GamePanel gp) {
         int screenX = worldX - gp.player.worldX + gp.player.screenX;

@@ -28,6 +28,8 @@ public class Player extends Entity {
         int hitboxBuffer = width/8;
         int hitboxOverlap = (height-hitboxBuffer)/3;
         hitbox = new Rectangle(hitboxBuffer, hitboxBuffer + hitboxOverlap, width-hitboxBuffer, (height-hitboxBuffer)-hitboxOverlap);
+        hitboxDefaultX = hitbox.x;
+        hitboxDefaultY = hitbox.y;
 
         setDefaultVariables();
         getPlayerImage();
@@ -65,15 +67,16 @@ public class Player extends Entity {
 
     public void update () {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
-            if (keyH.upPressed) dir = 0;
-            else if (keyH.leftPressed) dir = 1;
-            else if (keyH.downPressed) dir = 2;
-            else if (keyH.rightPressed) dir = 3;
+            if (keyH.upPressed) direction = 0;
+            else if (keyH.leftPressed) direction = 1;
+            else if (keyH.downPressed) direction = 2;
+            else direction = 3;
 
-            collisionOn = false;
-            gp.cChecker.checktile(this);
+            hasCollided = false;
+            gp.cChecker.checkTile(this);
+            gp.cChecker.checkObject(this);
 
-            if (collisionOn == false) switch (dir) {
+            if (!hasCollided) switch (direction) {
                 case 0 -> worldY -= speed;
                 case 1 -> worldX -= speed;
                 case 2 -> worldY += speed;
@@ -90,15 +93,16 @@ public class Player extends Entity {
 
     public void draw (Graphics2D g2) {
         BufferedImage sprite = null;
-        if (!(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) || collisionOn) {
-            switch (dir) {
+
+        if (!(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) || hasCollided) {
+            switch (direction) {
                 case 0 -> sprite = idle_up;
                 case 1 -> sprite = idle_left;
                 case 2 -> sprite = idle_down;
                 case 3 -> sprite = idle_right;
             }
         }
-        else switch (dir) {
+        else switch (direction) {
             case 0 -> sprite = spriteNumber == 1 ? walk_up1 : walk_up2;
             case 1 -> sprite = spriteNumber == 1 ? walk_left1 : walk_left2;
             case 2 -> sprite = spriteNumber == 1 ? walk_down1 : walk_down2;
