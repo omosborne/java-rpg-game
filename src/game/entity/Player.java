@@ -76,11 +76,35 @@ public class Player extends Entity {
             gp.cChecker.checkTile(this);
             gp.cChecker.checkObject(this);
 
-            if (!hasCollided) switch (direction) {
-                case 0 -> worldY -= speed;
-                case 1 -> worldX -= speed;
-                case 2 -> worldY += speed;
-                case 3 -> worldX += speed;
+            if (!hasCollided) {
+                if (keyH.upPressed  && keyH.leftPressed) {
+                    worldY -= speed;
+                    worldX -= speed;
+                }
+                else if (keyH.leftPressed  && keyH.downPressed) {
+                    worldX -= speed;
+                    worldY += speed;
+                }
+                else if (keyH.downPressed  && keyH.rightPressed) {
+                    worldY += speed;
+                    worldX += speed;
+                }
+                else if (keyH.rightPressed  && keyH.upPressed) {
+                    worldX += speed;
+                    worldY -= speed;
+                }
+                else if (keyH.upPressed) {
+                    worldY -= speed;
+                }
+                else if (keyH.leftPressed) {
+                    worldX -= speed;
+                }
+                else if (keyH.downPressed) {
+                    worldY += speed;
+                }
+                else if (keyH.rightPressed) {
+                    worldX += speed;
+                }
             }
 
             spriteCounter++;
