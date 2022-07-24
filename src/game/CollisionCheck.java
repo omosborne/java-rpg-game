@@ -77,6 +77,7 @@ public class CollisionCheck {
 
             if (entity.hitbox.intersects(object.hitbox) && object.isCollidable) {
                 entity.hasCollided = true;
+                gp.ui.displayNotification("Collision detected!");
             }
 
             // Reset hitboxes.
