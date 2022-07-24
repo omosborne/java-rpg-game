@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int worldHeight = tileSize * worldMaxRow;
 
 
-    KeyInputHandler keyH = new KeyInputHandler();
+    KeyInputHandler keyH = new KeyInputHandler(this);
     Thread gameThread;
     public CollisionCheck cChecker = new CollisionCheck(this);
 
@@ -39,6 +39,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     public UI ui = new UI(this);
 
+    public int gameState;
+    public final int playState = 1;
+    public final int pauseState = 2;
+
     public GamePanel () {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
@@ -46,8 +50,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
     }
 
-    public void loadGameObjects() {
+    public void prepareGame() {
         objM.placeObject();
+        gameState = playState;
     }
 
     public void startGameThread () {
@@ -76,7 +81,12 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update () {
-        player.update();
+        if (gameState == playState) {
+            player.update();
+        }
+        else if (gameState == pauseState) {
+
+        }
     }
 
     public void paintComponent (Graphics g) {

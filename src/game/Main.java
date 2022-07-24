@@ -17,7 +17,7 @@ public class Main {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
-        gamePanel.loadGameObjects();
+        gamePanel.prepareGame();
         gamePanel.startGameThread();
     }
 }
