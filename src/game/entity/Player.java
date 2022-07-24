@@ -118,7 +118,7 @@ public class Player extends Entity {
     public void draw (Graphics2D g2) {
         BufferedImage sprite = null;
 
-        if (!(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) || hasCollided) {
+        if (!(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed)) {
             switch (direction) {
                 case 0 -> sprite = idle_up;
                 case 1 -> sprite = idle_left;
