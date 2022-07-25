@@ -17,40 +17,77 @@ public class CollisionCheck {
         int entityBottomWorldY = entity.worldY + entity.hitbox.y + entity.hitbox.height;
 
         int entityLeftCol = entityLeftWorldX/gp.tileSize;
-        int entityRightCol = entityRightWorldX/ gp.tileSize;
+        int entityRightCol = entityRightWorldX/gp.tileSize;
         int entityTopRow = entityTopWorldY/gp.tileSize;
         int entityBottomRow = entityBottomWorldY/gp.tileSize;
 
-        int tileNum, tileNum2;
+        int tileNum = 0;
+        int tileNum2 = 0;
 
         switch (entity.direction) {
             // Up
             case 0 -> {
                 entityTopRow = (entityTopWorldY - entity.speed)/gp.tileSize;
-                tileNum = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) entity.hasCollided = true;
+
+                try {
+                    tileNum = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
+                    tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
+                } catch (IndexOutOfBoundsException e) {
+                    entity.hasCollided = true;
+                    break;
+                }
+
+                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
+                    entity.hasCollided = true;
+                }
             }
             // Left
             case 1 -> {
                 entityLeftCol = (entityLeftWorldX - entity.speed)/gp.tileSize;
-                tileNum = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
-                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) entity.hasCollided = true;
+
+                try {
+                    tileNum = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
+                    tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
+                } catch (IndexOutOfBoundsException e) {
+                    entity.hasCollided = true;
+                    break;
+                }
+
+                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
+                    entity.hasCollided = true;
+                }
             }
             // Down
             case 2 -> {
                 entityBottomRow = (entityBottomWorldY + entity.speed)/gp.tileSize;
-                tileNum = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
-                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) entity.hasCollided = true;
+
+                try {
+                    tileNum = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
+                    tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
+                } catch (IndexOutOfBoundsException e) {
+                    entity.hasCollided = true;
+                    break;
+                }
+
+                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
+                    entity.hasCollided = true;
+                }
             }
-            // Up
+            // Right
             case 3 -> {
                 entityRightCol = (entityRightWorldX + entity.speed)/gp.tileSize;
-                tileNum = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
-                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) entity.hasCollided = true;
+
+                try {
+                    tileNum = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
+                    tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
+                } catch (IndexOutOfBoundsException e) {
+                    entity.hasCollided = true;
+                    break;
+                }
+
+                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
+                    entity.hasCollided = true;
+                }
             }
         }
     }
