@@ -133,6 +133,26 @@ public class Player extends Entity {
             case 3 -> sprite = spriteNumber == 1 ? walk_right1 : walk_right2;
         }
 
-        g2.drawImage(sprite, screenX, screenY, width, height, null);
+        int x = screenX;
+        int y = screenY;
+
+        if (screenX > worldX) {
+            x = worldX;
+        }
+        if (screenY > worldY) {
+            y = worldY;
+        }
+
+        int rightOffset = gp.screenWidth - screenX;
+        if (rightOffset > gp.worldWidth - worldX) {
+            x = gp.screenWidth - (gp.worldWidth - worldX);
+        }
+
+        int bottomOffset = gp.screenHeight - screenY;
+        if (bottomOffset > gp.worldHeight - worldY) {
+            y = gp.screenHeight - (gp.worldHeight - worldY);
+        }
+
+        g2.drawImage(sprite, x, y, width, height, null);
     }
 }
