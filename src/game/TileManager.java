@@ -15,22 +15,23 @@ public class TileManager {
     public TileManager(GamePanel gp) {
         this.gp = gp;
 
-        tile = new Tile[16];
+        tile = new Tile[26];
         mapTileNum = new int[gp.worldMaxCol][gp.worldMaxRow];
 
         getTileImage();
-        loadMap("/game/maps/world01.txt");
+        loadMap("/game/maps/world02.txt");
     }
 
     public void getTileImage() {
         try {
-            for (int i = 0; i < tile.length; i++) {
+            for (int i = 10; i < tile.length; i++) {
+                System.out.println(i);
                 tile[i] = new Tile();
-                tile[i].image = ImageIO.read(getClass().getResourceAsStream("/game/images/tiles/tile_" + i + ".png"));
+                tile[i].image = ImageIO.read(getClass().getResourceAsStream("/game/images/tiles/tile" + i + ".png"));
             }
-            tile[0].collision = true;
+            tile[10].collision = true;
             // From 9 to 15
-            for (int i = 9; i < 15; i++) tile[i].collision = true;
+            for (int i = 19; i < 25; i++) tile[i].collision = true;
 
         } catch (IOException e) {
             e.printStackTrace();
