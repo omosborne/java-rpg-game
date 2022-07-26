@@ -29,8 +29,35 @@ public class Entity {
     public int hitboxDefaultY = 0;
     public boolean hasCollided = false;
 
+    public int actionCounter = 0;
+
     public Entity(GamePanel gp) {
         this.gp = gp;
+    }
+
+    public void setAction() {
+        // Override this.
+    }
+
+    public void update() {
+        setAction();
+
+        hasCollided = false;
+
+        if (!hasCollided) {
+            switch (direction) {
+                case 0 -> worldY -= speed;
+                case 1 -> worldX -= speed;
+                case 2 -> worldY += speed;
+                case 3 -> worldX += speed;
+            }
+        }
+
+        spriteCounter++;
+        if (spriteCounter > 10) {
+            spriteNumber = (byte) (spriteNumber == 1 ? 2 : 1);
+            spriteCounter = 0;
+        }
     }
 
     public void draw(Graphics2D g2) {

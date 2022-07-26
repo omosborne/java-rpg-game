@@ -4,6 +4,7 @@ import game.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.util.Random;
 
 public class HoodedMan extends Entity{
     public HoodedMan(GamePanel gp) {
@@ -35,6 +36,22 @@ public class HoodedMan extends Entity{
             walk_right2 = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/right_2.png"));
         } catch (IOException error) {
             error.printStackTrace();
+        }
+    }
+
+    public void setAction() {
+        actionCounter++;
+
+        if (actionCounter == 120) {
+            Random random = new Random();
+            int directionChance = random.nextInt(100) + 1;
+
+            if (directionChance < 25) direction = 0;
+            else if (directionChance > 25 && directionChance <= 50) direction = 1;
+            else if (directionChance > 50 && directionChance <= 75) direction = 2;
+            else if (directionChance > 75) direction = 3;
+
+            actionCounter = 0;
         }
     }
 }
