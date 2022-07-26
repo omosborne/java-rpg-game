@@ -33,6 +33,8 @@ public class Entity {
 
     public Entity(GamePanel gp) {
         this.gp = gp;
+        hitboxDefaultX = hitbox.x;
+        hitboxDefaultY = hitbox.y;
     }
 
     public void setAction() {
@@ -43,6 +45,9 @@ public class Entity {
         setAction();
 
         hasCollided = false;
+        gp.cChecker.checkTile(this);
+        gp.cChecker.checkObject(this);
+        gp.cChecker.checkPlayer(this);
 
         if (!hasCollided) {
             switch (direction) {
