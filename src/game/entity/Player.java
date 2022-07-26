@@ -9,27 +9,19 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
-    GamePanel gp;
+
     KeyInputHandler keyH;
 
     public final int screenX;
     public final int screenY;
 
-    private final int width = 32;
-    private final int height = 32;
-
     public Player (GamePanel gp, KeyInputHandler keyH) {
-        this.gp = gp;
+        super(gp);
+
         this.keyH = keyH;
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
-
-        int hitboxBuffer = width/8;
-        int hitboxOverlap = (height-hitboxBuffer)/3;
-        hitbox = new Rectangle(hitboxBuffer, hitboxBuffer + hitboxOverlap, width-hitboxBuffer, (height-hitboxBuffer)-hitboxOverlap);
-        hitboxDefaultX = hitbox.x;
-        hitboxDefaultY = hitbox.y;
 
         setDefaultVariables();
         getPlayerImage();
@@ -75,6 +67,7 @@ public class Player extends Entity {
             hasCollided = false;
             gp.cChecker.checkTile(this);
             gp.cChecker.checkObject(this);
+            gp.cChecker.checkEntity(this, gp.npc);
 
             if (!hasCollided) {
                 if (keyH.upPressed  && keyH.leftPressed) {

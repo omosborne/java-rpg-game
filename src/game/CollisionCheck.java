@@ -1,6 +1,7 @@
 package game;
 
 import game.entity.Entity;
+import game.entity.Player;
 import game.object.SuperObject;
 
 public class CollisionCheck {
@@ -124,5 +125,66 @@ public class CollisionCheck {
             object.hitbox.y = object.hitboxDefaultY;
 
         }
+    }
+
+    public void checkEntity(Entity entity, Entity[] target) {
+        for (int i = 0; i < target.length; i++) {
+            Entity currentTarget = target[i];
+
+            if (currentTarget == null) continue;
+
+            entity.hitbox.x = entity.worldX + entity.hitbox.x;
+            entity.hitbox.y = entity.worldY + entity.hitbox.y;
+
+            currentTarget.hitbox.x = currentTarget.worldX + currentTarget.hitbox.x;
+            currentTarget.hitbox.y = currentTarget.worldY + currentTarget.hitbox.y;
+
+            switch (entity.direction) {
+                case 0 -> entity.hitbox.y -= entity.speed;
+                case 1 -> entity.hitbox.x -= entity.speed;
+                case 2 -> entity.hitbox.y += entity.speed;
+                case 3 -> entity.hitbox.x += entity.speed;
+            }
+
+            if (entity.hitbox.intersects(currentTarget.hitbox)) {
+                entity.hasCollided = true;
+                gp.ui.displayNotification("Collision detected!");
+            }
+
+            // Reset hitboxes.
+            entity.hitbox.x = entity.hitboxDefaultX;
+            entity.hitbox.y = entity.hitboxDefaultY;
+            currentTarget.hitbox.x = currentTarget.hitboxDefaultX;
+            currentTarget.hitbox.y = currentTarget.hitboxDefaultY;
+
+        }
+    }
+
+    public void checkPlayer(Entity entity) {
+        Player player = gp.player;
+
+        entity.hitbox.x = entity.worldX + entity.hitbox.x;
+        entity.hitbox.y = entity.worldY + entity.hitbox.y;
+
+        player.hitbox.x = player.worldX + player.hitbox.x;
+        player.hitbox.y = player.worldY + player.hitbox.y;
+
+        switch (entity.direction) {
+            case 0 -> entity.hitbox.y -= entity.speed;
+            case 1 -> entity.hitbox.x -= entity.speed;
+            case 2 -> entity.hitbox.y += entity.speed;
+            case 3 -> entity.hitbox.x += entity.speed;
+        }
+
+        if (entity.hitbox.intersects(player.hitbox)) {
+            entity.hasCollided = true;
+            gp.ui.displayNotification("Collision detected!");
+        }
+
+        // Reset hitboxes.
+        entity.hitbox.x = entity.hitboxDefaultX;
+        entity.hitbox.y = entity.hitboxDefaultY;
+        player.hitbox.x = player.hitboxDefaultX;
+        player.hitbox.y = player.hitboxDefaultY;
     }
 }

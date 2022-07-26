@@ -39,20 +39,15 @@ public class SuperObject {
             screenY = gp.screenHeight - (gp.worldHeight - worldY);
         }
 
-        if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
+        if (isInCameraFrame(gp)) {
+            g2.drawImage(image, screenX, screenY, width, height, null);
+        }
+    }
+
+    private boolean isInCameraFrame(GamePanel gp) {
+        return worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
                 worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
                 worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
-                worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
-
-            g2.drawImage(image, screenX, screenY, width, height, null);
-        }
-        else if (gp.player.screenX > gp.player.worldX ||
-                gp.player.screenY > gp.player.worldY ||
-                rightOffset > gp.worldWidth - gp.player.worldX ||
-                bottomOffset > gp.worldHeight - gp.player.worldY) {
-
-            g2.drawImage(image, screenX, screenY, width, height, null);
-        }
-
+                worldY - gp.tileSize < gp.player.worldY + gp.player.screenY;
     }
 }
