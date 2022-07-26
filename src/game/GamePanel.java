@@ -2,6 +2,9 @@ package game;
 
 import javax.swing.JPanel;
 import java.awt.*;
+
+import game.entity.Entity;
+import game.entity.EntityManager;
 import game.entity.Player;
 import game.object.SuperObject;
 
@@ -27,15 +30,16 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     public CollisionCheck cChecker = new CollisionCheck(this);
 
-    final byte MaxFPS = 60;
+    final byte maxFPS = 60;
 
     TileManager tileM = new TileManager(this);
 
     public Player player = new Player(this, keyH);
-
     // Number of objects that can be displayed at once.
-    public SuperObject obj[] = new SuperObject[10];
+    public SuperObject[] obj = new SuperObject[10];
     public ObjectManager objM = new ObjectManager(this);
+    public Entity[] npc = new Entity[10];
+    public EntityManager npcM = new EntityManager(this);
 
     public UI ui = new UI(this);
 
@@ -52,6 +56,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void prepareGame() {
         objM.placeObject();
+        npcM.placeEntities();
         gameState = playState;
     }
 
@@ -62,7 +67,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void run () {
         // Game Loop Variables
-        double drawInterval = 1000000000/MaxFPS;
+        double drawInterval = 1000000000/ maxFPS;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -100,6 +105,13 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < obj.length; i++) {
             if (obj[i] != null) {
                 obj[i].draw(g2, this);
+            }
+        }
+
+        // NPCs
+        for (int i = 0; i < npc.length; i++) {
+            if (npc[i] != null) {
+                npc[i].draw(g2);
             }
         }
 
