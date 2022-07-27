@@ -72,23 +72,6 @@ public class Entity {
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-        if (gp.player.screenX > gp.player.worldX) {
-            screenX = worldX;
-        }
-        if (gp.player.screenY > gp.player.worldY) {
-            screenY = worldY;
-        }
-
-        int rightOffset = gp.screenWidth - gp.player.screenX;
-        if (rightOffset > gp.worldWidth - gp.player.worldX) {
-            screenX = gp.screenWidth - (gp.worldWidth - worldX);
-        }
-
-        int bottomOffset = gp.screenHeight - gp.player.screenY;
-        if (bottomOffset > gp.worldHeight - gp.player.worldY) {
-            screenY = gp.screenHeight - (gp.worldHeight - worldY);
-        }
-
         if (isInCameraFrame()) {
 
             switch (direction) {
@@ -97,15 +80,15 @@ public class Entity {
                 case 2 -> sprite = spriteNumber == 1 ? walk_down1 : walk_down2;
                 case 3 -> sprite = spriteNumber == 1 ? walk_right1 : walk_right2;
             }
-
+            System.out.println("Draw NPC");
             g2.drawImage(sprite, screenX, screenY, width, height, null);
         }
     }
 
     private boolean isInCameraFrame() {
-        return worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
-                worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
-                worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
-                worldY - gp.tileSize < gp.player.worldY + gp.player.screenY;
+        return (worldX + gp.tileSize * 2) > gp.player.worldX - gp.player.screenX &&         // Left Screen.
+                (worldX - gp.tileSize * 2) < gp.player.worldX + gp.player.screenX &&        // Right Screen.
+                (worldY + gp.tileSize * 2) > gp.player.worldY - gp.player.screenY &&        // Upper Screen.
+                (worldY - gp.tileSize * 2) < gp.player.worldY + gp.player.screenY;          // Bottom Screen.
     }
 }
