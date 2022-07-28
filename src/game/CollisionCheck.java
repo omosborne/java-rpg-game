@@ -12,10 +12,10 @@ public class CollisionCheck {
     }
 
     public void checkTile(Entity entity) {
-        int entityLeftWorldX = entity.worldX + entity.hitbox.x;
-        int entityRightWorldX = entity.worldX + entity.hitbox.x + entity.hitbox.width;
-        int entityTopWorldY = entity.worldY + entity.hitbox.y;
-        int entityBottomWorldY = entity.worldY + entity.hitbox.y + entity.hitbox.height;
+        int entityLeftWorldX = entity.getWorldX() + entity.hitbox.x;
+        int entityRightWorldX = entity.getWorldX() + entity.hitbox.x + entity.hitbox.width;
+        int entityTopWorldY = entity.getWorldY() + entity.hitbox.y;
+        int entityBottomWorldY = entity.getWorldY() + entity.hitbox.y + entity.hitbox.height;
 
         int entityLeftCol = entityLeftWorldX/gp.tileSize;
         int entityRightCol = entityRightWorldX/gp.tileSize;
@@ -25,69 +25,65 @@ public class CollisionCheck {
         int tileNum = 0;
         int tileNum2 = 0;
 
-        switch (entity.direction) {
-            // Up
-            case 0 -> {
-                entityTopRow = (entityTopWorldY - entity.speed)/gp.tileSize;
+        switch (entity.getDirection()) {
+            case UP -> {
+                entityTopRow = (entityTopWorldY - entity.getSpeed())/gp.tileSize;
 
                 try {
                     tileNum = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
                     tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
                 } catch (IndexOutOfBoundsException e) {
-                    entity.hasCollided = true;
+                    entity.collisionOccurred(true);
                     break;
                 }
 
                 if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
-                    entity.hasCollided = true;
+                    entity.collisionOccurred(true);
                 }
             }
-            // Left
-            case 1 -> {
-                entityLeftCol = (entityLeftWorldX - entity.speed)/gp.tileSize;
+            case LEFT -> {
+                entityLeftCol = (entityLeftWorldX - entity.getSpeed())/gp.tileSize;
 
                 try {
                     tileNum = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
                     tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
                 } catch (IndexOutOfBoundsException e) {
-                    entity.hasCollided = true;
+                    entity.collisionOccurred(true);
                     break;
                 }
 
                 if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
-                    entity.hasCollided = true;
+                    entity.collisionOccurred(true);
                 }
             }
-            // Down
-            case 2 -> {
-                entityBottomRow = (entityBottomWorldY + entity.speed)/gp.tileSize;
+            case DOWN -> {
+                entityBottomRow = (entityBottomWorldY + entity.getSpeed())/gp.tileSize;
 
                 try {
                     tileNum = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
                     tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
                 } catch (IndexOutOfBoundsException e) {
-                    entity.hasCollided = true;
+                    entity.collisionOccurred(true);
                     break;
                 }
 
                 if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
-                    entity.hasCollided = true;
+                    entity.collisionOccurred(true);
                 }
             }
-            // Right
-            case 3 -> {
-                entityRightCol = (entityRightWorldX + entity.speed)/gp.tileSize;
+            case RIGHT -> {
+                entityRightCol = (entityRightWorldX + entity.getSpeed())/gp.tileSize;
 
                 try {
                     tileNum = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
                     tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
                 } catch (IndexOutOfBoundsException e) {
-                    entity.hasCollided = true;
+                    entity.collisionOccurred(true);
                     break;
                 }
 
                 if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
-                    entity.hasCollided = true;
+                    entity.collisionOccurred(true);
                 }
             }
         }
@@ -100,21 +96,21 @@ public class CollisionCheck {
 
             if (object == null) continue;
 
-            entity.hitbox.x = entity.worldX + entity.hitbox.x;
-            entity.hitbox.y = entity.worldY + entity.hitbox.y;
+            entity.hitbox.x += entity.getWorldX();
+            entity.hitbox.y += entity.getWorldY();
 
-            object.hitbox.x = object.worldX + object.hitbox.x;
-            object.hitbox.y = object.worldY + object.hitbox.y;
+            object.hitbox.x += object.worldX;
+            object.hitbox.y += object.worldY;
 
-            switch (entity.direction) {
-                case 0 -> entity.hitbox.y -= entity.speed;
-                case 1 -> entity.hitbox.x -= entity.speed;
-                case 2 -> entity.hitbox.y += entity.speed;
-                case 3 -> entity.hitbox.x += entity.speed;
+            switch (entity.getDirection()) {
+                case UP -> entity.hitbox.y -= entity.getSpeed();
+                case LEFT -> entity.hitbox.x -= entity.getSpeed();
+                case DOWN -> entity.hitbox.y += entity.getSpeed();
+                case RIGHT -> entity.hitbox.x += entity.getSpeed();
             }
 
             if (entity.hitbox.intersects(object.hitbox) && object.isCollidable) {
-                entity.hasCollided = true;
+                entity.collisionOccurred(true);
                 gp.ui.displayNotification("Collision detected!");
             }
 
@@ -133,21 +129,21 @@ public class CollisionCheck {
 
             if (currentTarget == null) continue;
 
-            entity.hitbox.x = entity.worldX + entity.hitbox.x;
-            entity.hitbox.y = entity.worldY + entity.hitbox.y;
+            entity.hitbox.x += entity.getWorldX();
+            entity.hitbox.y += entity.getWorldY();
 
-            currentTarget.hitbox.x = currentTarget.worldX + currentTarget.hitbox.x;
-            currentTarget.hitbox.y = currentTarget.worldY + currentTarget.hitbox.y;
+            currentTarget.hitbox.x += currentTarget.getWorldX();
+            currentTarget.hitbox.y += currentTarget.getWorldY();
 
-            switch (entity.direction) {
-                case 0 -> entity.hitbox.y -= entity.speed;
-                case 1 -> entity.hitbox.x -= entity.speed;
-                case 2 -> entity.hitbox.y += entity.speed;
-                case 3 -> entity.hitbox.x += entity.speed;
+            switch (entity.getDirection()) {
+                case UP -> entity.hitbox.y -= entity.getSpeed();
+                case LEFT -> entity.hitbox.x -= entity.getSpeed();
+                case DOWN -> entity.hitbox.y += entity.getSpeed();
+                case RIGHT -> entity.hitbox.x += entity.getSpeed();
             }
 
             if (entity.hitbox.intersects(currentTarget.hitbox)) {
-                entity.hasCollided = true;
+                entity.collisionOccurred(true);
                 gp.ui.displayNotification("Collision detected!");
             }
 
@@ -163,21 +159,21 @@ public class CollisionCheck {
     public void checkPlayer(Entity entity) {
         Player player = gp.player;
 
-        entity.hitbox.x = entity.worldX + entity.hitbox.x;
-        entity.hitbox.y = entity.worldY + entity.hitbox.y;
+        entity.hitbox.x += entity.getWorldX();
+        entity.hitbox.y += entity.getWorldY();
 
-        player.hitbox.x = player.worldX + player.hitbox.x;
-        player.hitbox.y = player.worldY + player.hitbox.y;
+        player.hitbox.x += player.getWorldX();
+        player.hitbox.y += player.getWorldY();
 
-        switch (entity.direction) {
-            case 0 -> entity.hitbox.y -= entity.speed;
-            case 1 -> entity.hitbox.x -= entity.speed;
-            case 2 -> entity.hitbox.y += entity.speed;
-            case 3 -> entity.hitbox.x += entity.speed;
+        switch (entity.getDirection()) {
+            case UP -> entity.hitbox.y -= entity.getSpeed();
+            case LEFT -> entity.hitbox.x -= entity.getSpeed();
+            case DOWN -> entity.hitbox.y += entity.getSpeed();
+            case RIGHT -> entity.hitbox.x += entity.getSpeed();
         }
 
         if (entity.hitbox.intersects(player.hitbox)) {
-            entity.hasCollided = true;
+            entity.collisionOccurred(true);
             gp.ui.displayNotification("Collision detected!");
         }
 

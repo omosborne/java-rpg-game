@@ -4,41 +4,40 @@ import game.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Random;
 
 public class HoodedMan extends Entity{
     public HoodedMan(GamePanel gp) {
         super(gp);
 
-        direction = 2;
+        setDirection(Direction.DOWN);
         speed = 1;
-        getImages();
+        loadSprites();
     }
 
-    private void getImages () {
+    private void loadSprites() {
         try {
-            // Idle Sprites
-            idle_up = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/up_idle.png"));
-            idle_down = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/down_idle.png"));
-            idle_left = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/left_idle.png"));
-            idle_right = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/right_idle.png"));
+            idleUp = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/up_idle.png")));
+            idleDown = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/down_idle.png")));
+            idleLeft = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/left_idle.png")));
+            idleRight = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/right_idle.png")));
 
-            // Walk 1 Sprites
-            walk_up1 = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/up_1.png"));
-            walk_down1 = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/down_1.png"));
-            walk_left1 = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/left_1.png"));
-            walk_right1 = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/right_1.png"));
+            walkUpFrame1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/up_1.png")));
+            walkDownFrame1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/down_1.png")));
+            walkLeftFrame1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/left_1.png")));
+            walkRightFrame1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/right_1.png")));
 
-            // Walk 2 Sprites
-            walk_up2 = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/up_2.png"));
-            walk_down2 = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/down_2.png"));
-            walk_left2 = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/left_2.png"));
-            walk_right2 = ImageIO.read(getClass().getResourceAsStream("/game/images/npcs/hooded-man/right_2.png"));
+            walkUpFrame2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/up_2.png")));
+            walkDownFrame2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/down_2.png")));
+            walkLeftFrame2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/left_2.png")));
+            walkRightFrame2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/hooded-man/right_2.png")));
         } catch (IOException error) {
             error.printStackTrace();
         }
     }
 
+    @Override
     public void setAction() {
         actionCounter++;
 
@@ -46,10 +45,18 @@ public class HoodedMan extends Entity{
             Random random = new Random();
             int directionChance = random.nextInt(100) + 1;
 
-            if (directionChance < 25) direction = 0;
-            else if (directionChance > 25 && directionChance <= 50) direction = 1;
-            else if (directionChance > 50 && directionChance <= 75) direction = 2;
-            else if (directionChance > 75) direction = 3;
+            if (directionChance < 25) {
+                setDirection(Direction.UP);
+            }
+            else if (directionChance <= 50) {
+                setDirection(Direction.LEFT);
+            }
+            else if (directionChance <= 75) {
+                setDirection(Direction.DOWN);
+            }
+            else {
+                setDirection(Direction.RIGHT);
+            }
 
             actionCounter = 0;
         }

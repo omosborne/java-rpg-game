@@ -6,35 +6,100 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
+    public enum Direction {
+        UP,
+        LEFT,
+        DOWN,
+        RIGHT
+    }
 
     GamePanel gp;
 
-    public int worldX = 0;
-    public int worldY = 0;
-    public int speed = 0;
+    protected int worldX = 0;
+    protected int worldY = 0;
+    protected int speed = 0;
 
     protected int width = 32;
     protected int height = 32;
 
-    public BufferedImage idle_left, idle_right, idle_up, idle_down;
-    public BufferedImage walk_left1, walk_right1, walk_up1, walk_down1;
-    public BufferedImage walk_left2, walk_right2, walk_up2, walk_down2;
+    protected BufferedImage idleUp;
+    protected BufferedImage idleLeft;
+    protected BufferedImage idleDown;
+    protected BufferedImage idleRight;
 
-    public int direction = 0;
-    public byte spriteCounter = 0;
-    public byte spriteNumber = 1;
+    protected BufferedImage walkUpFrame1;
+    protected BufferedImage walkLeftFrame1;
+    protected BufferedImage walkDownFrame1;
+    protected BufferedImage walkRightFrame1;
+
+    protected BufferedImage walkUpFrame2;
+    protected BufferedImage walkLeftFrame2;
+    protected BufferedImage walkDownFrame2;
+    protected BufferedImage walkRightFrame2;
+
+    protected BufferedImage currentSprite;
+    protected int spriteCounter = 0;
+    protected int spriteNumber = 1;
+
+    private Direction direction;
 
     public Rectangle hitbox = new Rectangle(8, 16, 16, 16);
-    public int hitboxDefaultX = 0;
-    public int hitboxDefaultY = 0;
-    public boolean hasCollided = false;
+    public int hitboxDefaultX;
+    public int hitboxDefaultY;
+    private boolean collided = false;
 
-    public int actionCounter = 0;
+    protected int actionCounter = 0;
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public int getWorldX() {
+        return worldX;
+    }
+
+    public int getWorldY() {
+        return worldY;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public boolean hasCollided() {
+        return collided;
+    }
+
+    public void collisionOccurred(boolean collisionState) {
+        collided = collisionState;
+    }
 
     public Entity(GamePanel gp) {
         this.gp = gp;
         hitboxDefaultX = hitbox.x;
         hitboxDefaultY = hitbox.y;
+    }
+
+    public BufferedImage getIdleSprite() {
+        return switch (direction) {
+            case UP -> idleUp;
+            case LEFT -> idleLeft;
+            case DOWN -> idleDown;
+            case RIGHT -> idleRight;
+        };
+    }
+
+    public BufferedImage getWalkSprite() {
+        return switch (direction) {
+            case UP -> spriteNumber == 1 ? walkUpFrame1 : walkUpFrame2;
+            case LEFT -> spriteNumber == 1 ? walkLeftFrame1 : walkLeftFrame2;
+            case DOWN -> spriteNumber == 1 ? walkDownFrame1 : walkDownFrame2;
+            case RIGHT -> spriteNumber == 1 ? walkRightFrame1 : walkRightFrame2;
+        };
     }
 
     public void setAction() {
@@ -44,17 +109,17 @@ public class Entity {
     public void update() {
         setAction();
 
-        hasCollided = false;
+        collisionOccurred(false);
         gp.cChecker.checkTile(this);
         gp.cChecker.checkObject(this);
         gp.cChecker.checkPlayer(this);
 
-        if (!hasCollided) {
+        if (!hasCollided()) {
             switch (direction) {
-                case 0 -> worldY -= speed;
-                case 1 -> worldX -= speed;
-                case 2 -> worldY += speed;
-                case 3 -> worldX += speed;
+                case UP -> worldY -= speed;
+                case LEFT -> worldX -= speed;
+                case DOWN -> worldY += speed;
+                case RIGHT -> worldX += speed;
             }
         }
 
@@ -66,29 +131,19 @@ public class Entity {
     }
 
     public void draw(Graphics2D g2) {
-
-        BufferedImage sprite = null;
-
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
         if (isInCameraFrame()) {
-
-            switch (direction) {
-                case 0 -> sprite = spriteNumber == 1 ? walk_up1 : walk_up2;
-                case 1 -> sprite = spriteNumber == 1 ? walk_left1 : walk_left2;
-                case 2 -> sprite = spriteNumber == 1 ? walk_down1 : walk_down2;
-                case 3 -> sprite = spriteNumber == 1 ? walk_right1 : walk_right2;
-            }
-            System.out.println("Draw NPC");
-            g2.drawImage(sprite, screenX, screenY, width, height, null);
+            currentSprite = getWalkSprite();
+            g2.drawImage(currentSprite, screenX, screenY, width, height, null);
         }
     }
 
     private boolean isInCameraFrame() {
         return (worldX + gp.tileSize * 2) > gp.player.worldX - gp.player.screenX &&         // Left Screen.
                 (worldX - gp.tileSize * 2) < gp.player.worldX + gp.player.screenX &&        // Right Screen.
-                (worldY + gp.tileSize * 2) > gp.player.worldY - gp.player.screenY &&        // Upper Screen.
+                (worldY + gp.tileSize * 2) > gp.player.worldY - gp.player.screenY &&        // Top Screen.
                 (worldY - gp.tileSize * 2) < gp.player.worldY + gp.player.screenY;          // Bottom Screen.
     }
 }

@@ -33,8 +33,8 @@ public class UI {
     }
 
     public void drawPlayScreen() {
-        g2.drawString("X: " + gp.player.worldX, 25, 40);
-        g2.drawString("Y: " + gp.player.worldY, 25, 60);
+        g2.drawString("X: " + gp.player.getWorldX(), 25, 40);
+        g2.drawString("Y: " + gp.player.getWorldY(), 25, 60);
 
         // Notifications
         if (notificationActive) {

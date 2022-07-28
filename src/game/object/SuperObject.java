@@ -19,8 +19,8 @@ public class SuperObject {
     public int hitboxDefaultY = 0;
 
     public void draw(Graphics2D g2, GamePanel gp) {
-        int screenX = worldX - gp.player.worldX + gp.player.screenX;
-        int screenY = worldY - gp.player.worldY + gp.player.screenY;
+        int screenX = worldX - gp.player.getWorldX() + gp.player.screenX;
+        int screenY = worldY - gp.player.getWorldY() + gp.player.screenY;
 
         if (isInCameraFrame(gp)) {
             g2.drawImage(image, screenX, screenY, width, height, null);
@@ -28,9 +28,9 @@ public class SuperObject {
     }
 
     private boolean isInCameraFrame(GamePanel gp) {
-        return (worldX + gp.tileSize * 2) > gp.player.worldX - gp.player.screenX &&         // Left Screen.
-                (worldX - gp.tileSize * 2) < gp.player.worldX + gp.player.screenX &&        // Right Screen.
-                (worldY + gp.tileSize * 2) > gp.player.worldY - gp.player.screenY &&        // Upper Screen.
-                (worldY - gp.tileSize * 2) < gp.player.worldY + gp.player.screenY;          // Bottom Screen
+        return (worldX + gp.tileSize * 2) > gp.player.getWorldX() - gp.player.screenX &&         // Left Screen.
+                (worldX - gp.tileSize * 2) < gp.player.getWorldX() + gp.player.screenX &&        // Right Screen.
+                (worldY + gp.tileSize * 2) > gp.player.getWorldY() - gp.player.screenY &&        // Upper Screen.
+                (worldY - gp.tileSize * 2) < gp.player.getWorldY() + gp.player.screenY;          // Bottom Screen
     }
 }
