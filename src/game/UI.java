@@ -28,8 +28,8 @@ public class UI {
         g2.setFont(fontArial20);
         g2.setColor(Color.white);
 
-        if (gp.gameState == gp.playState) drawPlayScreen();
-        else if (gp.gameState == gp.pauseState) drawPauseScreen();
+        if (gp.gameState == gp.PLAY_STATE) drawPlayScreen();
+        else if (gp.gameState == gp.PAUSE_STATE) drawPauseScreen();
     }
 
     public void drawPlayScreen() {

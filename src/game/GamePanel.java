@@ -12,6 +12,9 @@ import game.object.SuperObject;
 public class GamePanel extends JPanel implements Runnable {
     // Main screen settings
 
+    public static final int PLAY_STATE = 1;
+    public static final int PAUSE_STATE = 2;
+
     public final int tileSize = 16;
 
     public final int screenMaxCol = 60;
@@ -45,8 +48,6 @@ public class GamePanel extends JPanel implements Runnable {
     public UI ui = new UI(this);
 
     public int gameState;
-    public final int playState = 1;
-    public final int pauseState = 2;
 
     public GamePanel () {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -58,7 +59,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void prepareGame() {
         objM.placeObject();
         npcM.placeEntities();
-        gameState = playState;
+        gameState = PLAY_STATE;
     }
 
     public void startGameThread () {
@@ -87,7 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update () {
-        if (gameState == playState) {
+        if (gameState == PLAY_STATE) {
             player.update();
             for (int i = 0; i < npc.length; i++) {
                 if (npc[i] != null) {
@@ -95,7 +96,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         }
-        else if (gameState == pauseState) {
+        else if (gameState == PAUSE_STATE) {
 
         }
     }

@@ -57,15 +57,15 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        if (noDirectionKeysPressed()) return;
+        if (keyH.noDirectionKeysPressed()) return;
 
-        if (keyH.upPressed) {
+        if (keyH.isUpPressed()) {
             setDirection(Direction.UP);
         }
-        else if (keyH.leftPressed) {
+        else if (keyH.isLeftPressed()) {
             setDirection(Direction.LEFT);
         }
-        else if (keyH.downPressed) {
+        else if (keyH.isDownPressed()) {
             setDirection(Direction.DOWN);
         }
         else {
@@ -89,32 +89,32 @@ public class Player extends Entity {
     }
 
     private void updatePlayerPosition() {
-        if (keyH.upPressed  && keyH.leftPressed) {
+        if (keyH.isUpLeftPressed()) {
             worldY -= speed;
             worldX -= speed;
         }
-        else if (keyH.leftPressed  && keyH.downPressed) {
+        else if (keyH.isLeftDownPressed()) {
             worldX -= speed;
             worldY += speed;
         }
-        else if (keyH.downPressed  && keyH.rightPressed) {
+        else if (keyH.isDownRightPressed()) {
             worldY += speed;
             worldX += speed;
         }
-        else if (keyH.rightPressed  && keyH.upPressed) {
+        else if (keyH.isRightUpPressed()) {
             worldX += speed;
             worldY -= speed;
         }
-        else if (keyH.upPressed) {
+        else if (keyH.isUpPressed()) {
             worldY -= speed;
         }
-        else if (keyH.leftPressed) {
+        else if (keyH.isLeftPressed()) {
             worldX -= speed;
         }
-        else if (keyH.downPressed) {
+        else if (keyH.isDownPressed()) {
             worldY += speed;
         }
-        else if (keyH.rightPressed) {
+        else if (keyH.isRightPressed()) {
             worldX += speed;
         }
     }
@@ -122,7 +122,7 @@ public class Player extends Entity {
     @Override
     public void draw (Graphics2D g2) {
 
-        if (noDirectionKeysPressed()) {
+        if (keyH.noDirectionKeysPressed()) {
             currentSprite = getIdleSprite();
         }
         else {
@@ -130,9 +130,5 @@ public class Player extends Entity {
         }
 
         g2.drawImage(currentSprite, screenX, screenY, width, height, null);
-    }
-
-    private boolean noDirectionKeysPressed() {
-        return !(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed);
     }
 }
