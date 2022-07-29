@@ -99,8 +99,8 @@ public class CollisionCheck {
             entity.hitbox.x += entity.getWorldX();
             entity.hitbox.y += entity.getWorldY();
 
-            object.hitbox.x += object.worldX;
-            object.hitbox.y += object.worldY;
+            object.hitbox.x += object.getWorldX();
+            object.hitbox.y += object.getWorldY();
 
             switch (entity.getDirection()) {
                 case UP -> entity.hitbox.y -= entity.getSpeed();
@@ -109,7 +109,7 @@ public class CollisionCheck {
                 case RIGHT -> entity.hitbox.x += entity.getSpeed();
             }
 
-            if (entity.hitbox.intersects(object.hitbox) && object.isCollidable) {
+            if (entity.hitbox.intersects(object.hitbox) && object.isCollidable()) {
                 entity.collisionOccurred(true);
                 gp.ui.displayNotification("Collision detected!");
             }

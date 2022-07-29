@@ -7,16 +7,32 @@ import java.awt.image.BufferedImage;
 
 public class SuperObject {
 
-    public BufferedImage image;
-    public String name;
-    public boolean isCollidable = false;
-    public int worldX = 0;
-    public int worldY = 0;
-    public int width = 0;
-    public int height = 0;
+    protected BufferedImage image;
+    protected String name;
+    protected int worldX = 0;
+    protected int worldY = 0;
+    protected int width = 0;
+    protected int height = 0;
+    protected boolean isCollidable = false;
     public Rectangle hitbox = new Rectangle(0,0,32,32);
     public int hitboxDefaultX = 0;
     public int hitboxDefaultY = 0;
+
+    public int getWorldX() {
+        return worldX;
+    }
+
+    public int getWorldY() {
+        return worldY;
+    }
+
+    public boolean isCollidable() {
+        return isCollidable;
+    }
+
+    public void canCollide(boolean collidable) {
+        isCollidable = collidable;
+    }
 
     public void draw(Graphics2D g2, GamePanel gp) {
         int screenX = worldX - gp.player.getWorldX() + gp.player.screenX;

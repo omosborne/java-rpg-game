@@ -1,7 +1,6 @@
-package game;
+package game.object;
 
-import game.object.Box;
-import game.object.Door;
+import game.GamePanel;
 
 public class ObjectManager {
 

@@ -6,6 +6,7 @@ import java.awt.*;
 import game.entity.Entity;
 import game.entity.EntityManager;
 import game.entity.Player;
+import game.object.ObjectManager;
 import game.object.SuperObject;
 
 public class GamePanel extends JPanel implements Runnable {
