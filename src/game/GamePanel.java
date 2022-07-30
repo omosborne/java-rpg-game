@@ -57,7 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void prepareGame() {
-        objM.placeObject();
+        objM.placeObjects();
         npcM.placeEntities();
         gameState = PLAY_STATE;
     }

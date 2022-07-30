@@ -1,11 +1,11 @@
 package game;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class Main {
     public static void main (String[] args) {
         JFrame window = new JFrame();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
@@ -13,7 +13,7 @@ public class Main {
         window.pack();
 
         window.setResizable(false);
-        window.setTitle("Last Mind - Dev");
+        window.setTitle("Last Mind");
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 

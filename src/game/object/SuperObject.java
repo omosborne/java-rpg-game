@@ -14,29 +14,30 @@ public class SuperObject {
     protected int width = 0;
     protected int height = 0;
     protected boolean isCollidable = false;
-    public Rectangle hitbox = new Rectangle(0,0,32,32);
-    public int hitboxDefaultX = 0;
-    public int hitboxDefaultY = 0;
+    protected final Rectangle hitbox = new Rectangle(0, 0, 32, 32);
 
-    public int getWorldX() {
-        return worldX;
-    }
-
-    public int getWorldY() {
-        return worldY;
+    public void setLocation(int x, int y) {
+        worldX = x;
+        worldY = y;
+        hitbox.x = x;
+        hitbox.y = y;
     }
 
     public boolean isCollidable() {
         return isCollidable;
     }
 
-    public void canCollide(boolean collidable) {
+    protected void canCollide(boolean collidable) {
         isCollidable = collidable;
     }
 
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
+
     public void draw(Graphics2D g2, GamePanel gp) {
-        int screenX = worldX - gp.player.getWorldX() + gp.player.screenX;
-        int screenY = worldY - gp.player.getWorldY() + gp.player.screenY;
+        int screenX = worldX - gp.player.getWorldX() + gp.player.getScreenX();
+        int screenY = worldY - gp.player.getWorldY() + gp.player.getScreenY();
 
         if (isInCameraFrame(gp)) {
             g2.drawImage(image, screenX, screenY, width, height, null);
@@ -44,9 +45,9 @@ public class SuperObject {
     }
 
     private boolean isInCameraFrame(GamePanel gp) {
-        return (worldX + gp.tileSize * 2) > gp.player.getWorldX() - gp.player.screenX &&         // Left Screen.
-                (worldX - gp.tileSize * 2) < gp.player.getWorldX() + gp.player.screenX &&        // Right Screen.
-                (worldY + gp.tileSize * 2) > gp.player.getWorldY() - gp.player.screenY &&        // Upper Screen.
-                (worldY - gp.tileSize * 2) < gp.player.getWorldY() + gp.player.screenY;          // Bottom Screen
+        return (worldX + gp.tileSize * 2) > gp.player.getWorldX() - gp.player.getScreenX() &&         // Left Screen.
+                (worldX - gp.tileSize * 2) < gp.player.getWorldX() + gp.player.getScreenX() &&        // Right Screen.
+                (worldY + gp.tileSize * 2) > gp.player.getWorldY() - gp.player.getScreenY() &&        // Upper Screen.
+                (worldY - gp.tileSize * 2) < gp.player.getWorldY() + gp.player.getScreenY();          // Bottom Screen
     }
 }

@@ -10,15 +10,23 @@ import java.util.Objects;
 
 public class Player extends Entity {
 
-    KeyInputHandler keyH;
+    private final KeyInputHandler keys;
 
-    public final int screenX;
-    public final int screenY;
+    private final int screenX;
+    private final int screenY;
 
-    public Player (GamePanel gp, KeyInputHandler keyH) {
+    public int getScreenX() {
+        return screenX;
+    }
+
+    public int getScreenY() {
+        return screenY;
+    }
+
+    public Player (GamePanel gp, KeyInputHandler keyHandler) {
         super(gp);
 
-        this.keyH = keyH;
+        this.keys = keyHandler;
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
@@ -27,14 +35,15 @@ public class Player extends Entity {
         loadSprites();
     }
 
-    public void setDefaultVariables () {
+    private void setDefaultVariables () {
         setDirection(Direction.DOWN);
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         speed = 3;
+        updateHitbox(worldX, worldY);
     }
 
-    public void loadSprites() {
+    private void loadSprites() {
         try {
             idleUp = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/character/up_idle.png")));
             idleDown = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/character/down_idle.png")));
@@ -57,15 +66,15 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-        if (keyH.noDirectionKeysPressed()) return;
+        if (keys.noDirectionKeysPressed()) return;
 
-        if (keyH.isUpPressed()) {
+        if (keys.isUpPressed()) {
             setDirection(Direction.UP);
         }
-        else if (keyH.isLeftPressed()) {
+        else if (keys.isLeftPressed()) {
             setDirection(Direction.LEFT);
         }
-        else if (keyH.isDownPressed()) {
+        else if (keys.isDownPressed()) {
             setDirection(Direction.DOWN);
         }
         else {
@@ -89,40 +98,41 @@ public class Player extends Entity {
     }
 
     private void updatePlayerPosition() {
-        if (keyH.isUpLeftPressed()) {
+        if (keys.isUpLeftPressed()) {
             worldY -= speed;
             worldX -= speed;
         }
-        else if (keyH.isLeftDownPressed()) {
+        else if (keys.isLeftDownPressed()) {
             worldX -= speed;
             worldY += speed;
         }
-        else if (keyH.isDownRightPressed()) {
+        else if (keys.isDownRightPressed()) {
             worldY += speed;
             worldX += speed;
         }
-        else if (keyH.isRightUpPressed()) {
+        else if (keys.isRightUpPressed()) {
             worldX += speed;
             worldY -= speed;
         }
-        else if (keyH.isUpPressed()) {
+        else if (keys.isUpPressed()) {
             worldY -= speed;
         }
-        else if (keyH.isLeftPressed()) {
+        else if (keys.isLeftPressed()) {
             worldX -= speed;
         }
-        else if (keyH.isDownPressed()) {
+        else if (keys.isDownPressed()) {
             worldY += speed;
         }
-        else if (keyH.isRightPressed()) {
+        else if (keys.isRightPressed()) {
             worldX += speed;
         }
+        updateHitbox(worldX, worldY);
     }
 
     @Override
-    public void draw (Graphics2D g2) {
+    public void draw(Graphics2D g2) {
 
-        if (keyH.noDirectionKeysPressed()) {
+        if (keys.noDirectionKeysPressed()) {
             currentSprite = getIdleSprite();
         }
         else {

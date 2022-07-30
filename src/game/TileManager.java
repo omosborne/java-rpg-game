@@ -83,8 +83,8 @@ public class TileManager {
 
             int worldX = worldCol * gp.tileSize;
             int worldY = worldRow * gp.tileSize;
-            int screenX = worldX - gp.player.getWorldX() + gp.player.screenX;
-            int screenY = worldY - gp.player.getWorldY() + gp.player.screenY;
+            int screenX = worldX - gp.player.getWorldX() + gp.player.getScreenX();
+            int screenY = worldY - gp.player.getWorldY() + gp.player.getScreenY();
 
             if (isInCameraFrame(worldX, worldY)) {
                 g2.drawImage(tileTypes[mapTile].getImage(), screenX, screenY, gp.tileSize, gp.tileSize, null);
@@ -100,9 +100,9 @@ public class TileManager {
     }
 
     private boolean isInCameraFrame(int worldX, int worldY) {
-        return (worldX + gp.tileSize * 2) > gp.player.getWorldX() - gp.player.screenX &&         // Left Screen.
-                (worldX - gp.tileSize * 2) < gp.player.getWorldX() + gp.player.screenX &&        // Right Screen.
-                (worldY + gp.tileSize * 2) > gp.player.getWorldY() - gp.player.screenY &&        // Top Screen.
-                (worldY - gp.tileSize * 2) < gp.player.getWorldY() + gp.player.screenY;          // Bottom Screen.
+        return (worldX + gp.tileSize * 2) > gp.player.getWorldX() - gp.player.getScreenX() &&         // Left Screen.
+                (worldX - gp.tileSize * 2) < gp.player.getWorldX() + gp.player.getScreenX() &&        // Right Screen.
+                (worldY + gp.tileSize * 2) > gp.player.getWorldY() - gp.player.getScreenY() &&        // Top Screen.
+                (worldY - gp.tileSize * 2) < gp.player.getWorldY() + gp.player.getScreenY();          // Bottom Screen.
     }
 }

@@ -4,19 +4,17 @@ import game.GamePanel;
 
 public class ObjectManager {
 
-    GamePanel gp;
+    private final GamePanel gp;
 
     public ObjectManager(GamePanel gp) {
         this.gp = gp;
     }
 
-    public void placeObject() {
+    public void placeObjects() {
         gp.obj[0] = new Box();
-        gp.obj[0].worldX = 23 * gp.tileSize;
-        gp.obj[0].worldY = 7 * gp.tileSize;
+        gp.obj[0].setLocation(23 * gp.tileSize, 7 * gp.tileSize);
 
         gp.obj[1] = new Door();
-        gp.obj[1].worldX = 23 * gp.tileSize;
-        gp.obj[1].worldY = 40 * gp.tileSize;
+        gp.obj[1].setLocation(23 * gp.tileSize, 40 * gp.tileSize);
     }
 }

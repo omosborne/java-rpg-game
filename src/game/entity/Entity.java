@@ -13,7 +13,7 @@ public class Entity {
         RIGHT
     }
 
-    GamePanel gp;
+    protected final GamePanel gp;
 
     protected int worldX = 0;
     protected int worldY = 0;
@@ -41,14 +41,19 @@ public class Entity {
     protected int spriteCounter = 0;
     protected int spriteNumber = 1;
 
-    private Direction direction;
+    protected Direction direction;
 
-    public Rectangle hitbox = new Rectangle(8, 16, 16, 16);
-    public int hitboxDefaultX;
-    public int hitboxDefaultY;
+    protected final Rectangle hitbox = new Rectangle(0, 0, 16, 16);
     private boolean collided = false;
 
     protected int actionCounter = 0;
+
+    public void setLocation(int x, int y) {
+        worldX = x;
+        worldY = y;
+        hitbox.x = x;
+        hitbox.y = y;
+    }
 
     public Direction getDirection() {
         return direction;
@@ -78,13 +83,19 @@ public class Entity {
         collided = collisionState;
     }
 
-    public Entity(GamePanel gp) {
-        this.gp = gp;
-        hitboxDefaultX = hitbox.x;
-        hitboxDefaultY = hitbox.y;
+    public Rectangle getHitbox() {
+        return hitbox;
     }
 
-    public BufferedImage getIdleSprite() {
+    protected void updateHitbox(int ownerX, int ownerY) {
+        hitbox.setLocation(ownerX + 8, ownerY + 16);
+    }
+
+    public Entity(GamePanel gp) {
+        this.gp = gp;
+    }
+
+    protected BufferedImage getIdleSprite() {
         return switch (direction) {
             case UP -> idleUp;
             case LEFT -> idleLeft;
@@ -93,7 +104,7 @@ public class Entity {
         };
     }
 
-    public BufferedImage getWalkSprite() {
+    protected BufferedImage getWalkSprite() {
         return switch (direction) {
             case UP -> spriteNumber == 1 ? walkUpFrame1 : walkUpFrame2;
             case LEFT -> spriteNumber == 1 ? walkLeftFrame1 : walkLeftFrame2;
@@ -115,24 +126,29 @@ public class Entity {
         gp.cChecker.checkPlayer(this);
 
         if (!hasCollided()) {
-            switch (direction) {
-                case UP -> worldY -= speed;
-                case LEFT -> worldX -= speed;
-                case DOWN -> worldY += speed;
-                case RIGHT -> worldX += speed;
-            }
+            updateEntityPosition();
         }
 
         spriteCounter++;
         if (spriteCounter > 10) {
-            spriteNumber = (byte) (spriteNumber == 1 ? 2 : 1);
+            spriteNumber = spriteNumber == 1 ? 2 : 1;
             spriteCounter = 0;
         }
     }
 
+    private void updateEntityPosition() {
+        switch (direction) {
+            case UP -> worldY -= speed;
+            case LEFT -> worldX -= speed;
+            case DOWN -> worldY += speed;
+            case RIGHT -> worldX += speed;
+        }
+        updateHitbox(worldX, worldY);
+    }
+
     public void draw(Graphics2D g2) {
-        int screenX = worldX - gp.player.worldX + gp.player.screenX;
-        int screenY = worldY - gp.player.worldY + gp.player.screenY;
+        int screenX = worldX - gp.player.worldX + gp.player.getScreenX();
+        int screenY = worldY - gp.player.worldY + gp.player.getScreenY();
 
         if (isInCameraFrame()) {
             currentSprite = getWalkSprite();
@@ -141,9 +157,9 @@ public class Entity {
     }
 
     private boolean isInCameraFrame() {
-        return (worldX + gp.tileSize * 2) > gp.player.worldX - gp.player.screenX &&         // Left Screen.
-                (worldX - gp.tileSize * 2) < gp.player.worldX + gp.player.screenX &&        // Right Screen.
-                (worldY + gp.tileSize * 2) > gp.player.worldY - gp.player.screenY &&        // Top Screen.
-                (worldY - gp.tileSize * 2) < gp.player.worldY + gp.player.screenY;          // Bottom Screen.
+        return (worldX + gp.tileSize * 2) > gp.player.worldX - gp.player.getScreenX() &&         // Left Screen.
+                (worldX - gp.tileSize * 2) < gp.player.worldX + gp.player.getScreenX() &&        // Right Screen.
+                (worldY + gp.tileSize * 2) > gp.player.worldY - gp.player.getScreenY() &&        // Top Screen.
+                (worldY - gp.tileSize * 2) < gp.player.worldY + gp.player.getScreenY();          // Bottom Screen.
     }
 }
