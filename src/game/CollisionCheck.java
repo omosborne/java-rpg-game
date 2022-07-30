@@ -30,14 +30,14 @@ public class CollisionCheck {
                 entityTopRow = (entityTopWorldY - entity.getSpeed())/gp.tileSize;
 
                 try {
-                    tileNum = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-                    tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
+                    tileNum = gp.tileM.getMapTile(entityLeftCol, entityTopRow);
+                    tileNum2 = gp.tileM.getMapTile(entityRightCol, entityTopRow);
                 } catch (IndexOutOfBoundsException e) {
                     entity.collisionOccurred(true);
                     break;
                 }
 
-                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
+                if (gp.tileM.getTileType(tileNum).isCollidable() || gp.tileM.getTileType(tileNum2).isCollidable()) {
                     entity.collisionOccurred(true);
                 }
             }
@@ -45,14 +45,14 @@ public class CollisionCheck {
                 entityLeftCol = (entityLeftWorldX - entity.getSpeed())/gp.tileSize;
 
                 try {
-                    tileNum = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-                    tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
+                    tileNum = gp.tileM.getMapTile(entityLeftCol, entityTopRow);
+                    tileNum2 = gp.tileM.getMapTile(entityLeftCol, entityBottomRow);
                 } catch (IndexOutOfBoundsException e) {
                     entity.collisionOccurred(true);
                     break;
                 }
 
-                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
+                if (gp.tileM.getTileType(tileNum).isCollidable() || gp.tileM.getTileType(tileNum2).isCollidable()) {
                     entity.collisionOccurred(true);
                 }
             }
@@ -60,14 +60,14 @@ public class CollisionCheck {
                 entityBottomRow = (entityBottomWorldY + entity.getSpeed())/gp.tileSize;
 
                 try {
-                    tileNum = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
-                    tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
+                    tileNum = gp.tileM.getMapTile(entityLeftCol, entityBottomRow);
+                    tileNum2 = gp.tileM.getMapTile(entityRightCol, entityBottomRow);
                 } catch (IndexOutOfBoundsException e) {
                     entity.collisionOccurred(true);
                     break;
                 }
 
-                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
+                if (gp.tileM.getTileType(tileNum).isCollidable() || gp.tileM.getTileType(tileNum2).isCollidable()) {
                     entity.collisionOccurred(true);
                 }
             }
@@ -75,14 +75,14 @@ public class CollisionCheck {
                 entityRightCol = (entityRightWorldX + entity.getSpeed())/gp.tileSize;
 
                 try {
-                    tileNum = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-                    tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
+                    tileNum = gp.tileM.getMapTile(entityRightCol, entityTopRow);
+                    tileNum2 = gp.tileM.getMapTile(entityRightCol, entityBottomRow);
                 } catch (IndexOutOfBoundsException e) {
                     entity.collisionOccurred(true);
                     break;
                 }
 
-                if (gp.tileM.tile[tileNum].collision || gp.tileM.tile[tileNum2].collision) {
+                if (gp.tileM.getTileType(tileNum).isCollidable() || gp.tileM.getTileType(tileNum2).isCollidable()) {
                     entity.collisionOccurred(true);
                 }
             }

@@ -6,54 +6,61 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 public class TileManager {
-    GamePanel gp;
-    public Tile[] tile;
-    public int mapTileNum[][];
+    private final GamePanel gp;
+    private final Tile[] tileTypes;
+    private final int[][] mapTiles;
+
+    public Tile getTileType(int mapTile) {
+        return tileTypes[mapTile];
+    }
+
+    public int getMapTile(int col, int row) {
+        return mapTiles[col][row];
+    }
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
 
-        tile = new Tile[26];
-        mapTileNum = new int[gp.worldMaxCol][gp.worldMaxRow];
+        tileTypes = new Tile[26];
+        mapTiles = new int[gp.worldMaxCol][gp.worldMaxRow];
 
-        getTileImage();
-        loadMap("/game/maps/world02.txt");
+        loadTileImages();
+        loadMapTiles("/game/maps/world02.txt");
     }
 
-    public void getTileImage() {
+    private void loadTileImages() {
         try {
-            for (int i = 10; i < tile.length; i++) {
-                System.out.println(i);
-                tile[i] = new Tile();
-                tile[i].image = ImageIO.read(getClass().getResourceAsStream("/game/images/tiles/tile" + i + ".png"));
+            for (int i = 10; i < tileTypes.length; i++) {
+                tileTypes[i] = new Tile();
+                tileTypes[i].setImage(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/tiles/tile" + i + ".png"))));
             }
-            tile[10].collision = true;
-            // From 9 to 15
-            for (int i = 19; i < 25; i++) tile[i].collision = true;
+            tileTypes[10].setCollidable(true);
+            for (int i = 19; i < 25; i++) tileTypes[i].setCollidable(true);
 
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
     }
 
-    public void loadMap(String mapFilePath) {
-        try {
-            InputStream is = getClass().getResourceAsStream(mapFilePath);
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+    private void loadMapTiles(String mapFilePath) {
+        try (InputStream mapFileInput = Objects.requireNonNull(getClass().getResourceAsStream(mapFilePath));
+             BufferedReader mapReader = new BufferedReader(new InputStreamReader(mapFileInput))) {
 
             int col = 0;
             int row = 0;
 
             while (col < gp.worldMaxCol && row < gp.worldMaxRow) {
-                String line = br.readLine();
+                String mapRow = mapReader.readLine();
+
                 while (col < gp.worldMaxCol) {
-                    String numbers[] = line.split(" ");
+                    String[] mapTilesRow = mapRow.split(" ");
 
-                    int num = Integer.parseInt(numbers[col]);
+                    int mapTile = Integer.parseInt(mapTilesRow[col]);
 
-                    mapTileNum[col][row] = num;
+                    mapTiles[col][row] = mapTile;
                     col++;
                 }
                 if (col == gp.worldMaxCol) {
@@ -61,8 +68,7 @@ public class TileManager {
                     row++;
                 }
             }
-            br.close();
-            } catch (Exception e) {
+            } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
     }
@@ -73,19 +79,15 @@ public class TileManager {
         int worldRow = 0;
 
         while (worldCol < gp.worldMaxCol && worldRow < gp.worldMaxRow) {
-            int tileNum = mapTileNum[worldCol][worldRow];
+            int mapTile = mapTiles[worldCol][worldRow];
 
             int worldX = worldCol * gp.tileSize;
             int worldY = worldRow * gp.tileSize;
             int screenX = worldX - gp.player.getWorldX() + gp.player.screenX;
             int screenY = worldY - gp.player.getWorldY() + gp.player.screenY;
 
-            if (worldX + gp.tileSize > gp.player.getWorldX() - gp.player.screenX &&
-                worldX - gp.tileSize < gp.player.getWorldX() + gp.player.screenX &&
-                worldY + gp.tileSize > gp.player.getWorldY() - gp.player.screenY &&
-                worldY - gp.tileSize < gp.player.getWorldY() + gp.player.screenY) {
-
-                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            if (isInCameraFrame(worldX, worldY)) {
+                g2.drawImage(tileTypes[mapTile].getImage(), screenX, screenY, gp.tileSize, gp.tileSize, null);
             }
 
             worldCol++;
@@ -95,5 +97,12 @@ public class TileManager {
                 worldRow++;
             }
         }
+    }
+
+    private boolean isInCameraFrame(int worldX, int worldY) {
+        return (worldX + gp.tileSize * 2) > gp.player.getWorldX() - gp.player.screenX &&         // Left Screen.
+                (worldX - gp.tileSize * 2) < gp.player.getWorldX() + gp.player.screenX &&        // Right Screen.
+                (worldY + gp.tileSize * 2) > gp.player.getWorldY() - gp.player.screenY &&        // Top Screen.
+                (worldY - gp.tileSize * 2) < gp.player.getWorldY() + gp.player.screenY;          // Bottom Screen.
     }
 }
