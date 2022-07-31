@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 public class KeyInputHandler implements KeyListener {
 
-    GamePanel gp;
+    private final GamePanel gp;
 
     private boolean upPressed;
     private boolean leftPressed;
@@ -43,12 +43,12 @@ public class KeyInputHandler implements KeyListener {
         return rightPressed;
     }
 
-    public KeyInputHandler (GamePanel gp) {
+    public KeyInputHandler(GamePanel gp) {
         this.gp = gp;
     }
 
     @Override
-    public void keyPressed (KeyEvent keyEvent) {
+    public void keyPressed(KeyEvent keyEvent) {
         int keyCode = keyEvent.getKeyCode();
 
         if (keyCode == KeyEvent.VK_W) {
@@ -65,7 +65,7 @@ public class KeyInputHandler implements KeyListener {
     }
 
     @Override
-    public void keyReleased (KeyEvent keyEvent) {
+    public void keyReleased(KeyEvent keyEvent) {
         int keyCode = keyEvent.getKeyCode();
 
         if (keyCode == KeyEvent.VK_W) {
@@ -80,11 +80,11 @@ public class KeyInputHandler implements KeyListener {
     }
 
     private void togglePause() {
-        if (gp.gameState == GamePanel.PLAY_STATE) {
-            gp.gameState = GamePanel.PAUSE_STATE;
+        if (gp.isInPlayState()) {
+            gp.setGameState(GamePanel.PAUSE_STATE);
         }
-        else if (gp.gameState == GamePanel.PAUSE_STATE) {
-            gp.gameState = GamePanel.PLAY_STATE;
+        else if (gp.isInPauseState()) {
+            gp.setGameState(GamePanel.PLAY_STATE);
         }
     }
 
@@ -93,7 +93,7 @@ public class KeyInputHandler implements KeyListener {
     }
 
     @Override
-    public void keyTyped (KeyEvent keyEvent) {
+    public void keyTyped(KeyEvent keyEvent) {
         // Not used.
     }
 }

@@ -1,5 +1,6 @@
 package game.entity;
 
+import game.CollisionHandler;
 import game.GamePanel;
 
 import java.awt.*;
@@ -45,6 +46,7 @@ public class Entity {
 
     protected final Rectangle hitbox = new Rectangle(0, 0, 16, 16);
     private boolean collided = false;
+    protected final CollisionHandler collisionHandler;
 
     protected int actionCounter = 0;
 
@@ -93,6 +95,8 @@ public class Entity {
 
     public Entity(GamePanel gp) {
         this.gp = gp;
+        this.collisionHandler = gp.getCollisionHandler();
+
     }
 
     protected BufferedImage getIdleSprite() {
@@ -121,9 +125,9 @@ public class Entity {
         setAction();
 
         collisionOccurred(false);
-        gp.cChecker.checkTile(this);
-        gp.cChecker.checkObject(this);
-        gp.cChecker.checkPlayer(this);
+        collisionHandler.checkTile(this);
+        collisionHandler.checkObject(this);
+        collisionHandler.checkPlayer(this);
 
         if (!hasCollided()) {
             updateEntityPosition();
@@ -157,9 +161,9 @@ public class Entity {
     }
 
     private boolean isInCameraFrame() {
-        return (worldX + gp.tileSize * 2) > gp.player.worldX - gp.player.getScreenX() &&         // Left Screen.
-                (worldX - gp.tileSize * 2) < gp.player.worldX + gp.player.getScreenX() &&        // Right Screen.
-                (worldY + gp.tileSize * 2) > gp.player.worldY - gp.player.getScreenY() &&        // Top Screen.
-                (worldY - gp.tileSize * 2) < gp.player.worldY + gp.player.getScreenY();          // Bottom Screen.
+        return (worldX + GamePanel.TILE_SIZE * 2) > gp.player.worldX - gp.player.getScreenX() &&         // Left Screen.
+                (worldX - GamePanel.TILE_SIZE * 2) < gp.player.worldX + gp.player.getScreenX() &&        // Right Screen.
+                (worldY + GamePanel.TILE_SIZE * 2) > gp.player.worldY - gp.player.getScreenY() &&        // Top Screen.
+                (worldY - GamePanel.TILE_SIZE * 2) < gp.player.worldY + gp.player.getScreenY();          // Bottom Screen.
     }
 }

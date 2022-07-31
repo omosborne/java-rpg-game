@@ -6,11 +6,13 @@ import game.object.SuperObject;
 
 import java.awt.*;
 
-public class CollisionCheck {
+public class CollisionHandler {
     private final GamePanel gp;
+    private final TileManager tileManager;
 
-    public CollisionCheck (GamePanel gp) {
+    public CollisionHandler(GamePanel gp) {
         this.gp = gp;
+        this.tileManager = gp.getTileManager();
     }
 
     public void checkTile(Entity entity) {
@@ -49,17 +51,17 @@ public class CollisionCheck {
         int mapTileCheck2;
 
         try {
-            mapTileCheck1 = gp.tileM.getMapTile(tile1Col / gp.tileSize, tile1Row / gp.tileSize);
-            mapTileCheck2 = gp.tileM.getMapTile(tile2Col / gp.tileSize, tile2Row / gp.tileSize);
+            mapTileCheck1 = tileManager.getMapTile(tile1Col / GamePanel.TILE_SIZE, tile1Row / GamePanel.TILE_SIZE);
+            mapTileCheck2 = tileManager.getMapTile(tile2Col / GamePanel.TILE_SIZE, tile2Row / GamePanel.TILE_SIZE);
         } catch (IndexOutOfBoundsException e) {
             return true;
         }
 
-        return gp.tileM.getTileType(mapTileCheck1).isCollidable() || gp.tileM.getTileType(mapTileCheck2).isCollidable();
+        return tileManager.getTileType(mapTileCheck1).isCollidable() || tileManager.getTileType(mapTileCheck2).isCollidable();
     }
 
     public void checkObject(Entity entity) {
-        for (SuperObject object : gp.obj) {
+        for (SuperObject object : gp.getGameObjects()) {
             if (object == null || !object.isCollidable()) continue;
             checkCollision(entity, object.getHitbox());
         }
@@ -85,7 +87,7 @@ public class CollisionCheck {
 
         if (entity.getHitbox().intersects(targetHitbox)) {
             entity.collisionOccurred(true);
-            gp.ui.displayNotification("Collision detected!");
+            gp.getGameUI().displayNotification("Collision detected!");
         }
 
         entity.getHitbox().x = oldHitboxX;

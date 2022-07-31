@@ -45,9 +45,9 @@ public class SuperObject {
     }
 
     private boolean isInCameraFrame(GamePanel gp) {
-        return (worldX + gp.tileSize * 2) > gp.player.getWorldX() - gp.player.getScreenX() &&         // Left Screen.
-                (worldX - gp.tileSize * 2) < gp.player.getWorldX() + gp.player.getScreenX() &&        // Right Screen.
-                (worldY + gp.tileSize * 2) > gp.player.getWorldY() - gp.player.getScreenY() &&        // Upper Screen.
-                (worldY - gp.tileSize * 2) < gp.player.getWorldY() + gp.player.getScreenY();          // Bottom Screen
+        return (worldX + GamePanel.TILE_SIZE * 2) > gp.player.getWorldX() - gp.player.getScreenX() &&         // Left Screen.
+                (worldX - GamePanel.TILE_SIZE * 2) < gp.player.getWorldX() + gp.player.getScreenX() &&        // Right Screen.
+                (worldY + GamePanel.TILE_SIZE * 2) > gp.player.getWorldY() - gp.player.getScreenY() &&        // Upper Screen.
+                (worldY - GamePanel.TILE_SIZE * 2) < gp.player.getWorldY() + gp.player.getScreenY();          // Bottom Screen
     }
 }

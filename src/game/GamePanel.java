@@ -10,66 +10,91 @@ import game.object.ObjectManager;
 import game.object.SuperObject;
 
 public class GamePanel extends JPanel implements Runnable {
-    // Main screen settings
 
     public static final int PLAY_STATE = 1;
     public static final int PAUSE_STATE = 2;
 
-    public final int tileSize = 16;
+    public static final int TILE_SIZE = 16;
 
-    public final int screenMaxCol = 60;
-    public final int screenMaxRow = 32;
+    public static final int WORLD_MAX_COL = 70;
+    public static final int WORLD_MAX_ROW = 70;
+    private static final int SCREEN_MAX_COL = 60;
+    private static final int SCREEN_MAX_ROW = 32;
+    private static final int SCREEN_MAX_OBJECTS = 10;
+    private static final int SCREEN_MAX_ENTITIES = 10;
+    public static final int SCREEN_MIN_WIDTH = SCREEN_MAX_COL * TILE_SIZE;
+    public static final int SCREEN_MIN_HEIGHT = SCREEN_MAX_ROW * TILE_SIZE;
 
-    public final int screenWidth = screenMaxCol * tileSize;
-    public final int screenHeight = screenMaxRow * tileSize;
+    private Thread gameThread;
 
-    // World Settings.
-    public final int worldMaxCol = 70;
-    public final int worldMaxRow = 70;
-    public final int worldWidth = tileSize * worldMaxCol;
-    public final int worldHeight = tileSize * worldMaxRow;
+    private final KeyInputHandler keyHandler = new KeyInputHandler(this);
+    private final TileManager tileManager = new TileManager(this);
+    private final SuperObject[] gameObjects = new SuperObject[SCREEN_MAX_OBJECTS];
+    private final ObjectManager objectManager = new ObjectManager(this);
+    private final Entity[] gameEntities = new Entity[SCREEN_MAX_ENTITIES];
+    private final EntityManager entityManager = new EntityManager(this);
+    private final CollisionHandler collisionHandler = new CollisionHandler(this);
 
+    private final GameUI gameUI = new GameUI(this);
 
-    KeyInputHandler keyH = new KeyInputHandler(this);
-    Thread gameThread;
-    public CollisionCheck cChecker = new CollisionCheck(this);
+    public Player player = new Player(this, keyHandler);
 
-    final byte maxFPS = 60;
+    private int gameState;
 
-    TileManager tileM = new TileManager(this);
+    public boolean isInPlayState() {
+        return gameState == PLAY_STATE;
+    }
 
-    public Player player = new Player(this, keyH);
-    // Number of objects that can be displayed at once.
-    public SuperObject[] obj = new SuperObject[10];
-    public ObjectManager objM = new ObjectManager(this);
-    public Entity[] npc = new Entity[10];
-    public EntityManager npcM = new EntityManager(this);
+    public boolean isInPauseState() {
+        return gameState == PAUSE_STATE;
+    }
 
-    public UI ui = new UI(this);
+    public void setGameState(int state) {
+        gameState = state;
+    }
 
-    public int gameState;
+    public TileManager getTileManager() {
+        return tileManager;
+    }
 
-    public GamePanel () {
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+    public SuperObject[] getGameObjects() {
+        return gameObjects;
+    }
+
+    public Entity[] getGameEntities() {
+        return gameEntities;
+    }
+
+    public CollisionHandler getCollisionHandler() {
+        return collisionHandler;
+    }
+
+    public GameUI getGameUI() {
+        return gameUI;
+    }
+
+    public GamePanel() {
+        this.setPreferredSize(new Dimension(SCREEN_MIN_WIDTH, SCREEN_MIN_HEIGHT));
         this.setBackground(Color.black);
-        this.addKeyListener(keyH);
+        this.addKeyListener(keyHandler);
         this.setFocusable(true);
     }
 
     public void prepareGame() {
-        objM.placeObjects();
-        npcM.placeEntities();
+        objectManager.placeObjects();
+        entityManager.placeEntities();
         gameState = PLAY_STATE;
     }
 
-    public void startGameThread () {
+    public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
     }
 
-    public void run () {
+    public void run() {
         // Game Loop Variables
-        double drawInterval = 1000000000/ maxFPS;
+        int maxFPS = 60;
+        double drawInterval = (double) 1000000000 / maxFPS;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -87,38 +112,36 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public void update () {
+    public void update() {
         if (gameState == PLAY_STATE) {
             player.update();
-            for (int i = 0; i < npc.length; i++) {
-                if (npc[i] != null) {
-                    npc[i].update();
+            for (Entity entity : gameEntities) {
+                if (entity != null) {
+                    entity.update();
                 }
             }
         }
-        else if (gameState == PAUSE_STATE) {
-
-        }
     }
 
-    public void paintComponent (Graphics g) {
+    @Override
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
         // Tiles
-        tileM.draw(g2);
+        tileManager.draw(g2);
 
         // Objects
-        for (int i = 0; i < obj.length; i++) {
-            if (obj[i] != null) {
-                obj[i].draw(g2, this);
+        for (SuperObject superObject : gameObjects) {
+            if (superObject != null) {
+                superObject.draw(g2, this);
             }
         }
 
         // NPCs
-        for (int i = 0; i < npc.length; i++) {
-            if (npc[i] != null) {
-                npc[i].draw(g2);
+        for (Entity entity : gameEntities) {
+            if (entity != null) {
+                entity.draw(g2);
             }
         }
 
@@ -126,7 +149,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.draw(g2);
 
         // UI
-        ui.draw(g2);
+        gameUI.draw(g2);
 
         g2.dispose();
     }

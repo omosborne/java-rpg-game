@@ -11,10 +11,12 @@ public class ObjectManager {
     }
 
     public void placeObjects() {
-        gp.obj[0] = new Box();
-        gp.obj[0].setLocation(23 * gp.tileSize, 7 * gp.tileSize);
+        SuperObject[] objects = gp.getGameObjects();
 
-        gp.obj[1] = new Door();
-        gp.obj[1].setLocation(23 * gp.tileSize, 40 * gp.tileSize);
+        objects[0] = new Box();
+        objects[0].setLocation(23 * GamePanel.TILE_SIZE, 7 * GamePanel.TILE_SIZE);
+
+        objects[1] = new Door();
+        objects[1].setLocation(23 * GamePanel.TILE_SIZE, 40 * GamePanel.TILE_SIZE);
     }
 }

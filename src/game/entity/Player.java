@@ -23,22 +23,22 @@ public class Player extends Entity {
         return screenY;
     }
 
-    public Player (GamePanel gp, KeyInputHandler keyHandler) {
+    public Player(GamePanel gp, KeyInputHandler keyHandler) {
         super(gp);
 
         this.keys = keyHandler;
 
-        screenX = gp.screenWidth/2 - (gp.tileSize/2);
-        screenY = gp.screenHeight/2 - (gp.tileSize/2);
+        screenX = (GamePanel.SCREEN_MIN_WIDTH) / 2 - (GamePanel.TILE_SIZE / 2);
+        screenY = (GamePanel.SCREEN_MIN_HEIGHT) / 2 - (GamePanel.TILE_SIZE / 2);
 
         setDefaultVariables();
         loadSprites();
     }
 
-    private void setDefaultVariables () {
+    private void setDefaultVariables() {
         setDirection(Direction.DOWN);
-        worldX = gp.tileSize * 23;
-        worldY = gp.tileSize * 21;
+        worldX = GamePanel.TILE_SIZE * 23;
+        worldY = GamePanel.TILE_SIZE * 21;
         speed = 3;
         updateHitbox(worldX, worldY);
     }
@@ -82,9 +82,9 @@ public class Player extends Entity {
         }
 
         collisionOccurred(false);
-        gp.cChecker.checkTile(this);
-        gp.cChecker.checkObject(this);
-        gp.cChecker.checkEntity(this, gp.npc);
+        collisionHandler.checkTile(this);
+        collisionHandler.checkObject(this);
+        collisionHandler.checkEntity(this, gp.getGameEntities());
 
         if (!hasCollided()) {
             updatePlayerPosition();

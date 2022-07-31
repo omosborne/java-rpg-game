@@ -25,7 +25,7 @@ public class TileManager {
         this.gp = gp;
 
         tileTypes = new Tile[26];
-        mapTiles = new int[gp.worldMaxCol][gp.worldMaxRow];
+        mapTiles = new int[GamePanel.WORLD_MAX_COL][GamePanel.WORLD_MAX_ROW];
 
         loadTileImages();
         loadMapTiles("/game/maps/world02.txt");
@@ -52,10 +52,10 @@ public class TileManager {
             int col = 0;
             int row = 0;
 
-            while (col < gp.worldMaxCol && row < gp.worldMaxRow) {
+            while (col < GamePanel.WORLD_MAX_COL && row < GamePanel.WORLD_MAX_ROW) {
                 String mapRow = mapReader.readLine();
 
-                while (col < gp.worldMaxCol) {
+                while (col < GamePanel.WORLD_MAX_COL) {
                     String[] mapTilesRow = mapRow.split(" ");
 
                     int mapTile = Integer.parseInt(mapTilesRow[col]);
@@ -63,7 +63,7 @@ public class TileManager {
                     mapTiles[col][row] = mapTile;
                     col++;
                 }
-                if (col == gp.worldMaxCol) {
+                if (col == GamePanel.WORLD_MAX_COL) {
                     col = 0;
                     row++;
                 }
@@ -78,21 +78,21 @@ public class TileManager {
         int worldCol = 0;
         int worldRow = 0;
 
-        while (worldCol < gp.worldMaxCol && worldRow < gp.worldMaxRow) {
+        while (worldCol < GamePanel.WORLD_MAX_COL && worldRow < GamePanel.WORLD_MAX_ROW) {
             int mapTile = mapTiles[worldCol][worldRow];
 
-            int worldX = worldCol * gp.tileSize;
-            int worldY = worldRow * gp.tileSize;
+            int worldX = worldCol * GamePanel.TILE_SIZE;
+            int worldY = worldRow * GamePanel.TILE_SIZE;
             int screenX = worldX - gp.player.getWorldX() + gp.player.getScreenX();
             int screenY = worldY - gp.player.getWorldY() + gp.player.getScreenY();
 
             if (isInCameraFrame(worldX, worldY)) {
-                g2.drawImage(tileTypes[mapTile].getImage(), screenX, screenY, gp.tileSize, gp.tileSize, null);
+                g2.drawImage(tileTypes[mapTile].getImage(), screenX, screenY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
             }
 
             worldCol++;
 
-            if (worldCol == gp.worldMaxCol) {
+            if (worldCol == GamePanel.WORLD_MAX_COL) {
                 worldCol = 0;
                 worldRow++;
             }
@@ -100,9 +100,9 @@ public class TileManager {
     }
 
     private boolean isInCameraFrame(int worldX, int worldY) {
-        return (worldX + gp.tileSize * 2) > gp.player.getWorldX() - gp.player.getScreenX() &&         // Left Screen.
-                (worldX - gp.tileSize * 2) < gp.player.getWorldX() + gp.player.getScreenX() &&        // Right Screen.
-                (worldY + gp.tileSize * 2) > gp.player.getWorldY() - gp.player.getScreenY() &&        // Top Screen.
-                (worldY - gp.tileSize * 2) < gp.player.getWorldY() + gp.player.getScreenY();          // Bottom Screen.
+        return (worldX + GamePanel.TILE_SIZE * 2) > gp.player.getWorldX() - gp.player.getScreenX() &&         // Left Screen.
+                (worldX - GamePanel.TILE_SIZE * 2) < gp.player.getWorldX() + gp.player.getScreenX() &&        // Right Screen.
+                (worldY + GamePanel.TILE_SIZE * 2) > gp.player.getWorldY() - gp.player.getScreenY() &&        // Top Screen.
+                (worldY - GamePanel.TILE_SIZE * 2) < gp.player.getWorldY() + gp.player.getScreenY();          // Bottom Screen.
     }
 }

@@ -10,7 +10,9 @@ public class EntityManager {
     }
 
     public void placeEntities() {
-        gp.npc[0] = new HoodedMan(gp);
-        gp.npc[0].setLocation(21 * gp.tileSize, 21 * gp.tileSize);
+        Entity[] entities = gp.getGameEntities();
+
+        entities[0] = new HoodedMan(gp);
+        entities[0].setLocation(21 * GamePanel.TILE_SIZE, 21 * GamePanel.TILE_SIZE);
     }
 }

@@ -2,7 +2,7 @@ package game;
 
 import java.awt.*;
 
-public class UI {
+public class GameUI {
     private final GamePanel gp;
 
     private Graphics2D g2;
@@ -14,7 +14,7 @@ public class UI {
     private String notificationMessage = "";
     private int notificationActiveCounter = 0;
 
-    public UI(GamePanel gp) {
+    public GameUI(GamePanel gp) {
         this.gp = gp;
         fontArial20 = new Font("Arial", Font.PLAIN, 20);
         fontNotifications = new Font("Arial", Font.BOLD, 14);
@@ -31,13 +31,17 @@ public class UI {
         g2.setFont(fontArial20);
         g2.setColor(Color.white);
 
-        if (gp.gameState == GamePanel.PLAY_STATE) drawPlayScreenUI();
-        else if (gp.gameState == GamePanel.PAUSE_STATE) drawPauseScreenUI();
+        if (gp.isInPlayState()) {
+            drawPlayScreenUI();
+        }
+        else if (gp.isInPauseState()) {
+            drawPauseScreenUI();
+        }
     }
 
     private void drawPlayScreenUI() {
-        g2.drawString("X: " + gp.player.getWorldX(), 25, 40);
-        g2.drawString("Y: " + gp.player.getWorldY(), 25, 60);
+        g2.drawString("X: " + gp.player.getWorldX() / GamePanel.TILE_SIZE, 25, 40);
+        g2.drawString("Y: " + gp.player.getWorldY() / GamePanel.TILE_SIZE, 25, 60);
 
         if (notificationActive) {
             drawNotification();
@@ -47,20 +51,20 @@ public class UI {
     private void drawPauseScreenUI() {
         String text = "PAUSED";
         int x = getXForCenteredText(text);
-        int y = gp.screenHeight/2;
+        int y = GamePanel.SCREEN_MIN_HEIGHT / 2;
         g2.drawString(text, x, y);
     }
 
     private int getXForCenteredText(String text) {
         int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-        return gp.screenWidth/2 - length/2;
+        return (GamePanel.SCREEN_MIN_WIDTH / 2) - (length / 2);
     }
 
     private void drawNotification() {
         g2.setFont(fontNotifications);
 
         int x = getXForCenteredText(notificationMessage);
-        int y = gp.screenHeight - 20;
+        int y = GamePanel.SCREEN_MIN_HEIGHT - 20;
 
         g2.drawString(notificationMessage, x, y);
 
