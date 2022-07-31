@@ -27,17 +27,19 @@ public class GamePanel extends JPanel implements Runnable {
 
     private Thread gameThread;
 
-    private final KeyInputHandler keyHandler = new KeyInputHandler(this);
-    private final TileManager tileManager = new TileManager(this);
-    private final SuperObject[] gameObjects = new SuperObject[SCREEN_MAX_OBJECTS];
-    private final ObjectManager objectManager = new ObjectManager(this);
-    private final Entity[] gameEntities = new Entity[SCREEN_MAX_ENTITIES];
-    private final EntityManager entityManager = new EntityManager(this);
-    private final CollisionHandler collisionHandler = new CollisionHandler(this);
+    private final KeyInputHandler keyHandler;
+    public final Player player;
+    private final Camera camera;
 
-    private final GameUI gameUI = new GameUI(this);
+    private final TileManager tileManager;
+    private final SuperObject[] gameObjects;
+    private final ObjectManager objectManager;
+    private final Entity[] gameEntities;
+    private final EntityManager entityManager;
+    private final CollisionHandler collisionHandler;
 
-    public Player player = new Player(this, keyHandler);
+    private final GameUI gameUI;
+
 
     private int gameState;
 
@@ -73,11 +75,33 @@ public class GamePanel extends JPanel implements Runnable {
         return gameUI;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Camera getCamera() {
+        return camera;
+    }
+
     public GamePanel() {
-        this.setPreferredSize(new Dimension(SCREEN_MIN_WIDTH, SCREEN_MIN_HEIGHT));
-        this.setBackground(Color.black);
-        this.addKeyListener(keyHandler);
-        this.setFocusable(true);
+        setPreferredSize(new Dimension(SCREEN_MIN_WIDTH, SCREEN_MIN_HEIGHT));
+
+        keyHandler = new KeyInputHandler(this);
+        player = new Player(this, keyHandler);
+        camera = new Camera(this);
+
+        tileManager = new TileManager(this);
+        gameObjects = new SuperObject[SCREEN_MAX_OBJECTS];
+        objectManager = new ObjectManager(this);
+        gameEntities = new Entity[SCREEN_MAX_ENTITIES];
+        entityManager = new EntityManager(this);
+        collisionHandler = new CollisionHandler(this);
+
+        gameUI = new GameUI(this);
+
+        setBackground(Color.black);
+        addKeyListener(keyHandler);
+        setFocusable(true);
     }
 
     public void prepareGame() {
@@ -134,7 +158,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Objects
         for (SuperObject superObject : gameObjects) {
             if (superObject != null) {
-                superObject.draw(g2, this);
+                superObject.draw(g2);
             }
         }
 

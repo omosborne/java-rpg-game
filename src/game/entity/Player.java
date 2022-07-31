@@ -82,9 +82,9 @@ public class Player extends Entity {
         }
 
         collisionOccurred(false);
-        collisionHandler.checkTile(this);
-        collisionHandler.checkObject(this);
-        collisionHandler.checkEntity(this, gp.getGameEntities());
+        gp.getCollisionHandler().checkTile(this);
+        gp.getCollisionHandler().checkObject(this);
+        gp.getCollisionHandler().checkEntity(this, gp.getGameEntities());
 
         if (!hasCollided()) {
             updatePlayerPosition();

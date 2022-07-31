@@ -1,6 +1,6 @@
 package game.entity;
 
-import game.CollisionHandler;
+import game.Camera;
 import game.GamePanel;
 
 import java.awt.*;
@@ -15,6 +15,7 @@ public class Entity {
     }
 
     protected final GamePanel gp;
+    protected final Camera camera;
 
     protected int worldX = 0;
     protected int worldY = 0;
@@ -46,7 +47,6 @@ public class Entity {
 
     protected final Rectangle hitbox = new Rectangle(0, 0, 16, 16);
     private boolean collided = false;
-    protected final CollisionHandler collisionHandler;
 
     protected int actionCounter = 0;
 
@@ -95,8 +95,7 @@ public class Entity {
 
     public Entity(GamePanel gp) {
         this.gp = gp;
-        this.collisionHandler = gp.getCollisionHandler();
-
+        camera = gp.getCamera();
     }
 
     protected BufferedImage getIdleSprite() {
@@ -125,9 +124,9 @@ public class Entity {
         setAction();
 
         collisionOccurred(false);
-        collisionHandler.checkTile(this);
-        collisionHandler.checkObject(this);
-        collisionHandler.checkPlayer(this);
+        gp.getCollisionHandler().checkTile(this);
+        gp.getCollisionHandler().checkObject(this);
+        gp.getCollisionHandler().checkPlayer(this);
 
         if (!hasCollided()) {
             updateEntityPosition();
@@ -151,19 +150,12 @@ public class Entity {
     }
 
     public void draw(Graphics2D g2) {
-        int screenX = worldX - gp.player.worldX + gp.player.getScreenX();
-        int screenY = worldY - gp.player.worldY + gp.player.getScreenY();
+        int screenX = camera.convertToScreenX(worldX);
+        int screenY = camera.convertToScreenY(worldY);
 
-        if (isInCameraFrame()) {
+        if (camera.isInCameraFrame(worldX, worldY)) {
             currentSprite = getWalkSprite();
             g2.drawImage(currentSprite, screenX, screenY, width, height, null);
         }
-    }
-
-    private boolean isInCameraFrame() {
-        return (worldX + GamePanel.TILE_SIZE * 2) > gp.player.worldX - gp.player.getScreenX() &&         // Left Screen.
-                (worldX - GamePanel.TILE_SIZE * 2) < gp.player.worldX + gp.player.getScreenX() &&        // Right Screen.
-                (worldY + GamePanel.TILE_SIZE * 2) > gp.player.worldY - gp.player.getScreenY() &&        // Top Screen.
-                (worldY - GamePanel.TILE_SIZE * 2) < gp.player.worldY + gp.player.getScreenY();          // Bottom Screen.
     }
 }

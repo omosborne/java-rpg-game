@@ -1,11 +1,14 @@
 package game.object;
 
+import game.Camera;
 import game.GamePanel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class SuperObject {
+
+    private final Camera camera;
 
     protected BufferedImage image;
     protected String name;
@@ -35,19 +38,16 @@ public class SuperObject {
         return hitbox;
     }
 
-    public void draw(Graphics2D g2, GamePanel gp) {
-        int screenX = worldX - gp.player.getWorldX() + gp.player.getScreenX();
-        int screenY = worldY - gp.player.getWorldY() + gp.player.getScreenY();
-
-        if (isInCameraFrame(gp)) {
-            g2.drawImage(image, screenX, screenY, width, height, null);
-        }
+    public SuperObject(GamePanel gp) {
+        camera = gp.getCamera();
     }
 
-    private boolean isInCameraFrame(GamePanel gp) {
-        return (worldX + GamePanel.TILE_SIZE * 2) > gp.player.getWorldX() - gp.player.getScreenX() &&         // Left Screen.
-                (worldX - GamePanel.TILE_SIZE * 2) < gp.player.getWorldX() + gp.player.getScreenX() &&        // Right Screen.
-                (worldY + GamePanel.TILE_SIZE * 2) > gp.player.getWorldY() - gp.player.getScreenY() &&        // Upper Screen.
-                (worldY - GamePanel.TILE_SIZE * 2) < gp.player.getWorldY() + gp.player.getScreenY();          // Bottom Screen
+    public void draw(Graphics2D g2) {
+        int screenX = camera.convertToScreenX(worldX);
+        int screenY = camera.convertToScreenY(worldY);
+
+        if (camera.isInCameraFrame(worldX, worldY)) {
+            g2.drawImage(image, screenX, screenY, width, height, null);
+        }
     }
 }

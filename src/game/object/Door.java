@@ -1,11 +1,14 @@
 package game.object;
 
+import game.GamePanel;
+
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.Objects;
 
 public class Door extends SuperObject {
-    public Door() {
+    public Door(GamePanel gp) {
+        super(gp);
         name = "Door";
         canCollide(true);
         try {

@@ -10,6 +10,8 @@ import java.util.Objects;
 
 public class TileManager {
     private final GamePanel gp;
+    private final Camera camera;
+
     private final Tile[] tileTypes;
     private final int[][] mapTiles;
 
@@ -23,6 +25,7 @@ public class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
+        camera = gp.getCamera();
 
         tileTypes = new Tile[26];
         mapTiles = new int[GamePanel.WORLD_MAX_COL][GamePanel.WORLD_MAX_ROW];
@@ -83,10 +86,10 @@ public class TileManager {
 
             int worldX = worldCol * GamePanel.TILE_SIZE;
             int worldY = worldRow * GamePanel.TILE_SIZE;
-            int screenX = worldX - gp.player.getWorldX() + gp.player.getScreenX();
-            int screenY = worldY - gp.player.getWorldY() + gp.player.getScreenY();
+            int screenX = camera.convertToScreenX(worldX);
+            int screenY = camera.convertToScreenY(worldY);
 
-            if (isInCameraFrame(worldX, worldY)) {
+            if (camera.isInCameraFrame(worldX, worldY)) {
                 g2.drawImage(tileTypes[mapTile].getImage(), screenX, screenY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
             }
 
@@ -97,12 +100,5 @@ public class TileManager {
                 worldRow++;
             }
         }
-    }
-
-    private boolean isInCameraFrame(int worldX, int worldY) {
-        return (worldX + GamePanel.TILE_SIZE * 2) > gp.player.getWorldX() - gp.player.getScreenX() &&         // Left Screen.
-                (worldX - GamePanel.TILE_SIZE * 2) < gp.player.getWorldX() + gp.player.getScreenX() &&        // Right Screen.
-                (worldY + GamePanel.TILE_SIZE * 2) > gp.player.getWorldY() - gp.player.getScreenY() &&        // Top Screen.
-                (worldY - GamePanel.TILE_SIZE * 2) < gp.player.getWorldY() + gp.player.getScreenY();          // Bottom Screen.
     }
 }
