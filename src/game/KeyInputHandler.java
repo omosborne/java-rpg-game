@@ -10,6 +10,7 @@ public class KeyInputHandler implements KeyListener {
     private boolean leftPressed;
     private boolean downPressed;
     private boolean rightPressed;
+    private boolean enterPressed;
 
     public boolean isUpLeftPressed() {
         return upPressed && leftPressed;
@@ -43,6 +44,10 @@ public class KeyInputHandler implements KeyListener {
         return rightPressed;
     }
 
+    public boolean isEnterPressed() {
+        return enterPressed;
+    }
+
     public KeyInputHandler(GamePanel gp) {
         this.gp = gp;
     }
@@ -51,16 +56,30 @@ public class KeyInputHandler implements KeyListener {
     public void keyPressed(KeyEvent keyEvent) {
         int keyCode = keyEvent.getKeyCode();
 
-        if (keyCode == KeyEvent.VK_W) {
-            upPressed = true;
-        } else if (keyCode == KeyEvent.VK_A) {
-            leftPressed = true;
-        } else if (keyCode == KeyEvent.VK_S) {
-            downPressed = true;
-        } else if (keyCode == KeyEvent.VK_D) {
-            rightPressed = true;
-        } else if (keyCode == KeyEvent.VK_P) {
-            togglePause();
+        if (gp.isInPlayState()) {
+            if (keyCode == KeyEvent.VK_W) {
+                upPressed = true;
+            } else if (keyCode == KeyEvent.VK_A) {
+                leftPressed = true;
+            } else if (keyCode == KeyEvent.VK_S) {
+                downPressed = true;
+            } else if (keyCode == KeyEvent.VK_D) {
+                rightPressed = true;
+            } else if (keyCode == KeyEvent.VK_P) {
+                togglePause();
+            } else if (keyCode == KeyEvent.VK_ENTER) {
+                enterPressed = true;
+            }
+        }
+        else if (gp.isInPauseState()) {
+            if (keyCode == KeyEvent.VK_P) {
+                togglePause();
+            }
+        }
+        else if (gp.isInDialogueState()) {
+            if (keyCode == KeyEvent.VK_ENTER) {
+                gp.setGameState(GamePanel.PLAY_STATE);
+            }
         }
     }
 
@@ -76,6 +95,8 @@ public class KeyInputHandler implements KeyListener {
             downPressed = false;
         } else if (keyCode == KeyEvent.VK_D) {
             rightPressed = false;
+        } else if (keyCode == KeyEvent.VK_ENTER) {
+            enterPressed = false;
         }
     }
 

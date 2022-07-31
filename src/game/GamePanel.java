@@ -13,6 +13,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public static final int PLAY_STATE = 1;
     public static final int PAUSE_STATE = 2;
+    public static final int DIALOGUE_STATE = 3;
 
     public static final int TILE_SIZE = 16;
 
@@ -40,7 +41,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     private final GameUI gameUI;
 
-
     private int gameState;
 
     public boolean isInPlayState() {
@@ -51,8 +51,16 @@ public class GamePanel extends JPanel implements Runnable {
         return gameState == PAUSE_STATE;
     }
 
+    public boolean isInDialogueState() {
+        return gameState == DIALOGUE_STATE;
+    }
+
     public void setGameState(int state) {
         gameState = state;
+    }
+
+    public KeyInputHandler getKeyHandler() {
+        return keyHandler;
     }
 
     public TileManager getTileManager() {
