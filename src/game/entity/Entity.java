@@ -50,6 +50,9 @@ public class Entity {
 
     protected int actionCounter = 0;
 
+    protected String[] dialogues = new String[20];
+    protected int dialogueIndex = 0;
+
     public void setLocation(int x, int y) {
         worldX = x;
         worldY = y;
@@ -118,6 +121,21 @@ public class Entity {
 
     public void setAction() {
         // Override this.
+    }
+
+    public void speak() {
+        if (dialogues[dialogueIndex] == null) {
+            dialogueIndex = 0;
+        }
+        gp.getGameUI().currentDialogue = dialogues[dialogueIndex];
+        dialogueIndex++;
+
+        switch (gp.getPlayer().getDirection()) {
+            case UP -> setDirection(Direction.DOWN);
+            case LEFT -> setDirection(Direction.RIGHT);
+            case DOWN -> setDirection(Direction.UP);
+            case RIGHT -> setDirection(Direction.LEFT);
+        }
     }
 
     public void update() {

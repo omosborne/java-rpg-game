@@ -88,6 +88,10 @@ public class CollisionHandler {
         if (entity.getHitbox().intersects(targetHitbox)) {
             entity.collisionOccurred(true);
             gp.getGameUI().displayNotification("Collision detected!");
+            if (gp.getKeyHandler().isEnterPressed()) {
+                gp.setGameState(GamePanel.DIALOGUE_STATE);
+                gp.getGameEntities()[0].speak();
+            }
         }
 
         entity.getHitbox().x = oldHitboxX;

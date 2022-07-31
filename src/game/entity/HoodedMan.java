@@ -14,6 +14,7 @@ public class HoodedMan extends Entity{
         setDirection(Direction.DOWN);
         speed = 1;
         loadSprites();
+        setDialogue();
     }
 
     private void loadSprites() {
@@ -35,6 +36,11 @@ public class HoodedMan extends Entity{
         } catch (IOException error) {
             error.printStackTrace();
         }
+    }
+
+    public void setDialogue() {
+        dialogues[0] = "Hello, Player!";
+        dialogues[1] = "Welcome to the world. I am here to test functionality. What a fun life! Welcome to the world. I am\nhere to test functionality. What a fun life! Welcome to the world. I am here to test functionality.\nWhat a fun life!";
     }
 
     @Override

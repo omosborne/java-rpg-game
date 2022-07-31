@@ -9,15 +9,19 @@ public class GameUI {
 
     private final Font fontArial20;
     private final Font fontNotifications;
+    private final Font fontDialogue;
 
     private boolean notificationActive = false;
     private String notificationMessage = "";
     private int notificationActiveCounter = 0;
 
+    public String currentDialogue = "";
+
     public GameUI(GamePanel gp) {
         this.gp = gp;
         fontArial20 = new Font("Arial", Font.PLAIN, 20);
         fontNotifications = new Font("Arial", Font.BOLD, 14);
+        fontDialogue = new Font("Arial", Font.BOLD, 16);
     }
 
     public void displayNotification(String text) {
@@ -36,6 +40,9 @@ public class GameUI {
         }
         else if (gp.isInPauseState()) {
             drawPauseScreenUI();
+        }
+        else if (gp.isInDialogueState()) {
+            drawDialogueScreenUI();
         }
     }
 
@@ -58,6 +65,35 @@ public class GameUI {
     private int getXForCenteredText(String text) {
         int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         return (GamePanel.SCREEN_MIN_WIDTH / 2) - (length / 2);
+    }
+
+    private void drawDialogueScreenUI() {
+        int x = GamePanel.SCREEN_MIN_WIDTH / 16;
+        int y = GamePanel.SCREEN_MIN_HEIGHT / 16;
+        int width = GamePanel.SCREEN_MIN_WIDTH - (x * 2);
+        int height = GamePanel.SCREEN_MIN_HEIGHT / 3;
+
+        drawWindow(x, y, width, height);
+
+        g2.setFont(fontDialogue);
+        x += x;
+        y += y;
+
+        for (String line : currentDialogue.split("\n")) {
+            g2.drawString(line, x, y);
+            y += 30;
+        }
+    }
+
+    private void drawWindow(int x, int y, int width, int height) {
+        Color black = new Color(0, 0, 0, 192);
+        g2.setColor(black);
+        g2.fillRoundRect(x, y, width, height, 35, 35);
+
+        Color white = new Color(255, 255, 255);
+        g2.setColor(white);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
     }
 
     private void drawNotification() {
