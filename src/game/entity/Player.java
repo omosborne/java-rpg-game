@@ -139,6 +139,6 @@ public class Player extends Entity {
             currentSprite = getWalkSprite();
         }
 
-        g2.drawImage(currentSprite, screenX, screenY, 44, 56, null);
+        g2.drawImage(currentSprite, screenX, screenY, 44, 58, null);
     }
 }

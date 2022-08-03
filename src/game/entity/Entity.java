@@ -45,7 +45,7 @@ public class Entity {
 
     protected Direction direction;
 
-    protected final Rectangle hitbox = new Rectangle(0, 0, 16, 16);
+    protected final Rectangle hitbox = new Rectangle(0, 0, 32, 16);
     private boolean collided = false;
 
     protected int actionCounter = 0;
@@ -93,7 +93,7 @@ public class Entity {
     }
 
     protected void updateHitbox(int ownerX, int ownerY) {
-        hitbox.setLocation(ownerX + 8, ownerY + 16);
+        hitbox.setLocation(ownerX + 6, ownerY + 40);
     }
 
     public Entity(GamePanel gp) {
