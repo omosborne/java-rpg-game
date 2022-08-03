@@ -45,7 +45,7 @@ public class Entity {
 
     protected Direction direction;
 
-    protected final Rectangle hitbox = new Rectangle(0, 0, 32, 16);
+    protected final Rectangle hitbox = new Rectangle(0, 0, 32, 20);
     private boolean collided = false;
 
     protected int actionCounter = 0;
@@ -56,8 +56,7 @@ public class Entity {
     public void setLocation(int x, int y) {
         worldX = x;
         worldY = y;
-        hitbox.x = x;
-        hitbox.y = y;
+        updateHitbox();
     }
 
     public Direction getDirection() {
@@ -92,8 +91,8 @@ public class Entity {
         return hitbox;
     }
 
-    protected void updateHitbox(int ownerX, int ownerY) {
-        hitbox.setLocation(ownerX + 6, ownerY + 40);
+    protected void updateHitbox() {
+        hitbox.setLocation(worldX + 6, worldY + 36);
     }
 
     public Entity(GamePanel gp) {
@@ -164,7 +163,7 @@ public class Entity {
             case DOWN -> worldY += speed;
             case RIGHT -> worldX += speed;
         }
-        updateHitbox(worldX, worldY);
+        updateHitbox();
     }
 
     public void draw(Graphics2D g2) {

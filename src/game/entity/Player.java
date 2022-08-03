@@ -40,7 +40,7 @@ public class Player extends Entity {
         worldX = GamePanel.TILE_SIZE * 23;
         worldY = GamePanel.TILE_SIZE * 21;
         speed = 3;
-        updateHitbox(worldX, worldY);
+        updateHitbox();
     }
 
     private void loadSprites() {
@@ -126,7 +126,7 @@ public class Player extends Entity {
         else if (keys.isRightPressed()) {
             worldX += speed;
         }
-        updateHitbox(worldX, worldY);
+        updateHitbox();
     }
 
     @Override
