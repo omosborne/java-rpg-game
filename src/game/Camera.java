@@ -24,10 +24,10 @@ public class Camera {
 
     public boolean isInCameraFrame(int worldX, int worldY) {
         getCameraFrame();
-        return (worldX + GamePanel.TILE_SIZE * 2) > cameraFrameLeft &&
-                (worldX - GamePanel.TILE_SIZE * 2) < cameraFrameRight &&
-                (worldY + GamePanel.TILE_SIZE * 2) > cameraFrameTop &&
-                (worldY - GamePanel.TILE_SIZE * 2) < cameraFrameBottom;
+        return (worldX + GamePanel.TILE_SIZE * 4) > cameraFrameLeft &&
+                (worldX - GamePanel.TILE_SIZE * 4) < cameraFrameRight &&
+                (worldY + GamePanel.TILE_SIZE * 4) > cameraFrameTop &&
+                (worldY - GamePanel.TILE_SIZE * 4) < cameraFrameBottom;
     }
 
     public int convertToScreenX(int worldX) {
