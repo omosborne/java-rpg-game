@@ -21,8 +21,8 @@ public class Entity {
     protected int worldY = 0;
     protected int speed = 0;
 
-    protected int width = 32;
-    protected int height = 32;
+    protected int width = 44;
+    protected int height = 58;
 
     protected BufferedImage idleUp;
     protected BufferedImage idleLeft;
