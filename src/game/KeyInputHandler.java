@@ -81,6 +81,18 @@ public class KeyInputHandler implements KeyListener {
                 gp.setGameState(GamePanel.PLAY_STATE);
             }
         }
+        else if (gp.isInTitleState()) {
+            if (keyCode == KeyEvent.VK_W) {
+                gp.getGameUI().moveTitleScreenOptionUp();
+            } else if (keyCode == KeyEvent.VK_S) {
+                gp.getGameUI().moveTitleScreenOptionDown();
+            } else if (keyCode == KeyEvent.VK_ENTER) {
+                switch (gp.getGameUI().getTitleScreenMenuOption()) {
+                    case 0 -> gp.setGameState(GamePanel.PLAY_STATE);
+                    case 3 -> System.exit(0);
+                }
+            }
+        }
     }
 
     @Override

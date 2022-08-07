@@ -16,12 +16,25 @@ public class GameUI {
     private final Font fontDialogue;
 
     private BufferedImage titleScreenBackground;
+    private int titleScreenMenuOption = 0;
 
     private boolean notificationActive = false;
     private String notificationMessage = "";
     private int notificationActiveCounter = 0;
 
     public String currentDialogue = "";
+
+    public void moveTitleScreenOptionUp() {
+        titleScreenMenuOption = (titleScreenMenuOption + 3) % 4;
+    }
+
+    public void moveTitleScreenOptionDown() {
+        titleScreenMenuOption = (titleScreenMenuOption + 1) % 4;
+    }
+
+    public int getTitleScreenMenuOption() {
+        return titleScreenMenuOption;
+    }
 
     public GameUI(GamePanel gp) {
         this.gp = gp;
@@ -133,12 +146,24 @@ public class GameUI {
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
         int x = 300;
-        int y = GamePanel.SCREEN_MIN_HEIGHT / 2;
+        int y0 = GamePanel.SCREEN_MIN_HEIGHT / 2;
+        int y1 = y0 + 50;
+        int y2 = y1 + 50;
+        int y3 = y2 + 50;
 
         g2.setColor(Color.red);
-        g2.drawString("New Game", x, y);
-        g2.drawString("Load Game", x, y + 50);
-        g2.drawString("Options", x, y + 100);
-        g2.drawString("Quit", x, y + 150);
+        g2.drawString("New Game", x, y0);
+        g2.drawString("Load Game", x, y1);
+        g2.drawString("Options", x, y2);
+        g2.drawString("Quit", x, y3);
+
+        g2.setColor(Color.white);
+
+        switch (titleScreenMenuOption) {
+            case 0 -> g2.drawString("O", x - 35, y0);
+            case 1 -> g2.drawString("O", x - 35, y1);
+            case 2 -> g2.drawString("O", x - 35, y2);
+            case 3 -> g2.drawString("O", x - 35, y3);
+        }
     }
 }
