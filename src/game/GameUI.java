@@ -160,10 +160,10 @@ public class GameUI {
         g2.setColor(Color.white);
 
         switch (titleScreenMenuOption) {
-            case 0 -> g2.drawString("O", x - 35, y0);
-            case 1 -> g2.drawString("O", x - 35, y1);
-            case 2 -> g2.drawString("O", x - 35, y2);
-            case 3 -> g2.drawString("O", x - 35, y3);
+            case 0 -> g2.drawString(".", x - 30, y0 - 10);
+            case 1 -> g2.drawString(".", x - 30, y1 - 10);
+            case 2 -> g2.drawString(".", x - 30, y2 - 10);
+            case 3 -> g2.drawString(".", x - 30, y3 - 10);
         }
     }
 }
