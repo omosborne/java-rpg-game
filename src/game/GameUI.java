@@ -1,6 +1,10 @@
 package game;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 public class GameUI {
     private final GamePanel gp;
@@ -11,17 +15,39 @@ public class GameUI {
     private final Font fontNotifications;
     private final Font fontDialogue;
 
+    private BufferedImage titleScreenBackground;
+    private int titleScreenMenuOption = 0;
+
     private boolean notificationActive = false;
     private String notificationMessage = "";
     private int notificationActiveCounter = 0;
 
     public String currentDialogue = "";
 
+    public void moveTitleScreenOptionUp() {
+        titleScreenMenuOption = (titleScreenMenuOption + 3) % 4;
+    }
+
+    public void moveTitleScreenOptionDown() {
+        titleScreenMenuOption = (titleScreenMenuOption + 1) % 4;
+    }
+
+    public int getTitleScreenMenuOption() {
+        return titleScreenMenuOption;
+    }
+
     public GameUI(GamePanel gp) {
         this.gp = gp;
         fontArial20 = new Font("Arial", Font.PLAIN, 20);
         fontNotifications = new Font("Arial", Font.BOLD, 14);
         fontDialogue = new Font("Arial", Font.BOLD, 16);
+
+        try {
+            titleScreenBackground = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/title.png")));
+        }
+        catch (IOException | NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public void displayNotification(String text) {
@@ -43,6 +69,9 @@ public class GameUI {
         }
         else if (gp.isInDialogueState()) {
             drawDialogueScreenUI();
+        }
+        else if (gp.isInTitleState()) {
+            drawTitleScreen();
         }
     }
 
@@ -109,6 +138,32 @@ public class GameUI {
         if (notificationActiveCounter > 120) {
             notificationActiveCounter = 0;
             notificationActive = false;
+        }
+    }
+
+    private void drawTitleScreen() {
+        g2.drawImage(titleScreenBackground, 0, 0, GamePanel.SCREEN_MIN_WIDTH, GamePanel.SCREEN_MIN_HEIGHT, null);
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
+        int x = 300;
+        int y0 = GamePanel.SCREEN_MIN_HEIGHT / 2;
+        int y1 = y0 + 50;
+        int y2 = y1 + 50;
+        int y3 = y2 + 50;
+
+        g2.setColor(Color.red);
+        g2.drawString("New Game", x, y0);
+        g2.drawString("Load Game", x, y1);
+        g2.drawString("Options", x, y2);
+        g2.drawString("Quit", x, y3);
+
+        g2.setColor(Color.white);
+
+        switch (titleScreenMenuOption) {
+            case 0 -> g2.drawString(".", x - 30, y0 - 10);
+            case 1 -> g2.drawString(".", x - 30, y1 - 10);
+            case 2 -> g2.drawString(".", x - 30, y2 - 10);
+            case 3 -> g2.drawString(".", x - 30, y3 - 10);
         }
     }
 }

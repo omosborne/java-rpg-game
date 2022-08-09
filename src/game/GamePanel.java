@@ -11,6 +11,7 @@ import game.object.SuperObject;
 
 public class GamePanel extends JPanel implements Runnable {
 
+    public static final int TITLE_STATE = 0;
     public static final int PLAY_STATE = 1;
     public static final int PAUSE_STATE = 2;
     public static final int DIALOGUE_STATE = 3;
@@ -42,6 +43,10 @@ public class GamePanel extends JPanel implements Runnable {
     private final GameUI gameUI;
 
     private int gameState;
+
+    public boolean isInTitleState() {
+        return gameState == TITLE_STATE;
+    }
 
     public boolean isInPlayState() {
         return gameState == PLAY_STATE;
@@ -115,7 +120,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void prepareGame() {
         objectManager.placeObjects();
         entityManager.placeEntities();
-        gameState = PLAY_STATE;
+        gameState = TITLE_STATE;
     }
 
     public void startGameThread() {
@@ -145,7 +150,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (gameState == PLAY_STATE) {
+        if (isInPlayState()) {
             player.update();
             for (Entity entity : gameEntities) {
                 if (entity != null) {
@@ -160,28 +165,33 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        // Tiles
-        tileManager.draw(g2);
-
-        // Objects
-        for (SuperObject superObject : gameObjects) {
-            if (superObject != null) {
-                superObject.draw(g2);
-            }
+        if (isInTitleState()) {
+            gameUI.draw(g2);
         }
+        else {
+            // Tiles
+            tileManager.draw(g2);
 
-        // NPCs
-        for (Entity entity : gameEntities) {
-            if (entity != null) {
-                entity.draw(g2);
+            // Objects
+            for (SuperObject superObject : gameObjects) {
+                if (superObject != null) {
+                    superObject.draw(g2);
+                }
             }
+
+            // NPCs
+            for (Entity entity : gameEntities) {
+                if (entity != null) {
+                    entity.draw(g2);
+                }
+            }
+
+            // Players
+            player.draw(g2);
+
+            // UI
+            gameUI.draw(g2);
         }
-
-        // Players
-        player.draw(g2);
-
-        // UI
-        gameUI.draw(g2);
 
         g2.dispose();
     }
