@@ -89,7 +89,7 @@ public class CollisionHandler {
             entity.collisionOccurred(true);
             gp.getGameUI().displayNotification("Collision detected!");
             if (gp.getKeyHandler().isEnterPressed()) {
-                gp.setGameState(GamePanel.DIALOGUE_STATE);
+                gp.setGameState(GamePanel.State.DIALOGUE);
                 gp.getGameEntities()[0].speak();
             }
         }

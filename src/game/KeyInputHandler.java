@@ -56,41 +56,51 @@ public class KeyInputHandler implements KeyListener {
     public void keyPressed(KeyEvent keyEvent) {
         int keyCode = keyEvent.getKeyCode();
 
-        if (gp.isInPlayState()) {
-            if (keyCode == KeyEvent.VK_W) {
-                upPressed = true;
-            } else if (keyCode == KeyEvent.VK_A) {
-                leftPressed = true;
-            } else if (keyCode == KeyEvent.VK_S) {
-                downPressed = true;
-            } else if (keyCode == KeyEvent.VK_D) {
-                rightPressed = true;
-            } else if (keyCode == KeyEvent.VK_P) {
-                togglePause();
-            } else if (keyCode == KeyEvent.VK_ENTER) {
-                enterPressed = true;
-            }
+        switch (gp.getGameState()) {
+            case PLAY -> checkPlayKeysPressed(keyCode);
+            case PAUSE -> checkPauseKeysPressed(keyCode);
+            case DIALOGUE -> checkDialogueKeysPressed(keyCode);
+            case TITLE -> checkTitleKeysPressed(keyCode);
         }
-        else if (gp.isInPauseState()) {
-            if (keyCode == KeyEvent.VK_P) {
-                togglePause();
-            }
+    }
+
+    private void checkPlayKeysPressed(int keyCode) {
+        if (keyCode == KeyEvent.VK_W) {
+            upPressed = true;
+        } else if (keyCode == KeyEvent.VK_A) {
+            leftPressed = true;
+        } else if (keyCode == KeyEvent.VK_S) {
+            downPressed = true;
+        } else if (keyCode == KeyEvent.VK_D) {
+            rightPressed = true;
+        } else if (keyCode == KeyEvent.VK_P) {
+            togglePause();
+        } else if (keyCode == KeyEvent.VK_ENTER) {
+            enterPressed = true;
         }
-        else if (gp.isInDialogueState()) {
-            if (keyCode == KeyEvent.VK_ENTER) {
-                gp.setGameState(GamePanel.PLAY_STATE);
-            }
+    }
+
+    private void checkPauseKeysPressed(int keyCode) {
+        if (keyCode == KeyEvent.VK_P) {
+            togglePause();
         }
-        else if (gp.isInTitleState()) {
-            if (keyCode == KeyEvent.VK_W) {
-                gp.getGameUI().moveTitleScreenOptionUp();
-            } else if (keyCode == KeyEvent.VK_S) {
-                gp.getGameUI().moveTitleScreenOptionDown();
-            } else if (keyCode == KeyEvent.VK_ENTER) {
-                switch (gp.getGameUI().getTitleScreenMenuOption()) {
-                    case 0 -> gp.setGameState(GamePanel.PLAY_STATE);
-                    case 3 -> System.exit(0);
-                }
+    }
+
+    private void checkDialogueKeysPressed(int keyCode) {
+        if (keyCode == KeyEvent.VK_ENTER) {
+            gp.setGameState(GamePanel.State.PLAY);
+        }
+    }
+
+    private void checkTitleKeysPressed(int keyCode) {
+        if (keyCode == KeyEvent.VK_W) {
+            gp.getGameUI().moveTitleScreenOptionUp();
+        } else if (keyCode == KeyEvent.VK_S) {
+            gp.getGameUI().moveTitleScreenOptionDown();
+        } else if (keyCode == KeyEvent.VK_ENTER) {
+            switch (gp.getGameUI().getTitleScreenMenuOption()) {
+                case 0 -> gp.setGameState(GamePanel.State.PLAY);
+                case 3 -> System.exit(0);
             }
         }
     }
@@ -99,25 +109,27 @@ public class KeyInputHandler implements KeyListener {
     public void keyReleased(KeyEvent keyEvent) {
         int keyCode = keyEvent.getKeyCode();
 
-        if (keyCode == KeyEvent.VK_W) {
-            upPressed = false;
-        } else if (keyCode == KeyEvent.VK_A) {
-            leftPressed = false;
-        } else if (keyCode == KeyEvent.VK_S) {
-            downPressed = false;
-        } else if (keyCode == KeyEvent.VK_D) {
-            rightPressed = false;
-        } else if (keyCode == KeyEvent.VK_ENTER) {
-            enterPressed = false;
+        if (gp.getGameState().isPlay()) {
+            if (keyCode == KeyEvent.VK_W) {
+                upPressed = false;
+            } else if (keyCode == KeyEvent.VK_A) {
+                leftPressed = false;
+            } else if (keyCode == KeyEvent.VK_S) {
+                downPressed = false;
+            } else if (keyCode == KeyEvent.VK_D) {
+                rightPressed = false;
+            } else if (keyCode == KeyEvent.VK_ENTER) {
+                enterPressed = false;
+            }
         }
     }
 
     private void togglePause() {
-        if (gp.isInPlayState()) {
-            gp.setGameState(GamePanel.PAUSE_STATE);
+        if (gp.getGameState().isPlay()) {
+            gp.setGameState(GamePanel.State.PAUSE);
         }
-        else if (gp.isInPauseState()) {
-            gp.setGameState(GamePanel.PLAY_STATE);
+        else if (gp.getGameState().isPause()) {
+            gp.setGameState(GamePanel.State.PLAY);
         }
     }
 

@@ -11,10 +11,57 @@ import game.object.SuperObject;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    public static final int TITLE_STATE = 0;
-    public static final int PLAY_STATE = 1;
-    public static final int PAUSE_STATE = 2;
-    public static final int DIALOGUE_STATE = 3;
+    public enum State {
+        TITLE {
+            @Override
+            public boolean isTitle() {
+                return true;
+            }
+
+            @Override
+            public boolean isWorldVisible() {
+                return false;
+            }
+        },
+        PLAY {
+            @Override
+            public boolean isPlay() {
+                return true;
+            }
+        },
+        PAUSE {
+            @Override
+            public boolean isPause() {
+                return true;
+            }
+        },
+        DIALOGUE {
+            @Override
+            public boolean isDialogue() {
+                return true;
+            }
+        };
+
+        public boolean isTitle() {
+            return false;
+        }
+
+        public boolean isPlay() {
+            return false;
+        }
+
+        public boolean isPause() {
+            return false;
+        }
+
+        public boolean isDialogue() {
+            return false;
+        }
+
+        public boolean isWorldVisible() {
+            return true;
+        }
+    }
 
     public static final int TILE_SIZE = 16;
 
@@ -42,25 +89,13 @@ public class GamePanel extends JPanel implements Runnable {
 
     private final GameUI gameUI;
 
-    private int gameState;
+    private State gameState = State.TITLE;
 
-    public boolean isInTitleState() {
-        return gameState == TITLE_STATE;
+    public State getGameState() {
+        return gameState;
     }
 
-    public boolean isInPlayState() {
-        return gameState == PLAY_STATE;
-    }
-
-    public boolean isInPauseState() {
-        return gameState == PAUSE_STATE;
-    }
-
-    public boolean isInDialogueState() {
-        return gameState == DIALOGUE_STATE;
-    }
-
-    public void setGameState(int state) {
+    public void setGameState(State state) {
         gameState = state;
     }
 
@@ -120,7 +155,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void prepareGame() {
         objectManager.placeObjects();
         entityManager.placeEntities();
-        gameState = TITLE_STATE;
+        setGameState(State.TITLE);
     }
 
     public void startGameThread() {
@@ -150,12 +185,12 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (isInPlayState()) {
-            player.update();
-            for (Entity entity : gameEntities) {
-                if (entity != null) {
-                    entity.update();
-                }
+        if (!gameState.isPlay()) return;
+
+        player.update();
+        for (Entity entity : gameEntities) {
+            if (entity != null) {
+                entity.update();
             }
         }
     }
@@ -165,34 +200,38 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if (isInTitleState()) {
-            gameUI.draw(g2);
+        if (gameState.isWorldVisible()) {
+            drawWorldContent(g2);
         }
         else {
-            // Tiles
-            tileManager.draw(g2);
-
-            // Objects
-            for (SuperObject superObject : gameObjects) {
-                if (superObject != null) {
-                    superObject.draw(g2);
-                }
-            }
-
-            // NPCs
-            for (Entity entity : gameEntities) {
-                if (entity != null) {
-                    entity.draw(g2);
-                }
-            }
-
-            // Players
-            player.draw(g2);
-
-            // UI
             gameUI.draw(g2);
         }
 
         g2.dispose();
+    }
+
+    private void drawWorldContent(Graphics2D g2) {
+        // Tiles
+        tileManager.draw(g2);
+
+        // Objects
+        for (SuperObject superObject : gameObjects) {
+            if (superObject != null) {
+                superObject.draw(g2);
+            }
+        }
+
+        // NPCs
+        for (Entity entity : gameEntities) {
+            if (entity != null) {
+                entity.draw(g2);
+            }
+        }
+
+        // Players
+        player.draw(g2);
+
+        // UI
+        gameUI.draw(g2);
     }
 }

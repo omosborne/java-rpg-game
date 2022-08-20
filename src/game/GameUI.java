@@ -61,17 +61,11 @@ public class GameUI {
         g2.setFont(fontArial20);
         g2.setColor(Color.white);
 
-        if (gp.isInPlayState()) {
-            drawPlayScreenUI();
-        }
-        else if (gp.isInPauseState()) {
-            drawPauseScreenUI();
-        }
-        else if (gp.isInDialogueState()) {
-            drawDialogueScreenUI();
-        }
-        else if (gp.isInTitleState()) {
-            drawTitleScreen();
+        switch (gp.getGameState()) {
+            case PLAY -> drawPlayScreenUI();
+            case PAUSE -> drawPauseScreenUI();
+            case DIALOGUE -> drawDialogueScreenUI();
+            case TITLE -> drawTitleScreen();
         }
     }
 
