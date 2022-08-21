@@ -7,6 +7,44 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class GameUI {
+
+    public enum TitleScreenOption {
+        NEW_GAME {
+            @Override
+            public String toString() {
+                return "New Game";
+            }
+        },
+        LOAD_GAME {
+            @Override
+            public String toString() {
+                return "Load Game";
+            }
+        },
+        OPTIONS {
+            @Override
+            public String toString() {
+                return "Options";
+            }
+        },
+        QUIT {
+            @Override
+            public String toString() {
+                return "Quit";
+            }
+        };
+
+        private static final TitleScreenOption[] options = values();
+
+        public TitleScreenOption next() {
+            return options[(this.ordinal() + 1) % options.length];
+        }
+
+        public TitleScreenOption previous() {
+            return options[(this.ordinal() + (options.length - 1)) % options.length];
+        }
+    }
+
     private final GamePanel gp;
 
     private Graphics2D g2;
@@ -16,7 +54,7 @@ public class GameUI {
     private final Font fontDialogue;
 
     private BufferedImage titleScreenBackground;
-    private int titleScreenMenuOption = 0;
+    private TitleScreenOption selectedTitleScreenOption = TitleScreenOption.NEW_GAME;
 
     private boolean notificationActive = false;
     private String notificationMessage = "";
@@ -24,16 +62,16 @@ public class GameUI {
 
     public String currentDialogue = "";
 
-    public void moveTitleScreenOptionUp() {
-        titleScreenMenuOption = (titleScreenMenuOption + 3) % 4;
+    public void selectPreviousTitleScreenOption() {
+        selectedTitleScreenOption = selectedTitleScreenOption.previous();
     }
 
-    public void moveTitleScreenOptionDown() {
-        titleScreenMenuOption = (titleScreenMenuOption + 1) % 4;
+    public void selectNextTitleScreenOption() {
+        selectedTitleScreenOption = selectedTitleScreenOption.next();
     }
 
-    public int getTitleScreenMenuOption() {
-        return titleScreenMenuOption;
+    public TitleScreenOption getSelectedTitleScreenOption() {
+        return selectedTitleScreenOption;
     }
 
     public GameUI(GamePanel gp) {
@@ -139,25 +177,22 @@ public class GameUI {
         g2.drawImage(titleScreenBackground, 0, 0, GamePanel.SCREEN_MIN_WIDTH, GamePanel.SCREEN_MIN_HEIGHT, null);
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
+
         int x = 300;
-        int y0 = GamePanel.SCREEN_MIN_HEIGHT / 2;
-        int y1 = y0 + 50;
-        int y2 = y1 + 50;
-        int y3 = y2 + 50;
+        int y = GamePanel.SCREEN_MIN_HEIGHT / 2;
+        int gapBetweenOptions = 50;
 
-        g2.setColor(Color.red);
-        g2.drawString("New Game", x, y0);
-        g2.drawString("Load Game", x, y1);
-        g2.drawString("Options", x, y2);
-        g2.drawString("Quit", x, y3);
+        for (TitleScreenOption option : TitleScreenOption.options) {
+            if (option == selectedTitleScreenOption) {
+                g2.setColor(Color.white);
+            }
+            else {
+                g2.setColor(Color.red);
+            }
 
-        g2.setColor(Color.white);
+            g2.drawString(option.toString(), x, y);
 
-        switch (titleScreenMenuOption) {
-            case 0 -> g2.drawString(".", x - 30, y0 - 10);
-            case 1 -> g2.drawString(".", x - 30, y1 - 10);
-            case 2 -> g2.drawString(".", x - 30, y2 - 10);
-            case 3 -> g2.drawString(".", x - 30, y3 - 10);
+            y += gapBetweenOptions;
         }
     }
 }

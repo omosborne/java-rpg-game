@@ -94,13 +94,13 @@ public class KeyInputHandler implements KeyListener {
 
     private void checkTitleKeysPressed(int keyCode) {
         if (keyCode == KeyEvent.VK_W) {
-            gp.getGameUI().moveTitleScreenOptionUp();
+            gp.getGameUI().selectPreviousTitleScreenOption();
         } else if (keyCode == KeyEvent.VK_S) {
-            gp.getGameUI().moveTitleScreenOptionDown();
+            gp.getGameUI().selectNextTitleScreenOption();
         } else if (keyCode == KeyEvent.VK_ENTER) {
-            switch (gp.getGameUI().getTitleScreenMenuOption()) {
-                case 0 -> gp.setGameState(GamePanel.State.PLAY);
-                case 3 -> System.exit(0);
+            switch (gp.getGameUI().getSelectedTitleScreenOption()) {
+                case NEW_GAME -> gp.setGameState(GamePanel.State.PLAY);
+                case QUIT -> System.exit(0);
             }
         }
     }
