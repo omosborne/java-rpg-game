@@ -91,6 +91,13 @@ public class GamePanel extends JPanel implements Runnable {
 
     private State gameState = State.TITLE;
 
+    private int maxFPS = 60;
+    private int fps;
+
+    public String getFPS() {
+        return String.valueOf(fps);
+    }
+
     public State getGameState() {
         return gameState;
     }
@@ -164,22 +171,25 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void run() {
-        // Game Loop Variables
-        int maxFPS = 60;
-        double drawInterval = (double) 1000000000 / maxFPS;
-        double delta = 0;
-        long lastTime = System.nanoTime();
-        long currentTime;
-
-
         while (gameThread != null) {
-            currentTime = System.nanoTime();
-            delta += (currentTime - lastTime) / drawInterval;
-            lastTime = currentTime;
-            if (delta >= 1) {
-                update();
-                repaint();
-                delta--;
+            long timeBeforeUpdateInMS = System.currentTimeMillis();
+            update();
+            repaint();
+            long timeAfterUpdateInMS = System.currentTimeMillis();
+
+            long timeIntervalInMS = (timeAfterUpdateInMS - timeBeforeUpdateInMS);
+            long threadSleepTimeInMS = 1000 / maxFPS - timeIntervalInMS;
+
+            try {
+                if (threadSleepTimeInMS > 0) {
+                    Thread.sleep(threadSleepTimeInMS);
+                    fps = maxFPS;
+                } else {
+                    fps = (int) (1000 / timeIntervalInMS);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                gameThread.interrupt();
             }
         }
     }
@@ -188,6 +198,7 @@ public class GamePanel extends JPanel implements Runnable {
         if (!gameState.isPlay()) return;
 
         player.update();
+
         for (Entity entity : gameEntities) {
             if (entity != null) {
                 entity.update();
