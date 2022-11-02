@@ -189,6 +189,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                gameThread.interrupt();
             }
         }
     }
