@@ -51,10 +51,13 @@ public class GameUI {
 
     private final Font fontArial20;
     private final Font fontNotifications;
+    private final Font fontFPS;
     private final Font fontDialogue;
 
     private BufferedImage titleScreenBackground;
     private TitleScreenOption selectedTitleScreenOption = TitleScreenOption.NEW_GAME;
+
+    private boolean fpsActive = true;
 
     private boolean notificationActive = false;
     private String notificationMessage = "";
@@ -78,6 +81,7 @@ public class GameUI {
         this.gp = gp;
         fontArial20 = new Font("Arial", Font.PLAIN, 20);
         fontNotifications = new Font("Arial", Font.BOLD, 14);
+        fontFPS = new Font("Arial", Font.PLAIN, 14);
         fontDialogue = new Font("Arial", Font.BOLD, 16);
 
         try {
@@ -105,6 +109,10 @@ public class GameUI {
             case DIALOGUE -> drawDialogueScreenUI();
             case TITLE -> drawTitleScreen();
         }
+
+        if (fpsActive) {
+            drawFPSCounter();
+        }
     }
 
     private void drawPlayScreenUI() {
@@ -114,6 +122,12 @@ public class GameUI {
         if (notificationActive) {
             drawNotification();
         }
+    }
+
+    private void drawFPSCounter() {
+        g2.setColor(Color.green);
+        g2.setFont(fontFPS);
+        g2.drawString(gp.getFPS(), GamePanel.SCREEN_MIN_WIDTH - 40, 25);
     }
 
     private void drawPauseScreenUI() {
