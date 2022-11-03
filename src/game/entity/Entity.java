@@ -155,13 +155,15 @@ public class Entity {
 
         if (!hasCollided()) {
             updateEntityPosition();
+
+            spriteCounter++;
+            if (spriteCounter > 10) {
+                spriteNumber = (spriteNumber + 1) % walkSpriteFrames;
+                spriteCounter = 0;
+            }
         }
 
-        spriteCounter++;
-        if (spriteCounter > 10) {
-            spriteNumber = (spriteNumber + 1) % walkSpriteFrames;
-            spriteCounter = 0;
-        }
+
     }
 
     private void updateEntityPosition() {
