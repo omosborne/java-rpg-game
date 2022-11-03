@@ -49,16 +49,6 @@ public class Monk extends Entity{
             walkRightFrame[1] = idleRight;
             walkRightFrame[2] = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/monk/monk_right_2.png")));
             walkRightFrame[3] = idleRight;
-
-//            walkUpFrame1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/soldier/soldier_up_1.png")));
-//            walkDownFrame1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/soldier/soldier_down_1.png")));
-//            walkLeftFrame1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/soldier/soldier_left_1.png")));
-//            walkRightFrame1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/soldier/soldier_right_1.png")));
-//
-//            walkUpFrame2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/soldier/soldier_up_2.png")));
-//            walkDownFrame2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/soldier/soldier_down_2.png")));
-//            walkLeftFrame2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/soldier/soldier_left_2.png")));
-//            walkRightFrame2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/npcs/soldier/soldier_right_2.png")));
         } catch (IOException error) {
             error.printStackTrace();
         }
