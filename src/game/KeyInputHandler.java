@@ -120,10 +120,8 @@ public class KeyInputHandler implements KeyListener {
                 rightPressed = false;
             } else if (keyCode == KeyEvent.VK_ENTER) {
                 enterPressed = false;
-            } else if (keyCode == KeyEvent.VK_M) {
-                gp.getTileManager().setMap("world03a");
-            } else if (keyCode == KeyEvent.VK_N) {
-                gp.getTileManager().setMap("world03");
+            } else if (keyCode == KeyEvent.VK_ESCAPE) {
+                gp.setGameState(GamePanel.State.TITLE);
             }
         }
     }
