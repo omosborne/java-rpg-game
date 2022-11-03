@@ -63,12 +63,17 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public static final int TILE_SIZE = 16;
+    public static final boolean IS_IN_DEBUG_MODE = false;
 
-    public static final int WORLD_MAX_COL = 70;
-    public static final int WORLD_MAX_ROW = 70;
-    private static final int SCREEN_MAX_COL = 60;
-    private static final int SCREEN_MAX_ROW = 32;
+    public static final String DEFAULT_MAP = "world04";
+
+    public static final int TILE_SIZE = 96;
+    public static final int ZOOM_FACTOR = 6;
+
+    public static final int WORLD_MAX_COL = 20;
+    public static final int WORLD_MAX_ROW = 20;
+    private static final int SCREEN_MAX_COL = 16;
+    private static final int SCREEN_MAX_ROW = 9;
     private static final int SCREEN_MAX_OBJECTS = 10;
     private static final int SCREEN_MAX_ENTITIES = 10;
     public static final int SCREEN_MIN_WIDTH = SCREEN_MAX_COL * TILE_SIZE;

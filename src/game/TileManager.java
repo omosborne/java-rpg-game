@@ -13,25 +13,36 @@ public class TileManager {
     private final Camera camera;
 
     private final Tile[] tileTypes;
-    private final int[][] mapTiles;
+    private String[][][] mapTiles;
+    private int mapLayers;
+
+    private String map = GamePanel.DEFAULT_MAP;
+
+    public String getMap() {
+        return map;
+    }
+
+    public void setMap(String newMap) {
+        map = newMap;
+        loadMap();
+    }
 
     public Tile getTileType(int mapTile) {
         return tileTypes[mapTile];
     }
 
-    public int getMapTile(int col, int row) {
-        return mapTiles[col][row];
+    public String getMapTile(int layer, int row, int col) {
+        return mapTiles[layer][row][col];
     }
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
         camera = gp.getCamera();
 
-        tileTypes = new Tile[26];
-        mapTiles = new int[GamePanel.WORLD_MAX_COL][GamePanel.WORLD_MAX_ROW];
+        tileTypes = new Tile[28];
 
         loadTileImages();
-        loadMapTiles("/game/maps/world02.txt");
+        loadMap();
     }
 
     private void loadTileImages() {
@@ -48,31 +59,34 @@ public class TileManager {
         }
     }
 
-    private void loadMapTiles(String mapFilePath) {
+    private void loadMap() {
+        String mapFilePath = "/game/maps/" + map + ".txt";
         try (InputStream mapFileInput = Objects.requireNonNull(getClass().getResourceAsStream(mapFilePath));
              BufferedReader mapReader = new BufferedReader(new InputStreamReader(mapFileInput))) {
+            mapLayers = Integer.parseInt(mapReader.readLine());
+            mapTiles = new String[mapLayers][GamePanel.WORLD_MAX_ROW][GamePanel.WORLD_MAX_COL];
+            String mapRow;
 
-            int col = 0;
-            int row = 0;
+            while ((mapRow = mapReader.readLine()) != null) {
+                String[] mapRowData = mapRow.split(" ");
 
-            while (col < GamePanel.WORLD_MAX_COL && row < GamePanel.WORLD_MAX_ROW) {
-                String mapRow = mapReader.readLine();
+                if (Objects.equals(mapRowData[0], "BOARD")) {
+                    int col = 0;
+                    int row = Integer.parseInt(mapRowData[1]);
+                    int width = Integer.parseInt(mapRowData[2]);
+                    int layer = Integer.parseInt(mapRowData[3]);
+                    String tileData = mapRowData[4];
 
-                while (col < GamePanel.WORLD_MAX_COL) {
-                    String[] mapTilesRow = mapRow.split(" ");
-
-                    int mapTile = Integer.parseInt(mapTilesRow[col]);
-
-                    mapTiles[col][row] = mapTile;
-                    col++;
-                }
-                if (col == GamePanel.WORLD_MAX_COL) {
-                    col = 0;
-                    row++;
+                    for (int i = 0; i < width*2; i+=2) {
+                        String tile = "" + tileData.charAt(i) + tileData.charAt(i+1);
+                        mapTiles[layer][row][col] = tile;
+                        col++;
+                    }
                 }
             }
-            } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
+        } catch (IOException | NullPointerException e) {
+        e.printStackTrace();
+        // TODO: Handle malformed map files.
         }
     }
 
@@ -82,7 +96,6 @@ public class TileManager {
         int worldRow = 0;
 
         while (worldCol < GamePanel.WORLD_MAX_COL && worldRow < GamePanel.WORLD_MAX_ROW) {
-            int mapTile = mapTiles[worldCol][worldRow];
 
             int worldX = worldCol * GamePanel.TILE_SIZE;
             int worldY = worldRow * GamePanel.TILE_SIZE;
@@ -90,7 +103,9 @@ public class TileManager {
             int screenY = camera.convertToScreenY(worldY);
 
             if (camera.isInCameraFrame(worldX, worldY)) {
-                g2.drawImage(tileTypes[mapTile].getImage(), screenX, screenY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+                for (int layer = 0; layer < mapLayers; layer++) {
+                    g2.drawImage(tileTypes[Integer.parseInt(mapTiles[layer][worldRow][worldCol])].getImage(), screenX, screenY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+                }
             }
 
             worldCol++;

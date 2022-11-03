@@ -51,8 +51,8 @@ public class CollisionHandler {
         int mapTileCheck2;
 
         try {
-            mapTileCheck1 = tileManager.getMapTile(tile1Col / GamePanel.TILE_SIZE, tile1Row / GamePanel.TILE_SIZE);
-            mapTileCheck2 = tileManager.getMapTile(tile2Col / GamePanel.TILE_SIZE, tile2Row / GamePanel.TILE_SIZE);
+            mapTileCheck1 = Integer.parseInt(tileManager.getMapTile(0,tile1Row / GamePanel.TILE_SIZE, tile1Col / GamePanel.TILE_SIZE));
+            mapTileCheck2 = Integer.parseInt(tileManager.getMapTile(0,tile2Row / GamePanel.TILE_SIZE, tile2Col / GamePanel.TILE_SIZE));
         } catch (IndexOutOfBoundsException e) {
             return true;
         }
