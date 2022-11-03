@@ -12,7 +12,7 @@ public class EntityManager {
     public void placeEntities() {
         Entity[] entities = gp.getGameEntities();
 
-        entities[0] = new Soldier(gp);
-        entities[0].setLocation(21 * GamePanel.TILE_SIZE, 21 * GamePanel.TILE_SIZE);
+        entities[0] = new Monk(gp);
+        entities[0].setLocation(11 * GamePanel.TILE_SIZE, 11 * GamePanel.TILE_SIZE);
     }
 }

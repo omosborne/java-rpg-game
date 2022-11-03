@@ -24,10 +24,17 @@ public class Entity {
     protected int width = 44;
     protected int height = 58;
 
+    protected final int walkSpriteFrames = 4;
+
     protected BufferedImage idleUp;
     protected BufferedImage idleLeft;
     protected BufferedImage idleDown;
     protected BufferedImage idleRight;
+
+    protected BufferedImage[] walkUpFrame;
+    protected BufferedImage[] walkLeftFrame;
+    protected BufferedImage[] walkDownFrame;
+    protected BufferedImage[] walkRightFrame;
 
     protected BufferedImage walkUpFrame1;
     protected BufferedImage walkLeftFrame1;
@@ -41,11 +48,11 @@ public class Entity {
 
     protected BufferedImage currentSprite;
     protected int spriteCounter = 0;
-    protected int spriteNumber = 1;
+    protected int spriteNumber = 0;
 
     protected Direction direction;
 
-    protected final Rectangle hitbox = new Rectangle(0, 0, 32, 20);
+    protected final Rectangle hitbox = new Rectangle(0, 0, 10*GamePanel.ZOOM_FACTOR, 8*GamePanel.ZOOM_FACTOR);
     private boolean collided = false;
 
     protected int actionCounter = 0;
@@ -92,7 +99,7 @@ public class Entity {
     }
 
     protected void updateHitbox() {
-        hitbox.setLocation(worldX + 6, worldY + 36);
+        hitbox.setLocation(worldX + (3*GamePanel.ZOOM_FACTOR), worldY + (8*GamePanel.ZOOM_FACTOR));
     }
 
     public Entity(GamePanel gp) {
@@ -111,10 +118,10 @@ public class Entity {
 
     protected BufferedImage getWalkSprite() {
         return switch (direction) {
-            case UP -> spriteNumber == 1 ? walkUpFrame1 : walkUpFrame2;
-            case LEFT -> spriteNumber == 1 ? walkLeftFrame1 : walkLeftFrame2;
-            case DOWN -> spriteNumber == 1 ? walkDownFrame1 : walkDownFrame2;
-            case RIGHT -> spriteNumber == 1 ? walkRightFrame1 : walkRightFrame2;
+            case UP -> walkUpFrame[spriteNumber];
+            case LEFT -> walkLeftFrame[spriteNumber];
+            case DOWN -> walkDownFrame[spriteNumber];
+            case RIGHT -> walkRightFrame[spriteNumber];
         };
     }
 
@@ -125,6 +132,7 @@ public class Entity {
     public void speak() {
         if (dialogues[dialogueIndex] == null) {
             dialogueIndex = 0;
+            gp.setGameState(GamePanel.State.PLAY);
         }
         gp.getGameUI().currentDialogue = dialogues[dialogueIndex];
         dialogueIndex++;
@@ -151,7 +159,7 @@ public class Entity {
 
         spriteCounter++;
         if (spriteCounter > 10) {
-            spriteNumber = spriteNumber == 1 ? 2 : 1;
+            spriteNumber = (spriteNumber + 1) % walkSpriteFrames;
             spriteCounter = 0;
         }
     }
@@ -172,7 +180,12 @@ public class Entity {
 
         if (camera.isInCameraFrame(worldX, worldY)) {
             currentSprite = getWalkSprite();
-            g2.drawImage(currentSprite, screenX, screenY, width, height, null);
+            g2.drawImage(currentSprite, screenX, screenY, 16*GamePanel.ZOOM_FACTOR, 16*GamePanel.ZOOM_FACTOR, null);
+
+            if (GamePanel.IS_IN_DEBUG_MODE) {
+                g2.setColor(Color.red);
+                g2.drawRect(screenX + (3*GamePanel.ZOOM_FACTOR), screenY + (8*GamePanel.ZOOM_FACTOR), hitbox.width, hitbox.height);
+            }
         }
     }
 }
