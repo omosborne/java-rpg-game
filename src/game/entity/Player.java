@@ -16,12 +16,22 @@ public class Player extends Entity {
     private final int screenX;
     private final int screenY;
 
+    private final int walkSpeed = 3;
+    private final int runSpeed = 8;
+
+    private final int walkFrames = 1;
+    private final int runFrames = 2;
+
     public int getScreenX() {
         return screenX;
     }
 
     public int getScreenY() {
         return screenY;
+    }
+
+    public boolean isRunning() {
+        return keys.isShiftPressed() && !keys.noDirectionKeysPressed();
     }
 
     public Player(GamePanel gp, KeyInputHandler keyHandler) {
@@ -45,7 +55,7 @@ public class Player extends Entity {
         setDirection(Direction.DOWN);
         worldX = GamePanel.TILE_SIZE * 5;
         worldY = GamePanel.TILE_SIZE * 5;
-        speed = 4;
+        speed = walkSpeed;
         updateHitbox();
     }
 
@@ -106,14 +116,23 @@ public class Player extends Entity {
             updatePlayerPosition();
         }
 
+        int nextFrame = walkFrames;
+
+        if (isRunning()) {
+            nextFrame = runFrames;
+            if (spriteNumber == 1) spriteNumber = 0;
+        }
         spriteCounter++;
+
         if (spriteCounter > 10) {
-            spriteNumber = (spriteNumber + 1) % walkSpriteFrames;
+            spriteNumber = (spriteNumber + nextFrame) % walkSpriteFrames;
             spriteCounter = 0;
         }
     }
 
     private void updatePlayerPosition() {
+        speed = isRunning() ? runSpeed : walkSpeed;
+
         if (keys.isUpLeftPressed()) {
             worldY -= speed;
             worldX -= speed;

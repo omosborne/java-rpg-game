@@ -11,6 +11,7 @@ public class KeyInputHandler implements KeyListener {
     private boolean downPressed;
     private boolean rightPressed;
     private boolean enterPressed;
+    private boolean shiftPressed;
 
     public boolean isUpLeftPressed() {
         return upPressed && leftPressed;
@@ -48,6 +49,10 @@ public class KeyInputHandler implements KeyListener {
         return enterPressed;
     }
 
+    public boolean isShiftPressed() {
+        return shiftPressed;
+    }
+
     public KeyInputHandler(GamePanel gp) {
         this.gp = gp;
     }
@@ -77,6 +82,8 @@ public class KeyInputHandler implements KeyListener {
             togglePause();
         } else if (keyCode == KeyEvent.VK_ENTER) {
             enterPressed = true;
+        } else if (keyCode == KeyEvent.VK_SHIFT) {
+            shiftPressed = true;
         }
     }
 
@@ -122,6 +129,8 @@ public class KeyInputHandler implements KeyListener {
                 enterPressed = false;
             } else if (keyCode == KeyEvent.VK_ESCAPE) {
                 gp.setGameState(GamePanel.State.TITLE);
+            } else if (keyCode == KeyEvent.VK_SHIFT) {
+                shiftPressed = false;
             }
         }
     }
