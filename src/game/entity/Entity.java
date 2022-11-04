@@ -21,8 +21,8 @@ public class Entity {
     protected int worldY = 0;
     protected int speed = 0;
 
-    protected int width = 44;
-    protected int height = 58;
+    protected int width = 16;
+    protected int height = 16;
 
     protected final int walkSpriteFrames = 4;
 
@@ -35,16 +35,6 @@ public class Entity {
     protected BufferedImage[] walkLeftFrame;
     protected BufferedImage[] walkDownFrame;
     protected BufferedImage[] walkRightFrame;
-
-    protected BufferedImage walkUpFrame1;
-    protected BufferedImage walkLeftFrame1;
-    protected BufferedImage walkDownFrame1;
-    protected BufferedImage walkRightFrame1;
-
-    protected BufferedImage walkUpFrame2;
-    protected BufferedImage walkLeftFrame2;
-    protected BufferedImage walkDownFrame2;
-    protected BufferedImage walkRightFrame2;
 
     protected BufferedImage currentSprite;
     protected int spriteCounter = 0;
@@ -182,7 +172,7 @@ public class Entity {
 
         if (camera.isInCameraFrame(worldX, worldY)) {
             currentSprite = getWalkSprite();
-            g2.drawImage(currentSprite, screenX, screenY, 16*GamePanel.ZOOM_FACTOR, 16*GamePanel.ZOOM_FACTOR, null);
+            g2.drawImage(currentSprite, screenX, screenY, width*GamePanel.ZOOM_FACTOR, height*GamePanel.ZOOM_FACTOR, null);
 
             if (GamePanel.IS_IN_DEBUG_MODE) {
                 g2.setColor(Color.red);
