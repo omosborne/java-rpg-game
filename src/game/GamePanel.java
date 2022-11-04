@@ -65,7 +65,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public static final boolean IS_IN_DEBUG_MODE = false;
 
-    public static final String DEFAULT_MAP = "world05";
+    public static final String DEFAULT_MAP = "world05a";
     public static final String DEFAULT_TILESET = "overworld";
 
     public static final int TILE_SIZE = 96;
