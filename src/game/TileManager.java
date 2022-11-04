@@ -2,19 +2,22 @@ package game;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class TileManager {
     private final GamePanel gp;
     private final Camera camera;
 
-    private final Tile[] tileTypes;
+    private String tilesetFileName;
     private String[][][] mapTiles;
     private int mapLayers;
+    private final HashMap<String, Tile> tiles = new HashMap();
 
     private String map = GamePanel.DEFAULT_MAP;
 
@@ -27,8 +30,8 @@ public class TileManager {
         loadMap();
     }
 
-    public Tile getTileType(int mapTile) {
-        return tileTypes[mapTile];
+    public Tile getTileType(String mapTile) {
+        return tiles.get(mapTile);
     }
 
     public String getMapTile(int layer, int row, int col) {
@@ -39,21 +42,40 @@ public class TileManager {
         this.gp = gp;
         camera = gp.getCamera();
 
-        tileTypes = new Tile[28];
+        tilesetFileName = GamePanel.DEFAULT_TILESET;
 
-        loadTileImages();
+        loadTileset();
         loadMap();
     }
 
-    private void loadTileImages() {
+    private void loadTileset() {
         try {
-            for (int i = 10; i < tileTypes.length; i++) {
-                tileTypes[i] = new Tile();
-                tileTypes[i].setImage(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/tiles/tile" + i + ".png"))));
-            }
-            tileTypes[10].setCollidable(true);
-            for (int i = 19; i < 25; i++) tileTypes[i].setCollidable(true);
+            BufferedImage tileset = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/" + tilesetFileName + ".png")));
 
+            int columns = tileset.getWidth() / 16;
+            int rows = tileset.getHeight() / 16;
+
+            String tileKeyList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            int tileKeyListLength = tileKeyList.length();
+            int firstKeyIndex = 0;
+            char secondKeyIndex = 0;
+
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < columns; j++) {
+                    BufferedImage tileImage = tileset.getSubimage(j * 16, i * 16, 16, 16);
+                    Tile tile = new Tile();
+                    tile.setImage(tileImage);
+
+                    if (secondKeyIndex >= tileKeyListLength) {
+                        firstKeyIndex++;
+                        secondKeyIndex = 0;
+                    }
+
+                    String tileKey = "" + tileKeyList.charAt(firstKeyIndex) + tileKeyList.charAt(secondKeyIndex);
+                    tiles.put(tileKey, tile);
+                    secondKeyIndex++;
+                }
+            }
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
@@ -104,7 +126,7 @@ public class TileManager {
 
             if (camera.isInCameraFrame(worldX, worldY)) {
                 for (int layer = 0; layer < mapLayers; layer++) {
-                    g2.drawImage(tileTypes[Integer.parseInt(mapTiles[layer][worldRow][worldCol])].getImage(), screenX, screenY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+                    g2.drawImage(tiles.get(mapTiles[layer][worldRow][worldCol]).getImage() , screenX, screenY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
                 }
             }
 
