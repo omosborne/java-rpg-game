@@ -58,7 +58,7 @@ public class TileManager {
             String tileKeyList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             int tileKeyListLength = tileKeyList.length();
             int firstKeyIndex = 0;
-            char secondKeyIndex = 0;
+            int secondKeyIndex = 0;
 
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
