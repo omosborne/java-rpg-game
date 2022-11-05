@@ -15,16 +15,18 @@ public class EditorPanel extends JPanel {
     public EditorPanel() {
         setPreferredSize(new Dimension(SCREEN_MIN_WIDTH, SCREEN_MIN_HEIGHT));
 
+        setLayout(new SpringLayout());
+
         JPanel levelViewer = new levelViewer();
         JScrollPane levelViewerScroll = new JScrollPane(levelViewer);
         levelViewer.setAutoscrolls(true);
-        levelViewerScroll.setPreferredSize(new Dimension(SCREEN_MIN_WIDTH, SCREEN_MIN_HEIGHT / 2));
+        levelViewerScroll.setPreferredSize(new Dimension((int) (SCREEN_MIN_WIDTH * 0.66), SCREEN_MIN_HEIGHT));
         add(levelViewerScroll);
 
         JPanel tilesetViewer = new tilesetViewer();
         JScrollPane tilesetViewerScroll = new JScrollPane(tilesetViewer);
         tilesetViewer.setAutoscrolls(true);
-        tilesetViewerScroll.setPreferredSize(new Dimension(SCREEN_MIN_WIDTH, (SCREEN_MIN_HEIGHT / 2) + SCREEN_MIN_HEIGHT / 2));
+        tilesetViewerScroll.setPreferredSize(new Dimension((SCREEN_MIN_WIDTH / 2) + SCREEN_MIN_WIDTH / 2, SCREEN_MIN_HEIGHT));
         add(tilesetViewerScroll);
 
         levelManager = new LevelManager();
