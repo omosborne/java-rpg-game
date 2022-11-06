@@ -47,19 +47,22 @@ public class Main {
         menuBar.add(layers);
 
         JMenuItem newLayer = new JMenuItem("New Layer");
-        JMenuItem Layer0 = new JMenuItem("Layer 0");
+        JMenuItem layer0 = new JMenuItem("Layer 0");
 
         layers.add(newLayer);
-        layers.add(Layer0);
+        layers.add(layer0);
 
         EditorPanel editorPanel = new EditorPanel();
         window.add(editorPanel);
 
+
         window.pack();
 
+        window.setLayout(null);
         window.setResizable(false);
         window.setTitle("Level Editor");
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
     }
 }
