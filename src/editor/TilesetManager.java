@@ -9,15 +9,18 @@ import java.util.Objects;
 
 public class TilesetManager {
 
+    private EditorPanel editor;
     private BufferedImage tileset;
 
-    public TilesetManager() {
+    public TilesetManager(EditorPanel editor) {
+        this.editor = editor;
         loadTileset("/game/images/overworld.png");
     }
 
     private void loadTileset(String tilesetFilePath) {
         try {
             tileset = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(tilesetFilePath)));
+            editor.getTilesetViewer().setPreferredSize(new Dimension(tileset.getWidth()*6, tileset.getHeight()*6));
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
