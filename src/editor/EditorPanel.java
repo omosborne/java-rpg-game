@@ -1,7 +1,11 @@
 package editor;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 public class EditorPanel extends JPanel {
 
@@ -62,10 +66,27 @@ public class EditorPanel extends JPanel {
 
     private class tilesetViewer extends JPanel {
 
+        private BufferedImage tileableImage;
+        private TexturePaint transparentBackground;
+
+        private tilesetViewer() {
+            try {
+                tileableImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/bg.png")));
+                transparentBackground = new TexturePaint(tileableImage, new Rectangle(DEFAULT_TILE_SIZE / 2, DEFAULT_TILE_SIZE / 2));
+            }
+            catch (IOException | NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g;
+
+            g2.setPaint(transparentBackground);
+            g2.fillRect(0, 0, getWidth(), getHeight());
+
             tilesetManager.draw(g2);
         }
 
