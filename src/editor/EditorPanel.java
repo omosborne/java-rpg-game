@@ -14,9 +14,24 @@ public class EditorPanel extends JPanel {
     public static final int DEFAULT_TILE_SIZE = 96;
     public static final String DEFAULT_TILESET = "/game/images/overworld.png";
 
+    private boolean showAllTileLayers = true;
+    private int currentLayer = 0;
+
     private final LevelManager levelManager;
     private final TilesetManager tilesetManager;
     private final JPanel tilesetViewer;
+
+    public int getCurrentLayer() {
+        return currentLayer;
+    }
+
+    public boolean drawInactiveLayers() {
+        return showAllTileLayers;
+    }
+
+    public void setDrawInactiveLayers(boolean drawInactiveLayers) {
+        showAllTileLayers = drawInactiveLayers;
+    }
 
     public JPanel getTilesetViewer() {
         return tilesetViewer;
@@ -25,7 +40,7 @@ public class EditorPanel extends JPanel {
     public EditorPanel() {
         setPreferredSize(new Dimension(SCREEN_MIN_WIDTH, SCREEN_MIN_HEIGHT));
 
-        JPanel levelViewer = new levelViewer();
+        JPanel levelViewer = new LevelViewer();
         levelViewer.setPreferredSize(new Dimension(1920, 1920));
         JScrollPane levelViewerScroll = new JScrollPane(levelViewer);
         levelViewer.setAutoscrolls(true);
@@ -36,7 +51,7 @@ public class EditorPanel extends JPanel {
         levelViewerScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         add(levelViewerScroll);
 
-        tilesetViewer = new tilesetViewer();
+        tilesetViewer = new TilesetViewer();
         JScrollPane tilesetViewerScroll = new JScrollPane(tilesetViewer);
         tilesetViewer.setAutoscrolls(true);
         tilesetViewerScroll.setPreferredSize(new Dimension((int) (SCREEN_MIN_WIDTH * 0.33), SCREEN_MIN_HEIGHT));
@@ -46,14 +61,14 @@ public class EditorPanel extends JPanel {
         tilesetViewerScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         add(tilesetViewerScroll);
 
-        levelManager = new LevelManager();
+        levelManager = new LevelManager(this);
         tilesetManager = new TilesetManager(this);
 
         levelViewer.repaint();
         tilesetViewer.repaint();
     }
 
-    private class levelViewer extends JPanel {
+    private class LevelViewer extends JPanel {
 
         @Override
         public void paintComponent(Graphics g) {
@@ -64,12 +79,12 @@ public class EditorPanel extends JPanel {
         }
     }
 
-    private class tilesetViewer extends JPanel {
+    private class TilesetViewer extends JPanel {
 
         private BufferedImage tileableImage;
         private TexturePaint transparentBackground;
 
-        private tilesetViewer() {
+        private TilesetViewer() {
             try {
                 tileableImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/bg.png")));
                 transparentBackground = new TexturePaint(tileableImage, new Rectangle(DEFAULT_TILE_SIZE / 2, DEFAULT_TILE_SIZE / 2));

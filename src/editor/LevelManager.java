@@ -12,6 +12,8 @@ import java.util.Objects;
 
 public class LevelManager {
 
+    private EditorPanel editor;
+
     private final int levelWidthInTiles = 20;
     private final int levelHeightInTiles = 20;
     private final int levelTileSize = 96;
@@ -25,7 +27,8 @@ public class LevelManager {
         tilesetFilePath = newTilesetFilePath;
     }
 
-    public LevelManager() {
+    public LevelManager(EditorPanel editor) {
+        this.editor = editor;
         loadLevelTileset();
         loadLevel("/game/maps/world05a.txt");
     }
@@ -104,8 +107,13 @@ public class LevelManager {
             int levelX = col * levelTileSize;
             int levelY = row * levelTileSize;
 
-            for (int layer = 0; layer < mapLayers; layer++) {
-                g2.drawImage(tiles.get(mapTiles[layer][row][col]), levelX, levelY, levelTileSize, levelTileSize, null);
+            if (editor.drawInactiveLayers()) {
+                for (int layer = 0; layer < mapLayers; layer++) {
+                    g2.drawImage(tiles.get(mapTiles[layer][row][col]), levelX, levelY, levelTileSize, levelTileSize, null);
+                }
+            }
+            else {
+                g2.drawImage(tiles.get(mapTiles[editor.getCurrentLayer()][row][col]), levelX, levelY, levelTileSize, levelTileSize, null);
             }
 
             col++;
