@@ -1,11 +1,7 @@
 package editor;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 public class EditorPanel extends JPanel {
 
@@ -19,7 +15,7 @@ public class EditorPanel extends JPanel {
 
     private final LevelManager levelManager;
     private final TilesetManager tilesetManager;
-    private final JPanel tilesetViewer;
+    private final TilesetViewer tilesetViewer;
 
     public int getCurrentLayer() {
         return currentLayer;
@@ -33,14 +29,22 @@ public class EditorPanel extends JPanel {
         showAllTileLayers = drawInactiveLayers;
     }
 
-    public JPanel getTilesetViewer() {
+    public TilesetManager getTilesetManager() {
+        return tilesetManager;
+    }
+
+    public TilesetViewer getTilesetViewer() {
         return tilesetViewer;
+    }
+
+    public LevelManager getLevelManager() {
+        return levelManager;
     }
 
     public EditorPanel() {
         setPreferredSize(new Dimension(SCREEN_MIN_WIDTH, SCREEN_MIN_HEIGHT));
 
-        JPanel levelViewer = new LevelViewer();
+        JPanel levelViewer = new LevelViewer(this);
         levelViewer.setPreferredSize(new Dimension(1920, 1920));
         JScrollPane levelViewerScroll = new JScrollPane(levelViewer);
         levelViewer.setAutoscrolls(true);
@@ -51,7 +55,8 @@ public class EditorPanel extends JPanel {
         levelViewerScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         add(levelViewerScroll);
 
-        tilesetViewer = new TilesetViewer();
+        tilesetViewer = new TilesetViewer(this);
+        tilesetViewer.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         JScrollPane tilesetViewerScroll = new JScrollPane(tilesetViewer);
         tilesetViewer.setAutoscrolls(true);
         tilesetViewerScroll.setPreferredSize(new Dimension((int) (SCREEN_MIN_WIDTH * 0.33), SCREEN_MIN_HEIGHT));
@@ -66,44 +71,5 @@ public class EditorPanel extends JPanel {
 
         levelViewer.repaint();
         tilesetViewer.repaint();
-    }
-
-    private class LevelViewer extends JPanel {
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D) g;
-
-            levelManager.draw(g2);
-        }
-    }
-
-    private class TilesetViewer extends JPanel {
-
-        private BufferedImage tileableImage;
-        private TexturePaint transparentBackground;
-
-        private TilesetViewer() {
-            try {
-                tileableImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/game/images/bg.png")));
-                transparentBackground = new TexturePaint(tileableImage, new Rectangle(DEFAULT_TILE_SIZE / 2, DEFAULT_TILE_SIZE / 2));
-            }
-            catch (IOException | NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D) g;
-
-            g2.setPaint(transparentBackground);
-            g2.fillRect(0, 0, getWidth(), getHeight());
-
-            tilesetManager.draw(g2);
-        }
-
     }
 }
