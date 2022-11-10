@@ -43,7 +43,7 @@ public class TilesetManager {
                 for (int j = 0; j < columns; j++) {
                     BufferedImage tileImage = tileset.getSubimage(j * 16, i * 16, 16, 16);
 
-                    Tile tile = new Tile(editor.getTilesetViewer());
+                    Tile tile = new TilesetTile(editor.getTilesetViewer());
                     tile.setImage(tileImage);
 
                     if (secondKeyIndex >= tileKeyListLength) {
@@ -58,8 +58,8 @@ public class TilesetManager {
                     secondKeyIndex++;
                 }
             }
-        } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
+        } catch (IOException | NullPointerException exception) {
+            exception.printStackTrace();
         }
     }
 

@@ -14,6 +14,7 @@ public class EditorPanel extends JPanel {
     private int currentLayer = 0;
 
     private final LevelManager levelManager;
+    private final LevelViewer levelViewer;
     private final TilesetManager tilesetManager;
     private final TilesetViewer tilesetViewer;
 
@@ -29,6 +30,14 @@ public class EditorPanel extends JPanel {
         showAllTileLayers = drawInactiveLayers;
     }
 
+    public LevelManager getLevelManager() {
+        return levelManager;
+    }
+
+    public LevelViewer getLevelViewer() {
+        return levelViewer;
+    }
+
     public TilesetManager getTilesetManager() {
         return tilesetManager;
     }
@@ -37,15 +46,12 @@ public class EditorPanel extends JPanel {
         return tilesetViewer;
     }
 
-    public LevelManager getLevelManager() {
-        return levelManager;
-    }
-
     public EditorPanel() {
         setPreferredSize(new Dimension(SCREEN_MIN_WIDTH, SCREEN_MIN_HEIGHT));
 
-        JPanel levelViewer = new LevelViewer(this);
+        levelViewer = new LevelViewer(this);
         levelViewer.setPreferredSize(new Dimension(1920, 1920));
+        levelViewer.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         JScrollPane levelViewerScroll = new JScrollPane(levelViewer);
         levelViewer.setAutoscrolls(true);
         levelViewerScroll.setPreferredSize(new Dimension((int) (SCREEN_MIN_WIDTH * 0.66), SCREEN_MIN_HEIGHT));

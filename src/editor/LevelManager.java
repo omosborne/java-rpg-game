@@ -31,6 +31,11 @@ public class LevelManager {
         this.editor = editor;
         loadLevelTileset();
         loadLevel("/game/maps/world05a.txt");
+        loadTileComponentsInLevelLayer(editor.getCurrentLayer());
+    }
+
+    public void changeMapTile(LevelTile levelTile, Tile newTile) {
+        mapTiles[levelTile.getLayer()][levelTile.getLevelY()][levelTile.getLevelX()] = newTile.getCode();
     }
 
     private void loadLevelTileset() {
@@ -94,11 +99,28 @@ public class LevelManager {
         }
     }
 
+    public void loadTileComponentsInLevelLayer(int layer) {
+
+        LevelViewer levelViewer = editor.getLevelViewer();
+
+        levelViewer.clearTileComponents();
+
+        for (int row = 0; row < levelHeightInTiles; row++) {
+            for (int col = 0; col < levelWidthInTiles; col++) {
+                Tile tile = new LevelTile(levelViewer, col, row, layer);
+                String tileCode = mapTiles[layer][row][col];
+                tile.setCode(tileCode);
+                tile.setImage(tiles.get(tileCode));
+                levelViewer.addTile(tile);
+            }
+        }
+    }
+
     private void createEmptyLevel() {
 
     }
 
-    public void draw(Graphics2D g2) {
+    public void draw(Graphics2D graphics2D) {
         int col = 0;
         int row = 0;
 
@@ -109,11 +131,11 @@ public class LevelManager {
 
             if (editor.drawInactiveLayers()) {
                 for (int layer = 0; layer < mapLayers; layer++) {
-                    g2.drawImage(tiles.get(mapTiles[layer][row][col]), levelX, levelY, levelTileSize, levelTileSize, null);
+                    graphics2D.drawImage(tiles.get(mapTiles[layer][row][col]), levelX, levelY, levelTileSize, levelTileSize, null);
                 }
             }
             else {
-                g2.drawImage(tiles.get(mapTiles[editor.getCurrentLayer()][row][col]), levelX, levelY, levelTileSize, levelTileSize, null);
+                graphics2D.drawImage(tiles.get(mapTiles[editor.getCurrentLayer()][row][col]), levelX, levelY, levelTileSize, levelTileSize, null);
             }
 
             col++;
