@@ -12,6 +12,7 @@ public class LevelViewer extends JPanel {
     private EditorPanel editor;
     private BufferedImage tileableImage;
     private TexturePaint transparentBackground;
+    private Stroke dashedStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
 
     public LevelViewer(EditorPanel editor) {
         this.editor = editor;
@@ -51,6 +52,8 @@ public class LevelViewer extends JPanel {
         editor.getLevelManager().draw(graphics2D);
 
         if (editor.isGridVisible()) drawGrid(graphics2D, editor.getGridColor());
+
+        graphics2D.dispose();
     }
 
     private void drawGrid(Graphics2D graphics2D, Color gridColor) {
@@ -59,6 +62,7 @@ public class LevelViewer extends JPanel {
         int levelHeightInTiles = getHeight() / tileSize;
 
         graphics2D.setColor(gridColor);
+        graphics2D.setStroke(dashedStroke);
 
         for (int col = 0, row = 0; col < 20 && row < 20; col++, row++) {
             graphics2D.drawLine(col * tileSize, 0, col * tileSize, levelWidthInTiles * tileSize);

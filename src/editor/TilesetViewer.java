@@ -46,6 +46,8 @@ public class TilesetViewer extends JPanel {
         graphics2D.fillRect(0, 0, getWidth(), getHeight());
 
         editor.getTilesetManager().draw(graphics2D);
+
+        graphics2D.dispose();
     }
 
 }
