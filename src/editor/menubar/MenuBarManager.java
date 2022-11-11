@@ -56,10 +56,10 @@ public class MenuBarManager {
     private JMenu getViewMenu() {
         menuView = new JMenu("View");
 
-        JMenuItem hideLayers = new JMenuItem("Hide Inactive Layers");
+        JMenuItem toggleLayers = new MenuItemToggleLayers();
         JMenuItem toggleGrid = new MenuItemToggleGrid();
 
-        menuView.add(hideLayers);
+        menuView.add(toggleLayers);
         menuView.add(toggleGrid);
 
         return menuView;

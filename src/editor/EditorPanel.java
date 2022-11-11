@@ -44,6 +44,7 @@ public class EditorPanel extends JPanel {
 
     public void setDrawInactiveLayers(boolean drawInactiveLayers) {
         showAllTileLayers = drawInactiveLayers;
+        levelViewer.repaint();
     }
 
     public LevelManager getLevelManager() {
