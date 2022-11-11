@@ -10,6 +10,9 @@ public class EditorPanel extends JPanel {
     public static final int DEFAULT_TILE_SIZE = 96;
     public static final String DEFAULT_TILESET = "/game/images/overworld.png";
 
+    private boolean showGrid = false;
+    private Color gridColor = Color.black;
+
     private boolean showAllTileLayers = true;
     private int currentLayer = 0;
 
@@ -17,6 +20,19 @@ public class EditorPanel extends JPanel {
     private final LevelViewer levelViewer;
     private final TilesetManager tilesetManager;
     private final TilesetViewer tilesetViewer;
+
+    public void setGridVisibility(boolean gridVisibility) {
+        showGrid = gridVisibility;
+        levelViewer.repaint();
+    }
+
+    public boolean isGridVisible() {
+        return showGrid;
+    }
+
+    public Color getGridColor() {
+        return gridColor;
+    }
 
     public int getCurrentLayer() {
         return currentLayer;

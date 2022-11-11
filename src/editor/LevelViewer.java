@@ -49,5 +49,20 @@ public class LevelViewer extends JPanel {
         graphics2D.fillRect(0, 0, getWidth(), getHeight());
 
         editor.getLevelManager().draw(graphics2D);
+
+        if (editor.isGridVisible()) drawGrid(graphics2D, editor.getGridColor());
+    }
+
+    private void drawGrid(Graphics2D graphics2D, Color gridColor) {
+        int tileSize = EditorPanel.DEFAULT_TILE_SIZE;
+        int levelWidthInTiles = getWidth() / tileSize;
+        int levelHeightInTiles = getHeight() / tileSize;
+
+        graphics2D.setColor(gridColor);
+
+        for (int col = 0, row = 0; col < 20 && row < 20; col++, row++) {
+            graphics2D.drawLine(col * tileSize, 0, col * tileSize, levelWidthInTiles * tileSize);
+            graphics2D.drawLine(0, row * tileSize, levelHeightInTiles * tileSize, row * tileSize);
+        }
     }
 }
