@@ -20,7 +20,6 @@ public class LevelManager {
 
     private String tilesetFilePath = EditorPanel.DEFAULT_TILESET;
     private String[][][] mapTiles;
-    private int mapLayers;
     private final HashMap<String, BufferedImage> tiles = new HashMap();
 
     public void setTileset(String newTilesetFilePath) {
@@ -31,7 +30,7 @@ public class LevelManager {
         this.editor = editor;
         loadLevelTileset();
         loadLevel("/game/maps/world05a.txt");
-        loadTileComponentsInLevelLayer(editor.getCurrentLayer());
+        loadTileComponentsInLevelLayer(editor.getSelectedLayer());
     }
 
     public void changeMapTile(LevelTile levelTile, Tile newTile) {
@@ -72,8 +71,8 @@ public class LevelManager {
     private void loadLevel(String levelFilePath) {
         try (InputStream mapFileInput = Objects.requireNonNull(getClass().getResourceAsStream(levelFilePath));
              BufferedReader mapReader = new BufferedReader(new InputStreamReader(mapFileInput))) {
-            mapLayers = Integer.parseInt(mapReader.readLine());
-            mapTiles = new String[mapLayers][levelWidthInTiles][levelHeightInTiles];
+            editor.setTotalLayers(Integer.parseInt(mapReader.readLine()));
+            mapTiles = new String[editor.getTotalLayers()][levelWidthInTiles][levelHeightInTiles];
             String mapRow;
 
             while ((mapRow = mapReader.readLine()) != null) {
@@ -123,6 +122,7 @@ public class LevelManager {
     public void draw(Graphics2D graphics2D) {
         int col = 0;
         int row = 0;
+        int mapLayers = editor.getTotalLayers();
 
         while (col < levelWidthInTiles && row < levelHeightInTiles) {
 
@@ -135,7 +135,7 @@ public class LevelManager {
                 }
             }
             else {
-                graphics2D.drawImage(tiles.get(mapTiles[editor.getCurrentLayer()][row][col]), levelX, levelY, levelTileSize, levelTileSize, null);
+                graphics2D.drawImage(tiles.get(mapTiles[editor.getSelectedLayer()][row][col]), levelX, levelY, levelTileSize, levelTileSize, null);
             }
 
             col++;

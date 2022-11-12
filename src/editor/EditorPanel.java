@@ -14,7 +14,8 @@ public class EditorPanel extends JPanel {
     private Color gridColor = Color.black;
 
     private boolean showAllTileLayers = true;
-    private int currentLayer = 0;
+    private int totalLayers = 1;
+    private int selectedLayer = 0;
 
     private final LevelManager levelManager;
     private final LevelViewer levelViewer;
@@ -34,8 +35,15 @@ public class EditorPanel extends JPanel {
         return gridColor;
     }
 
-    public int getCurrentLayer() {
-        return currentLayer;
+    public int getSelectedLayer() {
+        return selectedLayer;
+    }
+
+    public void setSelectedLayer(int layer) {
+        selectedLayer = layer;
+        levelManager.loadTileComponentsInLevelLayer(layer);
+        levelViewer.repaint();
+        levelViewer.scrollRectToVisible(new Rectangle(1,1)); // temp bug fix for updating components
     }
 
     public boolean drawInactiveLayers() {
@@ -45,6 +53,14 @@ public class EditorPanel extends JPanel {
     public void setDrawInactiveLayers(boolean drawInactiveLayers) {
         showAllTileLayers = drawInactiveLayers;
         levelViewer.repaint();
+    }
+
+    public int getTotalLayers() {
+        return totalLayers;
+    }
+
+    public void setTotalLayers(int numberOfLayersInLevel) {
+        totalLayers = numberOfLayersInLevel;
     }
 
     public LevelManager getLevelManager() {
@@ -70,7 +86,6 @@ public class EditorPanel extends JPanel {
         levelViewer.setPreferredSize(new Dimension(1920, 1920));
         levelViewer.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         JScrollPane levelViewerScroll = new JScrollPane(levelViewer);
-        levelViewer.setAutoscrolls(true);
         levelViewerScroll.setPreferredSize(new Dimension((int) (SCREEN_MIN_WIDTH * 0.66), SCREEN_MIN_HEIGHT));
         levelViewerScroll.getVerticalScrollBar().setUnitIncrement(DEFAULT_TILE_SIZE);
         levelViewerScroll.getHorizontalScrollBar().setUnitIncrement(DEFAULT_TILE_SIZE);
@@ -81,7 +96,6 @@ public class EditorPanel extends JPanel {
         tilesetViewer = new TilesetViewer(this);
         tilesetViewer.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         JScrollPane tilesetViewerScroll = new JScrollPane(tilesetViewer);
-        tilesetViewer.setAutoscrolls(true);
         tilesetViewerScroll.setPreferredSize(new Dimension((int) (SCREEN_MIN_WIDTH * 0.33), SCREEN_MIN_HEIGHT));
         tilesetViewerScroll.getVerticalScrollBar().setUnitIncrement(DEFAULT_TILE_SIZE);
         tilesetViewerScroll.getHorizontalScrollBar().setUnitIncrement(DEFAULT_TILE_SIZE);
