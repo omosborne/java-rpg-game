@@ -68,14 +68,17 @@ public class MenuBarManager {
     private JMenu getLayerMenu() {
         menuLayer = new JMenu("Layers");
 
-        JMenuItem createNewLayer = new JMenuItem("New Layer");
-        JMenuItem layer0 = new MenuItemLayer();
-        JMenuItem layer1 = new MenuItemLayer();
+        JMenuItem createNewLayer = new MenuItemNewLayer(menuLayer);
 
         menuLayer.add(createNewLayer);
-        menuLayer.add(layer0);
-        menuLayer.add(layer1);
 
         return menuLayer;
+    }
+
+    public void allocateLayerMenuItems(int totalLayers) {
+        for (int layer = 0; layer < totalLayers; layer++) {
+            JMenuItem menuItemLayer = new MenuItemLayer();
+            menuLayer.add(menuItemLayer);
+        }
     }
 }

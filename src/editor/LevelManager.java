@@ -71,8 +71,11 @@ public class LevelManager {
     private void loadLevel(String levelFilePath) {
         try (InputStream mapFileInput = Objects.requireNonNull(getClass().getResourceAsStream(levelFilePath));
              BufferedReader mapReader = new BufferedReader(new InputStreamReader(mapFileInput))) {
-            editor.setTotalLayers(Integer.parseInt(mapReader.readLine()));
-            mapTiles = new String[editor.getTotalLayers()][levelWidthInTiles][levelHeightInTiles];
+
+            int totalLayers = Integer.parseInt(mapReader.readLine());
+            editor.setTotalLayers(totalLayers);
+
+            mapTiles = new String[EditorPanel.MAX_LAYERS][levelWidthInTiles][levelHeightInTiles];
             String mapRow;
 
             while ((mapRow = mapReader.readLine()) != null) {
@@ -92,6 +95,7 @@ public class LevelManager {
                     }
                 }
             }
+            Main.getMenuBarManager().allocateLayerMenuItems(totalLayers);
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             // TODO: Handle malformed map files.
@@ -113,6 +117,16 @@ public class LevelManager {
                 levelViewer.addTile(tile);
             }
         }
+    }
+
+    public void addNewLayer() {
+        int newLayer = editor.getTotalLayers();
+        for (int row = 0; row < levelHeightInTiles; row++) {
+            for (int col = 0; col < levelWidthInTiles; col++) {
+                mapTiles[newLayer][row][col] = "AA";
+            }
+        }
+        editor.setTotalLayers(newLayer + 1);
     }
 
     private void createEmptyLevel() {

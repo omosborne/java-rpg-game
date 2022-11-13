@@ -11,7 +11,7 @@ public class MenuItemLayer extends JMenuItem implements ActionListener {
 
     private static int totalLayerMenuItems = 0;
     private static MenuItemLayer selectedLayer;
-    private int layer;
+    private final int layer;
 
     public MenuItemLayer() {
         setText("Layer " + totalLayerMenuItems);

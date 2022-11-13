@@ -7,6 +7,7 @@ public class EditorPanel extends JPanel {
 
     public static final int SCREEN_MIN_WIDTH = 1280;
     public static final int SCREEN_MIN_HEIGHT = 720;
+    public static final int MAX_LAYERS = 3;
     public static final int DEFAULT_TILE_SIZE = 96;
     public static final String DEFAULT_TILESET = "/game/images/overworld.png";
 
