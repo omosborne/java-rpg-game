@@ -1,5 +1,6 @@
 package editor.menubar;
 
+import editor.EditorPanel;
 import editor.Main;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ public class MenuBarManager {
     private JMenu menuFile;
     private JMenu menuEdit;
     private JMenu menuView;
-    private JMenu menuLayer;
+    private MenuLayer menuLayer;
 
     public MenuBarManager() {
         menu = new JMenuBar();
@@ -66,19 +67,22 @@ public class MenuBarManager {
     }
 
     private JMenu getLayerMenu() {
-        menuLayer = new JMenu("Layers");
+        menuLayer = new MenuLayer();
 
-        JMenuItem createNewLayer = new MenuItemNewLayer(menuLayer);
-
+        MenuItemNewLayer createNewLayer = new MenuItemNewLayer(menuLayer);
         menuLayer.add(createNewLayer);
+        MenuItemRemoveLayer removeLayer = new MenuItemRemoveLayer(menuLayer);
+        menuLayer.add(removeLayer);
+        for (int layer = 0; layer < 3; layer++) {
+            menuLayer.addNewLayerItem();
+        }
 
         return menuLayer;
     }
 
     public void allocateLayerMenuItems(int totalLayers) {
-        for (int layer = 0; layer < totalLayers; layer++) {
-            JMenuItem menuItemLayer = new MenuItemLayer();
-            menuLayer.add(menuItemLayer);
+        for (int layer = totalLayers; layer < EditorPanel.MAX_LAYERS; layer++) {
+            menuLayer.updateLayerItemVisibility(layer, false);
         }
     }
 }

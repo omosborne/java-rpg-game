@@ -9,22 +9,20 @@ import java.awt.event.ActionListener;
 
 public class MenuItemNewLayer extends JMenuItem implements ActionListener {
 
-    private final JMenu layerMenu;
+    private final MenuLayer layerMenu;
 
-    public MenuItemNewLayer (JMenu layerMenu) {
+    public MenuItemNewLayer (MenuLayer layerMenu) {
         this.layerMenu = layerMenu;
         setText("New Layer");
         addActionListener(this);
     }
 
     private void addNewLayer() {
-        if (Main.getEditor().getTotalLayers() < EditorPanel.MAX_LAYERS) {
-            System.out.println(Main.getEditor().getTotalLayers());
-            JMenuItem layer = new MenuItemLayer();
-            layerMenu.add(layer);
-            Main.getEditor().getLevelManager().addNewLayer();
-            if (Main.getEditor().getTotalLayers() == EditorPanel.MAX_LAYERS) layerMenu.remove(0);
-        }
+        int layer = layerMenu.getTotalVisibleLayerItems();
+        layerMenu.updateLayerItemVisibility(layer, true);
+        Main.getEditor().getLevelManager().addNewLayer();
+        if (layerMenu.getTotalVisibleLayerItems() == EditorPanel.MAX_LAYERS) layerMenu.updateNewLayerItemVisibility(false);
+        layerMenu.setSelectedLayerItem(layer);
     }
 
     @Override
