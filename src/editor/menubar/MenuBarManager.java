@@ -28,7 +28,7 @@ public class MenuBarManager {
         menuFile = new JMenu("File");
 
         JMenuItem newLevel = new JMenuItem("New");
-        JMenuItem openLevel = new JMenuItem("Open");
+        MenuItemOpenLayer openLevel = new MenuItemOpenLayer();
         JMenuItem saveAsLevel = new JMenuItem("Save As");
         JMenuItem saveLevel = new JMenuItem("Save");
         JMenuItem exitEditor = new JMenuItem("Exit");
@@ -38,6 +38,12 @@ public class MenuBarManager {
         menuFile.add(saveAsLevel);
         menuFile.add(saveLevel);
         menuFile.add(exitEditor);
+
+        // Disabled until functionality is implemented.
+        newLevel.setEnabled(false);
+        saveAsLevel.setEnabled(false);
+        saveLevel.setEnabled(false);
+        exitEditor.setEnabled(false);
 
         return menuFile;
     }
@@ -50,6 +56,10 @@ public class MenuBarManager {
 
         menuEdit.add(undo);
         menuEdit.add(redo);
+
+        // Disabled until functionality is implemented.
+        undo.setEnabled(false);
+        redo.setEnabled(false);
 
         return menuEdit;
     }
@@ -73,7 +83,7 @@ public class MenuBarManager {
         menuLayer.add(createNewLayer);
         MenuItemRemoveLayer removeLayer = new MenuItemRemoveLayer(menuLayer);
         menuLayer.add(removeLayer);
-        for (int layer = 0; layer < 3; layer++) {
+        for (int layer = 0; layer < EditorPanel.MAX_LAYERS; layer++) {
             menuLayer.addNewLayerItem();
         }
 
@@ -81,8 +91,13 @@ public class MenuBarManager {
     }
 
     public void allocateLayerMenuItems(int totalLayers) {
-        for (int layer = totalLayers; layer < EditorPanel.MAX_LAYERS; layer++) {
+        for (int layer = 0; layer < EditorPanel.MAX_LAYERS; layer++) {
             menuLayer.updateLayerItemVisibility(layer, false);
+        }
+
+        for (int layer = 0; layer < totalLayers; layer++) {
+            if (layer == 0) menuLayer.setSelectedLayerItem(layer);
+            menuLayer.updateLayerItemVisibility(layer, true);
         }
     }
 }

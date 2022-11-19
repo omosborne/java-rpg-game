@@ -22,16 +22,19 @@ public class MenuLayer extends JMenu {
         return totalVisibleLayerItems;
     }
 
+    private void updateTotalVisibleLayerItems(int delta) {
+        if (totalVisibleLayerItems + delta < 0) totalVisibleLayerItems = 0;
+        else if (totalVisibleLayerItems + delta > EditorPanel.MAX_LAYERS) totalVisibleLayerItems = EditorPanel.MAX_LAYERS;
+        else totalVisibleLayerItems += delta;
+    }
+
     public MenuLayer() {
         setText("Layers");
     }
 
     public void addNewLayerItem() {
-        MenuItemLayer layerItem = new MenuItemLayer(this, totalVisibleLayerItems);
+        MenuItemLayer layerItem = new MenuItemLayer(this);
         add(layerItem);
-
-        if (totalVisibleLayerItems == 0) setSelectedLayerItem(layerItem.getLayer());
-        totalVisibleLayerItems++;
     }
 
     public void setSelectedLayerItem(int layer) {
@@ -54,7 +57,7 @@ public class MenuLayer extends JMenu {
 
     public void updateLayerItemVisibility(int layer, boolean isVisible) {
         getLayerItemFromLayer(layer).setVisible(isVisible);
-        totalVisibleLayerItems += isVisible ? 1 : -1;
+        updateTotalVisibleLayerItems(isVisible ? 1 : -1);
 
         updateRemoveLayerItemVisibility(totalVisibleLayerItems != 1);
         updateNewLayerItemVisibility(totalVisibleLayerItems != EditorPanel.MAX_LAYERS);

@@ -80,6 +80,12 @@ public class EditorPanel extends JPanel {
         return tilesetViewer;
     }
 
+    public void openLevel(String levelFilePath) {
+        levelManager.loadLevel(levelFilePath);
+        selectedLayer = 0;
+        levelViewer.repaint();
+    }
+
     public EditorPanel() {
         setPreferredSize(new Dimension(SCREEN_MIN_WIDTH, SCREEN_MIN_HEIGHT));
 

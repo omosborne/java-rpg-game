@@ -37,7 +37,7 @@ public class LevelViewer extends JPanel {
         Tile updatedTile = editor.getTilesetViewer().getSelectedTile();
         if (updatedTile == null) return;
 
-        editor.getLevelManager().changeMapTile(tileToUpdate, updatedTile);
+        editor.getLevelManager().changeLevelTile(tileToUpdate, updatedTile);
         repaint();
     }
 

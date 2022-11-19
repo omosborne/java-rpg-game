@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 public class MenuItemLayer extends JMenuItem implements ActionListener {
 
+    private static int totalLayers = 0;
     private MenuLayer layerMenu;
     private int layer;
 
@@ -13,9 +14,10 @@ public class MenuItemLayer extends JMenuItem implements ActionListener {
         return layer;
     }
 
-    public MenuItemLayer(MenuLayer layerMenu, int layer) {
+    public MenuItemLayer(MenuLayer layerMenu) {
         this.layerMenu = layerMenu;
-        this.layer = layer;
+        this.layer = totalLayers;
+        totalLayers++;
         setText("Layer " + layer);
         addActionListener(this);
     }
