@@ -82,8 +82,7 @@ public class EditorPanel extends JPanel {
 
     public void openLevel(String levelFilePath) {
         levelManager.loadLevel(levelFilePath);
-        selectedLayer = 0;
-        levelViewer.repaint();
+        setSelectedLayer(0);
     }
 
     public EditorPanel() {
