@@ -17,8 +17,12 @@ public class LevelManager {
     private final EditorPanel editor;
 
     private String tilesetFilePath = EditorPanel.DEFAULT_TILESET;
-    private final ArrayList<String[][]> levelTiles = new ArrayList<>(EditorPanel.MAX_LAYERS);
+    private ArrayList<String[][]> levelTiles = new ArrayList<>();
     private final HashMap<String, BufferedImage> tiles = new HashMap();
+
+    public int getTotalLayers() {
+        return levelTiles.size();
+    }
 
     public void setTileset(String newTilesetFilePath) {
         tilesetFilePath = newTilesetFilePath;
@@ -26,13 +30,12 @@ public class LevelManager {
 
     public LevelManager(EditorPanel editor) {
         this.editor = editor;
-        clearAllLayers();
         loadLevelTileset();
         createEmptyLevel();
         loadTileComponentsInLevelLayer(editor.getSelectedLayer());
     }
 
-    public void changeLevelTile(LevelTile levelTile, Tile newTile) {
+    public void updateLevelTile(LevelTile levelTile, Tile newTile) {
         levelTiles.get(levelTile.getLayer())[levelTile.getLevelY()][levelTile.getLevelX()] = newTile.getCode();
     }
 
@@ -67,38 +70,27 @@ public class LevelManager {
         }
     }
 
+    public void saveLevel(String levelFilePath) {
+        try (FileOutputStream levelFileOut = new FileOutputStream(levelFilePath);
+             ObjectOutputStream levelDataOut = new ObjectOutputStream(levelFileOut)) {
+            levelDataOut.writeObject(levelTiles);
+        } catch (IOException  e) {
+            e.printStackTrace();
+        }
+    }
+
     public void loadLevel(String levelFilePath) {
-        try (InputStream levelFileInput = new FileInputStream(levelFilePath);
-             BufferedReader levelReader = new BufferedReader(new InputStreamReader(levelFileInput))) {
-
-            int totalLayers = Integer.parseInt(levelReader.readLine());
-            editor.setTotalLayers(totalLayers);
-
-            clearAllLayers();
-
-            String levelRow;
-
-            while ((levelRow = levelReader.readLine()) != null) {
-                String[] levelRowData = levelRow.split(" ");
-
-                if (Objects.equals(levelRowData[0], "BOARD")) {
-                    int col = 0;
-                    int row = Integer.parseInt(levelRowData[1]);
-                    int width = Integer.parseInt(levelRowData[2]);
-                    int layer = Integer.parseInt(levelRowData[3]);
-                    String tileData = levelRowData[4];
-
-                    for (int i = 0; i < width*2; i+=2) {
-                        String tile = "" + tileData.charAt(i) + tileData.charAt(i+1);
-                        levelTiles.get(layer)[row][col] = tile;
-                        col++;
-                    }
-                }
-            }
-            Main.getMenuBarManager().allocateLayerMenuItems(totalLayers);
+        try (FileInputStream levelFileIn = new FileInputStream(levelFilePath);
+             ObjectInputStream levelDataIn = new ObjectInputStream(levelFileIn)) {
+            levelTiles.clear();
+            levelTiles = (ArrayList<String[][]>) levelDataIn.readObject();
+            editor.setLevelFilePath(levelFilePath);
+            Main.getMenuBarManager().allocateLayerMenuItems(levelTiles.size());
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             // TODO: Handle malformed level files.
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -120,46 +112,37 @@ public class LevelManager {
     }
 
     public void addNewLayer() {
-        int newLayer = editor.getTotalLayers();
+        levelTiles.add(new String[LEVEL_WIDTH_IN_TILES][LEVEL_HEIGHT_IN_TILES]);
+        int newLayer = levelTiles.size() - 1;
         for (int row = 0; row < LEVEL_HEIGHT_IN_TILES; row++) {
             for (int col = 0; col < LEVEL_WIDTH_IN_TILES; col++) {
                 levelTiles.get(newLayer)[row][col] = "AA";
             }
         }
-        editor.setTotalLayers(newLayer + 1);
     }
 
     public void removeSelectedLayer() {
-        int layer = editor.getSelectedLayer();
-
-        levelTiles.remove(layer);
-        levelTiles.add(new String[LEVEL_WIDTH_IN_TILES][LEVEL_HEIGHT_IN_TILES]);
-
-        editor.setTotalLayers(editor.getTotalLayers()-1);
+        levelTiles.remove(editor.getSelectedLayer());
         editor.getLevelViewer().repaint();
     }
 
-    private void clearAllLayers() {
-        levelTiles.clear();
-        for (int i = 0; i < EditorPanel.MAX_LAYERS; i++) {
-            levelTiles.add(new String[LEVEL_WIDTH_IN_TILES][LEVEL_HEIGHT_IN_TILES]);
-        }
-    }
-
     private void createEmptyLevel() {
+        levelTiles.clear();
+        levelTiles.add(new String[LEVEL_WIDTH_IN_TILES][LEVEL_HEIGHT_IN_TILES]);
+
         for (int row = 0; row < LEVEL_HEIGHT_IN_TILES; row++) {
             for (int col = 0; col < LEVEL_WIDTH_IN_TILES; col++) {
                 levelTiles.get(0)[row][col] = "AB";
             }
         }
-        editor.setTotalLayers(1);
+
         Main.getMenuBarManager().allocateLayerMenuItems(1);
     }
 
     public void draw(Graphics2D graphics2D) {
         int col = 0;
         int row = 0;
-        int levelLayers = editor.getTotalLayers();
+        int totalLayers = levelTiles.size();
 
         while (col < LEVEL_WIDTH_IN_TILES && row < LEVEL_HEIGHT_IN_TILES) {
 
@@ -167,7 +150,7 @@ public class LevelManager {
             int levelY = row * LEVEL_TILE_SIZE;
 
             if (editor.drawInactiveLayers()) {
-                for (int layer = 0; layer < levelLayers; layer++) {
+                for (int layer = 0; layer < totalLayers; layer++) {
                     graphics2D.drawImage(tiles.get(levelTiles.get(layer)[row][col]), levelX, levelY, LEVEL_TILE_SIZE, LEVEL_TILE_SIZE, null);
                 }
             }

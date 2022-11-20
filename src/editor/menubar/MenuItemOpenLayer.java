@@ -19,7 +19,7 @@ public class MenuItemOpenLayer extends JMenuItem implements ActionListener {
         JFileChooser findFile = new JFileChooser();
         findFile.setDialogTitle("Open Level");
         findFile.setCurrentDirectory(new java.io.File("."));
-        findFile.setFileFilter(new FileNameExtensionFilter("Level Files", "txt"));
+        findFile.setFileFilter(new FileNameExtensionFilter("Level Files", "level"));
 
         if (findFile.showOpenDialog(Main.getWindow()) == JFileChooser.APPROVE_OPTION) {
             Main.getEditor().openLevel(findFile.getSelectedFile().getPath());

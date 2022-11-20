@@ -39,10 +39,12 @@ public class MenuLayer extends JMenu {
 
     public void setSelectedLayerItem(int layer) {
         MenuItemLayer newSelectedLayer = getLayerItemFromLayer(layer);
-        if (totalVisibleLayerItems != 0) {
-            selectedLayerItem.setBackground(new Color(238, 238, 238));
-            Main.getEditor().setSelectedLayer(newSelectedLayer.getLayer());
+
+        for (Component menuItem : getMenuComponents()) {
+            menuItem.setBackground(new Color(238, 238, 238));
         }
+
+        if (totalVisibleLayerItems != 0) Main.getEditor().setSelectedLayer(newSelectedLayer.getLayer());
         newSelectedLayer.setBackground(Color.lightGray);
         selectedLayerItem = newSelectedLayer;
     }

@@ -11,17 +11,38 @@ public class EditorPanel extends JPanel {
     public static final int DEFAULT_TILE_SIZE = 96;
     public static final String DEFAULT_TILESET = "/game/images/overworld.png";
 
+    private String levelFilePath = "";
+    private String levelTitle = "";
+
     private boolean showGrid = false;
     private Color gridColor = Color.black;
 
     private boolean showAllTileLayers = true;
-    private int totalLayers = 1;
     private int selectedLayer = 0;
 
     private final LevelManager levelManager;
     private final LevelViewer levelViewer;
     private final TilesetManager tilesetManager;
     private final TilesetViewer tilesetViewer;
+
+    public String getLevelFilePath() {
+        return levelFilePath;
+    }
+
+    public void setLevelFilePath(String filePath) {
+        levelFilePath = filePath;
+        setLevelTitle(levelFilePath);
+        Main.getWindow().setTitle("Level Editor - " + getLevelTitle());
+    }
+
+    public String getLevelTitle() {
+        return levelTitle;
+    }
+
+    public void setLevelTitle(String levelFilePath) {
+        String[] filePathItems = levelFilePath.split("\\\\");
+        levelTitle = filePathItems[filePathItems.length - 1];
+    }
 
     public void setGridVisibility(boolean gridVisibility) {
         showGrid = gridVisibility;
@@ -57,11 +78,7 @@ public class EditorPanel extends JPanel {
     }
 
     public int getTotalLayers() {
-        return totalLayers;
-    }
-
-    public void setTotalLayers(int numberOfLayersInLevel) {
-        totalLayers = numberOfLayersInLevel;
+        return levelManager.getTotalLayers();
     }
 
     public LevelManager getLevelManager() {
@@ -83,6 +100,10 @@ public class EditorPanel extends JPanel {
     public void openLevel(String levelFilePath) {
         levelManager.loadLevel(levelFilePath);
         setSelectedLayer(0);
+    }
+
+    public void saveLevel(String levelFilePath) {
+        levelManager.saveLevel(levelFilePath);
     }
 
     public EditorPanel() {
