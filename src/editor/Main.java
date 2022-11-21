@@ -35,7 +35,6 @@ public class Main {
 
         window.setLayout(null);
         window.setResizable(false);
-        window.setTitle("Level Editor");
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 

@@ -27,10 +27,10 @@ public class MenuBarManager {
     private JMenu getFileMenu() {
         menuFile = new JMenu("File");
 
-        JMenuItem newLevel = new JMenuItem("New");
-        MenuItemOpenLayer openLevel = new MenuItemOpenLayer();
         MenuItemSaveAsLevel saveAsLevel = new MenuItemSaveAsLevel();
         MenuItemSaveLevel saveLevel = new MenuItemSaveLevel(saveAsLevel);
+        MenuItemNewLevel newLevel = new MenuItemNewLevel(saveLevel);
+        MenuItemOpenLayer openLevel = new MenuItemOpenLayer();
         JMenuItem exitEditor = new JMenuItem("Exit");
 
         menuFile.add(newLevel);
@@ -40,7 +40,6 @@ public class MenuBarManager {
         menuFile.add(exitEditor);
 
         // Disabled until functionality is implemented.
-        newLevel.setEnabled(false);
         exitEditor.setEnabled(false);
 
         return menuFile;

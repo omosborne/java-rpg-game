@@ -37,6 +37,7 @@ public class LevelManager {
 
     public void updateLevelTile(LevelTile levelTile, Tile newTile) {
         levelTiles.get(levelTile.getLayer())[levelTile.getLevelY()][levelTile.getLevelX()] = newTile.getCode();
+        editor.setHasSaved(false);
     }
 
     private void loadLevelTileset() {
@@ -74,6 +75,8 @@ public class LevelManager {
         try (FileOutputStream levelFileOut = new FileOutputStream(levelFilePath);
              ObjectOutputStream levelDataOut = new ObjectOutputStream(levelFileOut)) {
             levelDataOut.writeObject(levelTiles);
+            editor.setLevelFilePath(levelFilePath);
+            editor.setHasSaved(true);
         } catch (IOException  e) {
             e.printStackTrace();
         }
@@ -85,6 +88,7 @@ public class LevelManager {
             levelTiles.clear();
             levelTiles = (ArrayList<String[][]>) levelDataIn.readObject();
             editor.setLevelFilePath(levelFilePath);
+            editor.setHasSaved(true);
             Main.getMenuBarManager().allocateLayerMenuItems(levelTiles.size());
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
@@ -126,7 +130,7 @@ public class LevelManager {
         editor.getLevelViewer().repaint();
     }
 
-    private void createEmptyLevel() {
+    public void createEmptyLevel() {
         levelTiles.clear();
         levelTiles.add(new String[LEVEL_WIDTH_IN_TILES][LEVEL_HEIGHT_IN_TILES]);
 
@@ -135,7 +139,7 @@ public class LevelManager {
                 levelTiles.get(0)[row][col] = "AB";
             }
         }
-
+        editor.setHasSaved(false);
         Main.getMenuBarManager().allocateLayerMenuItems(1);
     }
 

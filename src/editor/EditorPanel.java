@@ -12,7 +12,9 @@ public class EditorPanel extends JPanel {
     public static final String DEFAULT_TILESET = "/game/images/overworld.png";
 
     private String levelFilePath = "";
-    private String levelTitle = "";
+    private String levelTitle = "untitled";
+
+    private boolean hasSaved = false;
 
     private boolean showGrid = false;
     private Color gridColor = Color.black;
@@ -31,7 +33,8 @@ public class EditorPanel extends JPanel {
 
     public void setLevelFilePath(String filePath) {
         levelFilePath = filePath;
-        setLevelTitle(levelFilePath);
+        String[] filePathItems = levelFilePath.split("\\\\");
+        setLevelTitle(filePathItems[filePathItems.length - 1]);
         Main.getWindow().setTitle("Level Editor - " + getLevelTitle());
     }
 
@@ -39,9 +42,26 @@ public class EditorPanel extends JPanel {
         return levelTitle;
     }
 
-    public void setLevelTitle(String levelFilePath) {
-        String[] filePathItems = levelFilePath.split("\\\\");
-        levelTitle = filePathItems[filePathItems.length - 1];
+    public void setLevelTitle(String levelTitle) {
+        this.levelTitle = levelTitle;
+    }
+
+    public void createNewLevel() {
+        setLevelTitle("untitled");
+        levelManager.createEmptyLevel();
+        setSelectedLayer(0);
+        levelFilePath = "";
+        levelViewer.repaint();
+    }
+
+    public void setHasSaved(boolean hasSaved) {
+        this.hasSaved = hasSaved;
+        if (hasSaved) Main.getWindow().setTitle("Level Editor - " + getLevelTitle());
+        else Main.getWindow().setTitle("Level Editor - " + getLevelTitle() + "*");
+    }
+
+    public boolean hasUnsavedChanges() {
+        return !hasSaved;
     }
 
     public void setGridVisibility(boolean gridVisibility) {
