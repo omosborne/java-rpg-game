@@ -33,17 +33,16 @@ public class LevelTile extends Tile implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent event) {
-        levelViewer.updateTile((LevelTile) event.getComponent());
+
     }
 
     @Override
     public void mousePressed(MouseEvent event) {
-
+        levelViewer.updateTile((LevelTile) event.getComponent());
     }
 
     @Override
     public void mouseReleased(MouseEvent event) {
-
     }
 
     @Override

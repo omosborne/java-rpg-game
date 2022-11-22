@@ -15,12 +15,12 @@ public class TilesetTile extends Tile implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent event) {
-        tilesetViewer.setSelectedTile((Tile) event.getComponent());
+
     }
 
     @Override
     public void mousePressed(MouseEvent event) {
-
+        tilesetViewer.setSelectedTile((Tile) event.getComponent());
     }
 
     @Override
